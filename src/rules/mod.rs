@@ -1,20 +1,38 @@
 use std::iter;
 
+use tabled::{
+    Table, Tabled,
+    settings::{Modify, Style, Width, object::Columns},
+};
+
 use crate::{
     common::RuleV4,
     configs::v4::KEAv4Config,
     rules::{
+        hooks::v4::MultithreadingModesNotEqualInConfigAndHA,
         interfaces::v4::NoInterfacesInInterfacesConfigRule,
         lease_database::v4::NoEnabledPersistFlagForMemfileLeases,
     },
 };
 
+pub mod hooks;
 pub mod interfaces;
 pub mod lease_database;
 
 pub struct RulesV4 {
     pub interfaces: Vec<Box<dyn RuleV4>>,
     pub lease_database: Vec<Box<dyn RuleV4>>,
+    pub hooks: Vec<Box<dyn RuleV4>>,
+}
+
+#[derive(Tabled)]
+#[tabled(display(Option, "tabled::derive::display::option", ""))]
+struct Problem {
+    name: String,
+    config_type: String,
+    importance: String,
+    description: String,
+    snapshot: Option<String>,
 }
 
 impl RulesV4 {
@@ -22,36 +40,48 @@ impl RulesV4 {
         RulesV4 {
             interfaces: vec![Box::new(NoInterfacesInInterfacesConfigRule)],
             lease_database: vec![Box::new(NoEnabledPersistFlagForMemfileLeases)],
+            hooks: vec![Box::new(MultithreadingModesNotEqualInConfigAndHA)],
         }
     }
 
     fn values(&self) -> impl Iterator<Item = &Vec<Box<dyn RuleV4>>> {
         let interfaces = iter::once(&self.interfaces);
         let lease_database = iter::once(&self.lease_database);
+        let hooks = iter::once(&self.hooks);
 
-        interfaces.chain(lease_database)
+        interfaces.chain(lease_database).chain(hooks)
     }
 
     pub fn run(&self, config: &KEAv4Config) {
+        let mut problems: Vec<Problem> = Vec::new();
+
         for rules_item in self.values() {
             for rule in rules_item {
                 let checks = rule.check(&config);
                 match checks {
                     Some(check_items) => {
                         for item in check_items {
-                            println!(
-                                "Rule: {}; Config: {:?}; Type: {:?}; Description: {}; Snapshot: {};",
-                                rule.get_name(),
-                                rule.get_config_type(),
-                                rule.get_level(),
-                                item.description,
-                                item.snapshot.unwrap_or_default()
-                            )
+                            problems.push(Problem {
+                                name: rule.get_name().to_string(),
+                                importance: rule.get_level().to_string(),
+                                config_type: rule.get_config_type().to_string(),
+                                description: item.description,
+                                snapshot: item.snapshot,
+                            });
                         }
                     }
                     None => {}
                 }
             }
         }
+
+        let mut table = Table::new(problems);
+        table.with(Style::modern());
+        table.with(Modify::new(Columns::one(0)).with(Width::wrap(30)));
+        table.with(Modify::new(Columns::one(3)).with(Width::wrap(30)));
+        table.with(Modify::new(Columns::one(4)).with(Width::wrap(30)));
+        println!("{}", table);
+
+        println!("{} problem(s) found.", &table.count_rows());
     }
 }

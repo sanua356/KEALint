@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize};
+use serde_json::Value;
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "kebab-case")]
@@ -9,6 +10,7 @@ pub struct KEAv4Config {
 
     pub interfaces_config: KEAv4InterfacesConfig,
     pub lease_database: KEAv4LeaseDatabase,
+    pub multi_threading: Option<KEAv4Multithreading>,
 
     pub hooks_libraries: Option<Vec<KEAv4HookLibrary>>,
 }
@@ -36,4 +38,13 @@ pub struct KEAv4LeaseDatabase {
 #[derive(Debug, Serialize, Deserialize)]
 pub struct KEAv4HookLibrary {
     pub library: String,
+    pub parameters: Option<Value>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "kebab-case")]
+pub struct KEAv4Multithreading {
+    pub enable_multi_threading: Option<bool>,
+    pub thread_pool_size: Option<u32>,
+    pub packet_queue_size: Option<u32>,
 }
