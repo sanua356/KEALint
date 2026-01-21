@@ -43,7 +43,7 @@ impl RuleV4 for MultithreadingModesNotEqualInConfigAndHA {
             Some(hook_info) => {
                 let parameters = hook_info.parameters.as_ref().unwrap_or_default();
                 let is_hook_multithreading_enabled =
-                    *&parameters["multi-threading"]["enable-multi-threading"]
+                    parameters["multi-threading"]["enable-multi-threading"]
                         .as_bool()
                         .unwrap_or(true);
 
@@ -64,5 +64,36 @@ impl RuleV4 for MultithreadingModesNotEqualInConfigAndHA {
         }
 
         None
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use serde_json::Value;
+
+    use crate::{
+        common::RuleV4, configs::v4::KEAv4Config, constants::TEMPLATE_CONFIG_FOR_TESTS_V4,
+        rules::hooks::v4::MultithreadingModesNotEqualInConfigAndHA,
+    };
+
+    #[test]
+    fn check_expected_trigger() {
+        let data: KEAv4Config = serde_json::from_str(TEMPLATE_CONFIG_FOR_TESTS_V4).unwrap();
+
+        let rule = MultithreadingModesNotEqualInConfigAndHA;
+        assert!(rule.check(&data).is_some());
+    }
+
+    #[test]
+    fn check_absense_trigger() {
+        let mut json_value: Value = serde_json::from_str(TEMPLATE_CONFIG_FOR_TESTS_V4).unwrap();
+        json_value["multi-threading"]
+            .as_object_mut()
+            .unwrap()
+            .insert("enable-multi-threading".to_string(), Value::from(true));
+        let data: KEAv4Config = serde_json::from_value(json_value).unwrap();
+
+        let rule = MultithreadingModesNotEqualInConfigAndHA;
+        assert!(rule.check(&data).is_none());
     }
 }

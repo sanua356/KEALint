@@ -25,3 +25,34 @@ impl RuleV4 for NoInterfacesInInterfacesConfigRule {
         None
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use serde_json::Value;
+
+    use crate::{
+        common::RuleV4, configs::v4::KEAv4Config, constants::TEMPLATE_CONFIG_FOR_TESTS_V4,
+        rules::interfaces::v4::NoInterfacesInInterfacesConfigRule,
+    };
+
+    #[test]
+    fn check_expected_trigger() {
+        let data: KEAv4Config = serde_json::from_str(TEMPLATE_CONFIG_FOR_TESTS_V4).unwrap();
+
+        let rule = NoInterfacesInInterfacesConfigRule;
+        assert!(rule.check(&data).is_some());
+    }
+
+    #[test]
+    fn check_absense_trigger() {
+        let mut json_value: Value = serde_json::from_str(TEMPLATE_CONFIG_FOR_TESTS_V4).unwrap();
+        json_value["interfaces-config"]
+            .as_object_mut()
+            .unwrap()
+            .insert("interfaces".to_string(), Value::from(["eth0"]));
+        let data: KEAv4Config = serde_json::from_value(json_value).unwrap();
+
+        let rule = NoInterfacesInInterfacesConfigRule;
+        assert!(rule.check(&data).is_none());
+    }
+}
