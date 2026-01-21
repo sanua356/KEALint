@@ -9,9 +9,9 @@ use crate::{
     common::RuleV4,
     configs::v4::KEAv4Config,
     rules::{
-        hooks::v4::MultithreadingModesNotEqualInConfigAndHA,
-        interfaces::v4::NoInterfacesInInterfacesConfigRule,
-        lease_database::v4::NoEnabledPersistFlagForMemfileLeases,
+        hooks::v4::multithread_modes_not_equal::MultithreadingModesNotEqualInConfigAndHA,
+        interfaces::v4::no_active_interfaces::NoInterfacesInInterfacesConfigRule,
+        lease_database::v4::no_enabled_persist_flag::NoEnabledPersistFlagForMemfileLeases,
     },
 };
 

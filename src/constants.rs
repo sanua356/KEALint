@@ -3,6 +3,7 @@
 pub static HIGH_AVAILABILITY_HOOK_LIBRARY: &str = "libdhcp_ha.so";
 
 // Not production. Only for tests.
+// This file should cause all rules in tests to fire correctly.
 pub static TEMPLATE_CONFIG_FOR_TESTS_V4: &str = r#"
 {
 	"valid-lifetime": 4000,

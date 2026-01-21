@@ -38,7 +38,7 @@ mod tests {
 
     use crate::{
         common::RuleV4, configs::v4::KEAv4Config, constants::TEMPLATE_CONFIG_FOR_TESTS_V4,
-        rules::lease_database::v4::NoEnabledPersistFlagForMemfileLeases,
+        rules::lease_database::v4::no_enabled_persist_flag::NoEnabledPersistFlagForMemfileLeases,
     };
 
     #[test]

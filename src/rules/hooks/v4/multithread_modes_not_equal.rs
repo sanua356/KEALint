@@ -23,7 +23,7 @@ impl RuleV4 for MultithreadingModesNotEqualInConfigAndHA {
         if config.hooks_libraries.is_none() || config.multi_threading.is_none() {
             return None;
         }
-        // Unwrap safety, presence of the value is checked above
+        // Unwrap safety, presence of the value is checked above.
         let is_multithreading_enabled: bool = config
             .multi_threading
             .as_ref()
@@ -31,7 +31,7 @@ impl RuleV4 for MultithreadingModesNotEqualInConfigAndHA {
             .enable_multi_threading
             .unwrap_or(true);
 
-        // Unwrap safety, presence of the value is checked above
+        // Unwrap safety, presence of the value is checked above.
         let ha_hook = config
             .hooks_libraries
             .as_ref()
@@ -73,7 +73,7 @@ mod tests {
 
     use crate::{
         common::RuleV4, configs::v4::KEAv4Config, constants::TEMPLATE_CONFIG_FOR_TESTS_V4,
-        rules::hooks::v4::MultithreadingModesNotEqualInConfigAndHA,
+        rules::hooks::v4::multithread_modes_not_equal::MultithreadingModesNotEqualInConfigAndHA,
     };
 
     #[test]

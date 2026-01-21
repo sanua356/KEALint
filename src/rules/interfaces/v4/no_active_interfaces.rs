@@ -32,7 +32,7 @@ mod tests {
 
     use crate::{
         common::RuleV4, configs::v4::KEAv4Config, constants::TEMPLATE_CONFIG_FOR_TESTS_V4,
-        rules::interfaces::v4::NoInterfacesInInterfacesConfigRule,
+        rules::interfaces::v4::no_active_interfaces::NoInterfacesInInterfacesConfigRule,
     };
 
     #[test]
