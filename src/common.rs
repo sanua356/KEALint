@@ -44,6 +44,7 @@ impl Display for RuleConfigs {
 pub struct RuleResult {
     pub description: String,
     pub snapshot: Option<String>,
+    pub links: Option<Vec<String>>,
 }
 
 pub trait RuleV4 {

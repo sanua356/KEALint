@@ -33,6 +33,7 @@ struct Problem {
     importance: String,
     description: String,
     snapshot: Option<String>,
+    links: Option<String>,
 }
 
 impl RulesV4 {
@@ -67,6 +68,7 @@ impl RulesV4 {
                                 config_type: rule.get_config_type().to_string(),
                                 description: item.description,
                                 snapshot: item.snapshot,
+                                links: Some(item.links.unwrap_or_default().join("\n\n")),
                             });
                         }
                     }
@@ -77,11 +79,12 @@ impl RulesV4 {
 
         let mut table = Table::new(problems);
         table.with(Style::modern());
-        table.with(Modify::new(Columns::one(0)).with(Width::wrap(30)));
-        table.with(Modify::new(Columns::one(3)).with(Width::wrap(30)));
-        table.with(Modify::new(Columns::one(4)).with(Width::wrap(30)));
+        table.with(Modify::new(Columns::one(0)).with(Width::wrap(20)));
+        table.with(Modify::new(Columns::one(3)).with(Width::wrap(20)));
+        table.with(Modify::new(Columns::one(4)).with(Width::wrap(20)));
+        table.with(Modify::new(Columns::one(5)).with(Width::wrap(20)));
         println!("{}", table);
 
-        println!("{} problem(s) found.", &table.count_rows());
+        println!("{} problem(s) found.", &table.count_rows() - 1);
     }
 }
