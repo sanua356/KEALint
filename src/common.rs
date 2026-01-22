@@ -2,8 +2,7 @@
 
 use std::fmt::Display;
 
-use super::configs::KEAv4Config;
-use crate::configs::KEAD2Config;
+use crate::configs::{KEAD2Config, KEAv4Config};
 
 #[derive(Debug)]
 pub enum RuleConfigs {
