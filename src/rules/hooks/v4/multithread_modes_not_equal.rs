@@ -1,6 +1,6 @@
 use crate::{
     common::{RuleConfigs, RuleLevels, RuleResult, RuleV4},
-    configs::v4::KEAv4Config,
+    configs::KEAv4Config,
     constants::HIGH_AVAILABILITY_HOOK_LIBRARY,
 };
 

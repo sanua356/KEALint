@@ -104,3 +104,22 @@ pub static TEMPLATE_CONFIG_FOR_TESTS_V4: &str = r#"
 	]
 }
 "#;
+
+// Not production. Only for tests.
+// This file should cause all rules in tests to fire correctly.
+pub static TEMPLATE_CONFIG_FOR_TESTS_D2: &str = r#"
+{
+	"ip-address": "1.2.3.4",
+	"port": 53001,
+	"dns-server-timeout": 500,
+	"ncr-protocol": "UDP",
+	"ncr-format": "JSON",
+	"tsig-keys": [],
+	"forward-ddns": {
+		"ddns-domains": []
+	},
+	"reverse-ddns": {
+		"ddns-domains": []
+	}
+}
+"#;

@@ -1,0 +1,65 @@
+use crate::{
+    common::{RuleConfigs, RuleD2, RuleLevels, RuleResult},
+    configs::KEAD2Config,
+};
+
+pub struct NotLocalIPAddressInD2ServerConfigRule;
+
+impl RuleD2 for NotLocalIPAddressInD2ServerConfigRule {
+    fn get_name(&self) -> &'static str {
+        "DDNS_SERVER::NotLocalIPAddressInD2ServerConfigRule"
+    }
+
+    fn get_level(&self) -> RuleLevels {
+        RuleLevels::Critical
+    }
+
+    fn get_config_type(&self) -> RuleConfigs {
+        RuleConfigs::D2
+    }
+
+    fn check(&self, config: &KEAD2Config) -> Option<Vec<RuleResult>> {
+        config.ip_address.as_ref()?;
+
+        if !config.ip_address.unwrap().is_loopback() {
+            return Some(vec![RuleResult {
+                description: "Loopback addresses must be used as the server address to avoid attacks with fake requests.".to_string(),
+                snapshot: Some(serde_json::to_string(&config.ip_address).unwrap()),
+                links: Some(vec![
+                    "https://kea.readthedocs.io/en/latest/arm/ddns.html#global-server-parameters"
+                        .to_string(),
+                ]),
+            }]);
+        }
+
+        None
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use serde_json::Value;
+
+    use crate::{
+        common::RuleD2, configs::KEAD2Config, constants::TEMPLATE_CONFIG_FOR_TESTS_D2,
+        rules::ddns_server::NotLocalIPAddressInD2ServerConfigRule,
+    };
+
+    #[test]
+    fn check_expected_trigger() {
+        let data: KEAD2Config = serde_json::from_str(TEMPLATE_CONFIG_FOR_TESTS_D2).unwrap();
+
+        let rule = NotLocalIPAddressInD2ServerConfigRule;
+        assert!(rule.check(&data).is_some());
+    }
+
+    #[test]
+    fn check_absense_trigger() {
+        let mut json_value: Value = serde_json::from_str(TEMPLATE_CONFIG_FOR_TESTS_D2).unwrap();
+        json_value["ip-address"] = Value::from("127.0.0.1");
+        let data: KEAD2Config = serde_json::from_value(json_value).unwrap();
+
+        let rule = NotLocalIPAddressInD2ServerConfigRule;
+        assert!(rule.check(&data).is_none());
+    }
+}

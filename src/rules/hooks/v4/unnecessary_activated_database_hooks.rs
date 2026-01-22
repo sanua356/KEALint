@@ -2,7 +2,7 @@ use std::collections::HashSet;
 
 use crate::{
     common::{RuleConfigs, RuleLevels, RuleResult, RuleV4},
-    configs::v4::{KEALeaseDatabaseTypes, KEAv4Config, KEAv4HostsDatabasesTypes},
+    configs::{KEALeaseDatabaseTypes, KEAv4Config, KEAv4HostsDatabasesTypes},
     constants::{MYSQL_HOOK_LIBRARY, PGSQL_HOOK_LIBRARY},
 };
 
@@ -19,9 +19,7 @@ impl RuleV4 for UnnecessaryActivatedDatabaseHooksRule {
         RuleConfigs::Dhcp4
     }
     fn check(&self, config: &KEAv4Config) -> Option<Vec<RuleResult>> {
-        if config.hooks_libraries.is_none() {
-            return None;
-        }
+        config.hooks_libraries.as_ref()?;
 
         let mysql_hook = config
             .hooks_libraries
@@ -49,57 +47,52 @@ impl RuleV4 for UnnecessaryActivatedDatabaseHooksRule {
             _ => {}
         }
 
-        if let Some(hosts_database) = &config.hosts_database {
-            match &hosts_database.r#type {
-                Some(db_type) => {
-                    config_types.insert(db_type.clone());
-                }
-                None => {}
-            }
+        if let Some(hosts_database) = &config.hosts_database
+            && let Some(db_type) = &hosts_database.r#type
+        {
+            config_types.insert(*db_type);
         }
 
         if let Some(hosts_databases) = &config.hosts_databases {
             for hosts_db in hosts_databases {
-                match &hosts_db.r#type {
-                    Some(db_type) => {
-                        config_types.insert(db_type.clone());
-                    }
-                    None => {}
+                if let Some(db_type) = &hosts_db.r#type {
+                    config_types.insert(*db_type);
                 }
             }
         }
 
-        if let Some(config_control) = &config.config_control {
-            if let Some(control_databases) = &config_control.config_databases {
-                for control_db in control_databases {
-                    match &control_db.r#type {
-                        Some(db_type) => {
-                            config_types.insert(db_type.clone());
-                        }
-                        None => {}
-                    }
+        if let Some(config_control) = &config.config_control
+            && let Some(control_databases) = &config_control.config_databases
+        {
+            for control_db in control_databases {
+                if let Some(db_type) = &control_db.r#type {
+                    config_types.insert(*db_type);
                 }
             }
         }
 
         let mut results: Vec<RuleResult> = Vec::new();
 
-        if mysql_hook.is_some() && !config_types.contains(&KEAv4HostsDatabasesTypes::MySQL) {
+        if let Some(hook) = mysql_hook
+            && !config_types.contains(&KEAv4HostsDatabasesTypes::MySQL)
+        {
             results.push(
 	                RuleResult {
 	                description: "The MySQL support hook is specified in the configuration of the hooks, but it does not serve any functionality.".to_string(),
-	                snapshot: Some(serde_json::to_string(&mysql_hook.unwrap()).unwrap()),
+	                snapshot: Some(serde_json::to_string(&hook).unwrap()),
 	                links: Some(vec!["https://kea.readthedocs.io/en/kea-3.1.4/arm/hooks.html#libdhcp-mysql-so-database-backend-for-mysql".to_string()])
             });
         }
 
-        if pgsql_hook.is_some() && !config_types.contains(&KEAv4HostsDatabasesTypes::PostgreSQL) {
+        if let Some(hook) = pgsql_hook
+            && !config_types.contains(&KEAv4HostsDatabasesTypes::PostgreSQL)
+        {
             results.push(
 	                RuleResult {
 	                description: "The PostgreSQL support hook is specified in the configuration of the hooks, but it does not serve any functionality.".to_string(),
-	                snapshot: Some(serde_json::to_string(&pgsql_hook.unwrap()).unwrap()),
+	                snapshot: Some(serde_json::to_string(&hook).unwrap()),
 	                links: Some(vec!["https://kea.readthedocs.io/en/kea-3.1.4/arm/hooks.html#libdhcp-pgsql-so-database-backend-for-postgresql".to_string()])
-            });
+        });
         }
 
         if results.iter().len() > 0 {

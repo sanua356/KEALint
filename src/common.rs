@@ -2,13 +2,14 @@
 
 use std::fmt::Display;
 
-use super::configs::v4::KEAv4Config;
+use super::configs::KEAv4Config;
+use crate::configs::KEAD2Config;
 
 #[derive(Debug)]
 pub enum RuleConfigs {
     Dhcp4,
     Dhcp6,
-    DhcpDDNS,
+    D2,
     ControlAgent,
 }
 
@@ -34,7 +35,7 @@ impl Display for RuleConfigs {
         match *self {
             RuleConfigs::Dhcp4 => write!(f, "Dhcp4"),
             RuleConfigs::Dhcp6 => write!(f, "Dhcp6"),
-            RuleConfigs::DhcpDDNS => write!(f, "DhcpDDNS"),
+            RuleConfigs::D2 => write!(f, "D2"),
             RuleConfigs::ControlAgent => write!(f, "ControlAgent"),
         }
     }
@@ -56,5 +57,17 @@ pub trait RuleV4 {
 
     fn get_config_type(&self) -> RuleConfigs {
         RuleConfigs::Dhcp4
+    }
+}
+
+pub trait RuleD2 {
+    fn check(&self, config: &KEAD2Config) -> Option<Vec<RuleResult>>;
+
+    fn get_name(&self) -> &'static str;
+
+    fn get_level(&self) -> RuleLevels;
+
+    fn get_config_type(&self) -> RuleConfigs {
+        RuleConfigs::D2
     }
 }

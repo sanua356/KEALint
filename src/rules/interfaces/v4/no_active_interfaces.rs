@@ -1,5 +1,5 @@
 use crate::common::{RuleLevels, RuleResult, RuleV4};
-use crate::configs::v4::KEAv4Config;
+use crate::configs::KEAv4Config;
 
 pub struct NoInterfacesInInterfacesConfigRule;
 

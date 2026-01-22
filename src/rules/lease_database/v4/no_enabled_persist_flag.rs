@@ -1,6 +1,6 @@
 use crate::{
     common::{RuleLevels, RuleResult, RuleV4},
-    configs::v4::{KEALeaseDatabaseTypes, KEAv4Config},
+    configs::{KEALeaseDatabaseTypes, KEAv4Config},
 };
 
 pub struct NoEnabledPersistFlagForMemfileLeasesRule;
