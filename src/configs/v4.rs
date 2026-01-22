@@ -4,6 +4,8 @@ use serde_json::Value;
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "kebab-case")]
 pub struct KEAv4Config {
+    pub server_tag: Option<String>,
+
     pub valid_lifetime: u32,
     pub renew_timer: u32,
     pub rebind_timer: u32,
@@ -16,6 +18,10 @@ pub struct KEAv4Config {
     pub client_classes: Option<Vec<KEAv4ClientClass>>,
     pub option_def: Option<Vec<KEAv4OptionDefinition>>,
     pub option_data: Option<Vec<KEAv4OptionData>>,
+
+    pub hosts_databases: Option<Vec<KEAv4HostsDatabase>>,
+    pub hosts_database: Option<KEAv4HostsDatabase>,
+    pub config_control: Option<KEAv4ConfigControl>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -36,6 +42,22 @@ pub struct KEAv4LeaseDatabase {
     pub r#type: KEALeaseDatabaseTypes,
     pub persist: Option<bool>,
     pub name: Option<String>,
+    pub host: Option<String>,
+    pub password: Option<String>,
+    pub port: Option<u32>,
+    pub user: Option<String>,
+    pub readonly: Option<bool>,
+    pub trust_anchor: Option<String>,
+    pub cert_file: Option<String>,
+    pub key_file: Option<String>,
+    pub cipher_list: Option<String>,
+    pub reconnect_wait_time: Option<u32>,
+    pub max_reconnect_tries: Option<u32>,
+    pub on_fail: Option<KEAv4HostsDatabasesFailStrategers>,
+    pub retry_on_startup: Option<bool>,
+    pub connect_timeout: Option<u32>,
+    pub read_timeout: Option<u32>,
+    pub write_timeout: Option<u32>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -115,4 +137,74 @@ pub struct KEAv4OptionDefinition {
     pub record_types: Option<String>,
     pub space: Option<String>,
     pub encapsulate: Option<String>,
+}
+
+#[derive(Debug, PartialEq, Eq, Hash, Clone, Copy, Serialize, Deserialize)]
+#[serde(rename_all = "lowercase")]
+pub enum KEAv4HostsDatabasesTypes {
+    MySQL,
+    PostgreSQL,
+}
+
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
+pub enum KEAv4HostsDatabasesFailStrategers {
+    #[serde(rename = "stop-retry-exit")]
+    StopRetryExit,
+    #[serde(rename = "serve-retry-exit")]
+    ServeRetryExit,
+    #[serde(rename = "serve-retry-continue")]
+    ServeRetryContinue,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "kebab-case")]
+pub struct KEAv4HostsDatabase {
+    pub name: String,
+    pub host: Option<String>,
+    pub password: Option<String>,
+    pub port: Option<u32>,
+    pub r#type: Option<KEAv4HostsDatabasesTypes>,
+    pub user: Option<String>,
+    pub readonly: Option<bool>,
+    pub trust_anchor: Option<String>,
+    pub cert_file: Option<String>,
+    pub key_file: Option<String>,
+    pub cipher_list: Option<String>,
+    pub reconnect_wait_time: Option<u32>,
+    pub max_reconnect_tries: Option<u32>,
+    pub on_fail: Option<KEAv4HostsDatabasesFailStrategers>,
+    pub retry_on_startup: Option<bool>,
+    pub connect_timeout: Option<u32>,
+    pub read_timeout: Option<u32>,
+    pub write_timeout: Option<u32>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "kebab-case")]
+pub struct KEAv4ConfigControl {
+    pub config_databases: Option<Vec<KEAv4ConfigDatabase>>,
+    pub config_fetch_wait_time: Option<u32>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "kebab-case")]
+pub struct KEAv4ConfigDatabase {
+    pub name: String,
+    pub host: Option<String>,
+    pub password: Option<String>,
+    pub port: Option<u32>,
+    pub r#type: Option<KEAv4HostsDatabasesTypes>,
+    pub user: Option<String>,
+    pub readonly: Option<bool>,
+    pub trust_anchor: Option<String>,
+    pub cert_file: Option<String>,
+    pub key_file: Option<String>,
+    pub cipher_list: Option<String>,
+    pub reconnect_wait_time: Option<u32>,
+    pub max_reconnect_tries: Option<u32>,
+    pub on_fail: Option<KEAv4HostsDatabasesFailStrategers>,
+    pub retry_on_startup: Option<bool>,
+    pub connect_timeout: Option<u32>,
+    pub read_timeout: Option<u32>,
+    pub write_timeout: Option<u32>,
 }

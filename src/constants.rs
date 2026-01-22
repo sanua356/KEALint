@@ -1,6 +1,9 @@
 #![allow(dead_code)]
 
 pub static HIGH_AVAILABILITY_HOOK_LIBRARY: &str = "libdhcp_ha.so";
+pub static MYSQL_HOOK_LIBRARY: &str = "libdhcp_mysql.so";
+pub static PGSQL_HOOK_LIBRARY: &str = "libdhcp_pgsql.so";
+
 pub static GSS_TSIG_HOOK_LIBRARY: &str = "libddns_gss_tsig.so";
 
 // Not production. Only for tests.
@@ -34,9 +37,39 @@ pub static TEMPLATE_CONFIG_FOR_TESTS_V4: &str = r#"
 		"thread-pool-size": 4,
 		"packet-queue-size": 16
 	},
+	"hosts-databases": [
+		{
+			"name": "keatest",
+			"host": "localhost",
+			"password": "1234",
+			"port": 3306,
+			"type": "mysql",
+			"user": "keatest",
+			"readonly": false,
+			"trust-anchor": "my-ca",
+			"cert-file": "my-cert",
+			"key-file": "my-key",
+			"cipher-list": "AES",
+			"reconnect-wait-time": 3000,
+			"max-reconnect-tries": 3,
+			"on-fail": "stop-retry-exit",
+			"retry-on-startup": false,
+			"connect-timeout": 100,
+			"read-timeout": 120,
+			"write-timeout": 180
+		}
+	],
 	"hooks-libraries": [
 		{
 			"library": "libdhcp_lease_cmds.so",
+			"parameters": {}
+		},
+		{
+			"library": "libdhcp_pgsql.so",
+			"parameters": {}
+		},
+		{
+			"library": "libdhcp_mysql.so",
 			"parameters": {}
 		},
 		{

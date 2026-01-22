@@ -4,11 +4,11 @@ use crate::{
     constants::HIGH_AVAILABILITY_HOOK_LIBRARY,
 };
 
-pub struct MultithreadingModesNotEqualInConfigAndHA;
+pub struct MultithreadingModesNotEqualInConfigAndHARule;
 
-impl RuleV4 for MultithreadingModesNotEqualInConfigAndHA {
+impl RuleV4 for MultithreadingModesNotEqualInConfigAndHARule {
     fn get_name(&self) -> &'static str {
-        "HOOKS::MultithreadingModesNotEqualInConfigAndHA"
+        "HOOKS::MultithreadingModesNotEqualInConfigAndHARule"
     }
 
     fn get_level(&self) -> RuleLevels {
@@ -73,14 +73,14 @@ mod tests {
 
     use crate::{
         common::RuleV4, configs::v4::KEAv4Config, constants::TEMPLATE_CONFIG_FOR_TESTS_V4,
-        rules::hooks::v4::multithread_modes_not_equal::MultithreadingModesNotEqualInConfigAndHA,
+        rules::hooks::v4::multithread_modes_not_equal::MultithreadingModesNotEqualInConfigAndHARule,
     };
 
     #[test]
     fn check_expected_trigger() {
         let data: KEAv4Config = serde_json::from_str(TEMPLATE_CONFIG_FOR_TESTS_V4).unwrap();
 
-        let rule = MultithreadingModesNotEqualInConfigAndHA;
+        let rule = MultithreadingModesNotEqualInConfigAndHARule;
         assert!(rule.check(&data).is_some());
     }
 
@@ -93,7 +93,7 @@ mod tests {
             .insert("enable-multi-threading".to_string(), Value::from(true));
         let data: KEAv4Config = serde_json::from_value(json_value).unwrap();
 
-        let rule = MultithreadingModesNotEqualInConfigAndHA;
+        let rule = MultithreadingModesNotEqualInConfigAndHARule;
         assert!(rule.check(&data).is_none());
     }
 }

@@ -9,9 +9,11 @@ use crate::{
     common::RuleV4,
     configs::v4::KEAv4Config,
     rules::{
-        hooks::v4::multithread_modes_not_equal::MultithreadingModesNotEqualInConfigAndHA,
-        interfaces::v4::no_active_interfaces::NoInterfacesInInterfacesConfigRule,
-        lease_database::v4::no_enabled_persist_flag::NoEnabledPersistFlagForMemfileLeases,
+        hooks::{
+            MultithreadingModesNotEqualInConfigAndHARule, UnnecessaryActivatedDatabaseHooksRule,
+        },
+        interfaces::NoInterfacesInInterfacesConfigRule,
+        lease_database::NoEnabledPersistFlagForMemfileLeasesRule,
     },
 };
 
@@ -40,8 +42,11 @@ impl RulesV4 {
     pub fn default() -> Self {
         RulesV4 {
             interfaces: vec![Box::new(NoInterfacesInInterfacesConfigRule)],
-            lease_database: vec![Box::new(NoEnabledPersistFlagForMemfileLeases)],
-            hooks: vec![Box::new(MultithreadingModesNotEqualInConfigAndHA)],
+            lease_database: vec![Box::new(NoEnabledPersistFlagForMemfileLeasesRule)],
+            hooks: vec![
+                Box::new(MultithreadingModesNotEqualInConfigAndHARule),
+                Box::new(UnnecessaryActivatedDatabaseHooksRule),
+            ],
         }
     }
 

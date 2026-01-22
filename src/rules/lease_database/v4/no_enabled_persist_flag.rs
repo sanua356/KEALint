@@ -3,9 +3,9 @@ use crate::{
     configs::v4::{KEALeaseDatabaseTypes, KEAv4Config},
 };
 
-pub struct NoEnabledPersistFlagForMemfileLeases;
+pub struct NoEnabledPersistFlagForMemfileLeasesRule;
 
-impl RuleV4 for NoEnabledPersistFlagForMemfileLeases {
+impl RuleV4 for NoEnabledPersistFlagForMemfileLeasesRule {
     fn get_name(&self) -> &'static str {
         "LEASE_DATABASE::NoEnabledPersistFlagForMemfileLeases"
     }
@@ -38,14 +38,14 @@ mod tests {
 
     use crate::{
         common::RuleV4, configs::v4::KEAv4Config, constants::TEMPLATE_CONFIG_FOR_TESTS_V4,
-        rules::lease_database::v4::no_enabled_persist_flag::NoEnabledPersistFlagForMemfileLeases,
+        rules::lease_database::v4::no_enabled_persist_flag::NoEnabledPersistFlagForMemfileLeasesRule,
     };
 
     #[test]
     fn check_expected_trigger() {
         let data: KEAv4Config = serde_json::from_str(TEMPLATE_CONFIG_FOR_TESTS_V4).unwrap();
 
-        let rule = NoEnabledPersistFlagForMemfileLeases;
+        let rule = NoEnabledPersistFlagForMemfileLeasesRule;
         assert!(rule.check(&data).is_some());
     }
 
@@ -58,7 +58,7 @@ mod tests {
             .insert("persist".to_string(), Value::from(true));
         let data: KEAv4Config = serde_json::from_value(json_value).unwrap();
 
-        let rule = NoEnabledPersistFlagForMemfileLeases;
+        let rule = NoEnabledPersistFlagForMemfileLeasesRule;
         assert!(rule.check(&data).is_none());
     }
 }
