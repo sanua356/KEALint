@@ -1,6 +1,7 @@
 #![allow(dead_code)]
 
 pub static HIGH_AVAILABILITY_HOOK_LIBRARY: &str = "libdhcp_ha.so";
+pub static GSS_TSIG_HOOK_LIBRARY: &str = "libddns_gss_tsig.so";
 
 // Not production. Only for tests.
 // This file should cause all rules in tests to fire correctly.
