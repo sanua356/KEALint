@@ -2,7 +2,7 @@ use std::collections::HashSet;
 
 use crate::{
     common::{RuleConfigs, RuleLevels, RuleResult, RuleV4},
-    configs::{KEALeaseDatabaseTypes, KEAv4Config, KEAv4HostsDatabasesTypes},
+    configs::v4::{KEALeaseDatabaseTypes, KEAv4Config, KEAv4HostsDatabasesTypes},
     constants::{MYSQL_HOOK_LIBRARY, PGSQL_HOOK_LIBRARY},
 };
 
