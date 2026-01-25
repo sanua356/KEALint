@@ -1,4 +1,4 @@
-use crate::common::{RuleLevels, RuleResult, RuleV4};
+use crate::common::{RuleConfigs, RuleLevels, RuleResult, RuleV4};
 use crate::configs::KEAv4Config;
 
 pub struct NoInterfacesInInterfacesConfigRule;
@@ -10,6 +10,10 @@ impl RuleV4 for NoInterfacesInInterfacesConfigRule {
 
     fn get_name(&self) -> &'static str {
         "INTERFACES::NoInterfacesInInterfacesConfigRule"
+    }
+
+    fn get_config_type(&self) -> RuleConfigs {
+        RuleConfigs::Dhcp4
     }
 
     fn check(&self, config: &KEAv4Config) -> Option<Vec<RuleResult>> {

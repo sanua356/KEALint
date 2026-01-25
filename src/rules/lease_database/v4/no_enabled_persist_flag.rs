@@ -1,5 +1,5 @@
 use crate::{
-    common::{RuleLevels, RuleResult, RuleV4},
+    common::{RuleConfigs, RuleLevels, RuleResult, RuleV4},
     configs::{KEALeaseDatabaseTypes, KEAv4Config},
 };
 
@@ -12,6 +12,10 @@ impl RuleV4 for NoEnabledPersistFlagForMemfileLeasesRule {
 
     fn get_level(&self) -> RuleLevels {
         RuleLevels::Warning
+    }
+
+    fn get_config_type(&self) -> RuleConfigs {
+        RuleConfigs::Dhcp4
     }
 
     fn check(&self, config: &KEAv4Config) -> Option<Vec<RuleResult>> {

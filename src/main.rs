@@ -3,6 +3,7 @@ mod common;
 mod configs;
 mod constants;
 mod rules;
+mod utils;
 
 use std::{env, fs, path::Path};
 

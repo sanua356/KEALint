@@ -10,6 +10,7 @@ use crate::{
         },
         interfaces::NoInterfacesInInterfacesConfigRule,
         lease_database::NoEnabledPersistFlagForMemfileLeasesRule,
+        subnets::SubnetsPoolsIntersectionRule,
     },
 };
 
@@ -17,6 +18,7 @@ pub struct RulesV4 {
     pub interfaces: Vec<Box<dyn RuleV4>>,
     pub lease_database: Vec<Box<dyn RuleV4>>,
     pub hooks: Vec<Box<dyn RuleV4>>,
+    pub subnets: Vec<Box<dyn RuleV4>>,
 }
 
 impl RulesV4 {
@@ -28,6 +30,7 @@ impl RulesV4 {
                 Box::new(MultithreadingModesNotEqualInConfigAndHARule),
                 Box::new(UnnecessaryActivatedDatabaseHooksRule),
             ],
+            subnets: vec![Box::new(SubnetsPoolsIntersectionRule)],
         }
     }
 
@@ -35,8 +38,9 @@ impl RulesV4 {
         let interfaces = iter::once(&self.interfaces);
         let lease_database = iter::once(&self.lease_database);
         let hooks = iter::once(&self.hooks);
+        let subnets = iter::once(&self.subnets);
 
-        interfaces.chain(lease_database).chain(hooks)
+        interfaces.chain(lease_database).chain(hooks).chain(subnets)
     }
 
     pub fn run(&self, config: &KEAv4Config) {

@@ -3,6 +3,7 @@
 use serde::Deserialize;
 
 pub use shared::*;
+pub use subnets::KEAv4PoolVariant;
 
 mod client_classes;
 mod config_control;
