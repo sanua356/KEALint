@@ -7,10 +7,12 @@ use crate::{
     rules::{
         client_classes::EvaluateRequiredAsAdditionalClassesRule,
         hooks::{
-            MultithreadingModesNotEqualInConfigAndHARule, UnnecessaryActivatedDatabaseHooksRule,
+            MultithreadingModesNotEqualInConfigAndHARule,
+            NoActivatedHostCMDsHookForDatabaseBackendRule, UnnecessaryActivatedDatabaseHooksRule,
         },
         interfaces::NoInterfacesInInterfacesConfigRule,
         lease_database::NoEnabledPersistFlagForMemfileLeasesRule,
+        shared_networks::OneSubnetInSharedNetworksRule,
         subnets::SubnetsPoolsIntersectionRule,
     },
 };
@@ -21,6 +23,7 @@ pub struct RulesV4 {
     pub hooks: Vec<Box<dyn RuleV4>>,
     pub subnets: Vec<Box<dyn RuleV4>>,
     pub client_classes: Vec<Box<dyn RuleV4>>,
+    pub shared_networks: Vec<Box<dyn RuleV4>>,
 }
 
 impl RulesV4 {
@@ -31,9 +34,11 @@ impl RulesV4 {
             hooks: vec![
                 Box::new(MultithreadingModesNotEqualInConfigAndHARule),
                 Box::new(UnnecessaryActivatedDatabaseHooksRule),
+                Box::new(NoActivatedHostCMDsHookForDatabaseBackendRule),
             ],
             subnets: vec![Box::new(SubnetsPoolsIntersectionRule)],
             client_classes: vec![Box::new(EvaluateRequiredAsAdditionalClassesRule)],
+            shared_networks: vec![Box::new(OneSubnetInSharedNetworksRule)],
         }
     }
 
@@ -43,12 +48,14 @@ impl RulesV4 {
         let hooks = iter::once(&self.hooks);
         let subnets = iter::once(&self.subnets);
         let client_classes = iter::once(&self.client_classes);
+        let shared_networks = iter::once(&self.shared_networks);
 
         interfaces
             .chain(lease_database)
             .chain(hooks)
             .chain(subnets)
             .chain(client_classes)
+            .chain(shared_networks)
     }
 
     pub fn run(&self, config: &KEAv4Config) {

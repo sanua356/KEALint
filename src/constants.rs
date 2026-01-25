@@ -6,6 +6,7 @@ use regex::Regex;
 pub static HIGH_AVAILABILITY_HOOK_LIBRARY: &str = "libdhcp_ha.so";
 pub static MYSQL_HOOK_LIBRARY: &str = "libdhcp_mysql.so";
 pub static PGSQL_HOOK_LIBRARY: &str = "libdhcp_pgsql.so";
+pub static HOST_CMDS_HOOK_LIBRARY: &str = "libdhcp_host_cmds.so";
 
 pub static GSS_TSIG_HOOK_LIBRARY: &str = "libddns_gss_tsig.so";
 
@@ -85,15 +86,6 @@ pub static TEMPLATE_CONFIG_FOR_TESTS_V4: &str = r#"
 					"pools": [
 						{
 							"pool": "10.0.0.1 - 10.0.0.99"
-						}
-					]
-				},
-				{
-					"id": 2,
-					"subnet": "192.0.2.0/24",
-					"pools": [
-						{
-							"pool": "192.0.2.100 - 192.0.2.199"
 						}
 					]
 				}

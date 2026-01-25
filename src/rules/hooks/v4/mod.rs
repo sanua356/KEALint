@@ -1,2 +1,3 @@
 pub mod multithread_modes_not_equal;
+pub mod no_activated_host_cmds_for_database_backend;
 pub mod unnecessary_activated_database_hooks;

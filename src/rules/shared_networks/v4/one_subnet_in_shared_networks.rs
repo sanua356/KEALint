@@ -1,0 +1,91 @@
+use crate::{
+    common::{RuleConfigs, RuleLevels, RuleResult, RuleV4},
+    configs::KEAv4Config,
+};
+
+pub struct OneSubnetInSharedNetworksRule;
+
+impl RuleV4 for OneSubnetInSharedNetworksRule {
+    fn get_name(&self) -> &'static str {
+        "SHARED_NETWORKS::OneSubnetInSharedNetworksRule"
+    }
+    fn get_level(&self) -> RuleLevels {
+        RuleLevels::Info
+    }
+    fn get_config_type(&self) -> RuleConfigs {
+        RuleConfigs::Dhcp4
+    }
+    fn check(&self, config: &KEAv4Config) -> Option<Vec<RuleResult>> {
+        config.shared_networks.as_ref()?;
+
+        let mut results: Vec<RuleResult> = Vec::new();
+
+        if let Some(shared_networks) = &config.shared_networks {
+            for shared_network in shared_networks {
+                if let Some(subnets) = &shared_network.subnet4
+                    && subnets.len() == 1
+                {
+                    results.push(RuleResult {
+                        description: format!("There is one subnet in the network using the 'shared-networks' key named '{}'. It can be moved to the 'subnet4' global configuration.", shared_network.name),
+                        snapshot: None,
+                        links: None,
+                    });
+                }
+            }
+        }
+
+        if !results.is_empty() {
+            return Some(results);
+        }
+
+        None
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use serde_json::Value;
+
+    use crate::{
+        common::RuleV4, configs::v4::KEAv4Config, constants::TEMPLATE_CONFIG_FOR_TESTS_V4,
+        rules::shared_networks::OneSubnetInSharedNetworksRule,
+    };
+
+    #[test]
+    fn check_expected_trigger() {
+        let data: KEAv4Config = serde_json::from_str(TEMPLATE_CONFIG_FOR_TESTS_V4).unwrap();
+
+        let rule = OneSubnetInSharedNetworksRule;
+        assert!(rule.check(&data).is_some());
+    }
+
+    #[test]
+    fn check_absense_trigger() {
+        let mut json_value: Value = serde_json::from_str(TEMPLATE_CONFIG_FOR_TESTS_V4).unwrap();
+        let subnets: Value = serde_json::json!(
+            [{
+                "id": 1,
+                "subnet": "10.0.0.0/8",
+                "pools": [
+                    {
+                        "pool": "10.0.0.1 - 10.0.0.99"
+                    }
+                ]
+            },
+            {
+                "id": 2,
+                "subnet": "10.0.0.0/16",
+                "pools": [
+                    {
+                        "pool": "10.0.0.100 - 10.0.0.150"
+                    }
+                ]
+            }]
+        );
+        json_value["shared-networks"].as_array_mut().unwrap()[0]["subnet4"] = subnets;
+        let data: KEAv4Config = serde_json::from_value(json_value).unwrap();
+
+        let rule = OneSubnetInSharedNetworksRule;
+        assert!(rule.check(&data).is_none());
+    }
+}
