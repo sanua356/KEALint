@@ -2,8 +2,9 @@
 
 use serde::Deserialize;
 
+pub use option_data::KEAv4OptionData;
 pub use shared::*;
-pub use subnets::KEAv4PoolVariant;
+pub use subnets::{KEAv4PoolVariant, KEAv4Subnet};
 
 use super::shared::hooks;
 
@@ -16,6 +17,7 @@ mod multithreading;
 mod option_data;
 mod option_def;
 mod shared;
+mod shared_networks;
 mod subnets;
 
 #[derive(Debug, Deserialize)]
@@ -37,6 +39,7 @@ pub struct KEAv4Config {
     pub option_data: Option<Vec<option_data::KEAv4OptionData>>,
 
     pub subnet4: Option<Vec<subnets::KEAv4Subnet>>,
+    pub shared_networks: Option<Vec<shared_networks::KEAv4SharedNetwork>>,
 
     pub hosts_databases: Option<Vec<hosts_database::KEAv4HostsDatabase>>,
     pub hosts_database: Option<hosts_database::KEAv4HostsDatabase>,

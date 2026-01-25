@@ -1,6 +1,7 @@
+use serde::Deserialize;
 use std::{fmt::Display, net::Ipv4Addr, str::FromStr};
 
-use serde::Deserialize;
+use super::KEAv4OptionData;
 
 use crate::constants::{CIDR_V4_REGEXP, IPV4_RANGE_REGEXP};
 
@@ -10,6 +11,13 @@ pub struct KEAv4Subnet {
     pub subnet: String,
     pub id: Option<u32>,
     pub pools: Option<Vec<KEAv4Pool>>,
+
+    pub valid_lifetime: Option<u32>,
+    pub renew_timer: Option<u32>,
+    pub rebind_timer: Option<u32>,
+    pub evaluate_additional_classes: Option<Vec<String>>,
+
+    pub option_data: Option<Vec<KEAv4OptionData>>,
 }
 
 #[derive(Debug, PartialEq, Clone, Copy)]
@@ -70,8 +78,9 @@ impl<'de> Deserialize<'de> for KEAv4PoolVariant {
     }
 }
 
-#[derive(Debug, Deserialize, Clone, Copy)]
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "kebab-case")]
 pub struct KEAv4Pool {
     pub pool: KEAv4PoolVariant,
+    pub evaluate_additional_classes: Option<Vec<String>>,
 }

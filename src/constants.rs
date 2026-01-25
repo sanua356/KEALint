@@ -35,9 +35,15 @@ pub static TEMPLATE_CONFIG_FOR_TESTS_V4: &str = r#"
 		{
 			"id": 3,
 			"subnet": "1.2.3.0/24",
+			"evaluate-additional-classes": [
+				"test_required_class"
+			],
 			"pools": [
 				{
-					"pool": "1.2.3.0/24"
+					"pool": "1.2.3.0/24",
+					"evaluate-additional-classes": [
+						"test_required_class"
+					]
 				}
 			]
 		},
@@ -59,6 +65,41 @@ pub static TEMPLATE_CONFIG_FOR_TESTS_V4: &str = r#"
 		"thread-pool-size": 4,
 		"packet-queue-size": 16
 	},
+	"client-classes": [
+		{
+			"name": "test_required_class",
+			"test": ""
+		}
+	],
+	"shared-networks": [
+		{
+			"name": "my-secret-lair-level-1",
+			"interface": "eth0",
+			"evaluate-additional-classes": [
+				"test_required_class"
+			],
+			"subnet4": [
+				{
+					"id": 1,
+					"subnet": "10.0.0.0/8",
+					"pools": [
+						{
+							"pool": "10.0.0.1 - 10.0.0.99"
+						}
+					]
+				},
+				{
+					"id": 2,
+					"subnet": "192.0.2.0/24",
+					"pools": [
+						{
+							"pool": "192.0.2.100 - 192.0.2.199"
+						}
+					]
+				}
+			]
+		}
+	],
 	"hosts-databases": [
 		{
 			"name": "keatest",

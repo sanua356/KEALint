@@ -5,6 +5,7 @@ use crate::{
     common::RuleV4,
     configs::v4::KEAv4Config,
     rules::{
+        client_classes::EvaluateRequiredAsAdditionalClassesRule,
         hooks::{
             MultithreadingModesNotEqualInConfigAndHARule, UnnecessaryActivatedDatabaseHooksRule,
         },
@@ -19,6 +20,7 @@ pub struct RulesV4 {
     pub lease_database: Vec<Box<dyn RuleV4>>,
     pub hooks: Vec<Box<dyn RuleV4>>,
     pub subnets: Vec<Box<dyn RuleV4>>,
+    pub client_classes: Vec<Box<dyn RuleV4>>,
 }
 
 impl RulesV4 {
@@ -31,6 +33,7 @@ impl RulesV4 {
                 Box::new(UnnecessaryActivatedDatabaseHooksRule),
             ],
             subnets: vec![Box::new(SubnetsPoolsIntersectionRule)],
+            client_classes: vec![Box::new(EvaluateRequiredAsAdditionalClassesRule)],
         }
     }
 
@@ -39,8 +42,13 @@ impl RulesV4 {
         let lease_database = iter::once(&self.lease_database);
         let hooks = iter::once(&self.hooks);
         let subnets = iter::once(&self.subnets);
+        let client_classes = iter::once(&self.client_classes);
 
-        interfaces.chain(lease_database).chain(hooks).chain(subnets)
+        interfaces
+            .chain(lease_database)
+            .chain(hooks)
+            .chain(subnets)
+            .chain(client_classes)
     }
 
     pub fn run(&self, config: &KEAv4Config) {
