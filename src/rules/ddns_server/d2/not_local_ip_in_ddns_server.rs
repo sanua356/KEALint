@@ -24,10 +24,13 @@ impl RuleD2 for NotLocalIPAddressInD2ServerConfigRule {
         if !config.ip_address.unwrap().is_loopback() {
             return Some(vec![RuleResult {
                 description: "Loopback addresses must be used as the server address to avoid attacks with fake requests.".to_string(),
-                snapshot: Some(serde_json::to_string(&config.ip_address).unwrap()),
+                snapshot: Some(
+	                serde_json::to_string(
+		                &serde_json::json!({"ip-address": &config.ip_address})
+	                ).unwrap()
+                ),
                 links: Some(vec![
-                    "https://kea.readthedocs.io/en/latest/arm/ddns.html#global-server-parameters"
-                        .to_string(),
+                    "https://kea.readthedocs.io/en/latest/arm/ddns.html#global-server-parameters",
                 ]),
             }]);
         }

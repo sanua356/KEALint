@@ -1,6 +1,6 @@
 #![allow(dead_code)]
 
-use std::{net::Ipv4Addr, u32};
+use std::net::Ipv4Addr;
 
 use crate::configs::KEAv4PoolVariant;
 

@@ -32,7 +32,7 @@ impl RuleV4 for SubnetsPoolsIntersectionRule {
                 for pool in pools {
                     all_subnets_pools.push(SubnetPool {
                         subnet: subnet.subnet.clone(),
-                        pool: pool.pool.clone(),
+                        pool: pool.pool,
                     });
                 }
             }
@@ -58,13 +58,13 @@ impl RuleV4 for SubnetsPoolsIntersectionRule {
                             b.subnet
                         ),
                         snapshot: None,
-                        links: Some(vec!["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#configuration-of-ipv4-address-pools".to_string()]),
+                        links: Some(vec!["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#configuration-of-ipv4-address-pools"]),
                     });
                 }
             }
         }
 
-        if results.iter().len() > 0 {
+        if !results.is_empty() {
             return Some(results);
         }
 

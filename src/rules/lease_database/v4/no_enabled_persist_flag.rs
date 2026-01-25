@@ -27,7 +27,7 @@ impl RuleV4 for NoEnabledPersistFlagForMemfileLeasesRule {
                 RuleResult {
                     description: "The 'persist' flag is not set to 'true' for the maintenance of the arend database in the 'memfile'".to_string(),
                     snapshot: Some(serde_json::to_string(&config.lease_database).unwrap()),
-                    links: Some(vec!["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#memfile-basic-storage-for-leases".to_string()]),
+                    links: Some(vec!["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#memfile-basic-storage-for-leases"]),
                 }
             ]);
         }

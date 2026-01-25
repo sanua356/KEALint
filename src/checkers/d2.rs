@@ -4,22 +4,29 @@ use crate::{
     checkers::{Problem, tabled_print_problems},
     common::RuleD2,
     configs::KEAD2Config,
-    rules::ddns_server::NotLocalIPAddressInD2ServerConfigRule,
+    rules::{
+        ddns_server::NotLocalIPAddressInD2ServerConfigRule, hooks::BadTKeyGSSTSIGHookTimeoutsRule,
+    },
 };
 
 pub struct RulesD2 {
     pub global: Vec<Box<dyn RuleD2>>,
+    pub hooks: Vec<Box<dyn RuleD2>>,
 }
 
 impl RulesD2 {
     pub fn default() -> Self {
         RulesD2 {
             global: vec![Box::new(NotLocalIPAddressInD2ServerConfigRule)],
+            hooks: vec![Box::new(BadTKeyGSSTSIGHookTimeoutsRule)],
         }
     }
 
     fn values(&self) -> impl Iterator<Item = &Vec<Box<dyn RuleD2>>> {
-        iter::once(&self.global)
+        let global = iter::once(&self.global);
+        let hooks = iter::once(&self.hooks);
+
+        global.chain(hooks)
     }
 
     pub fn run(&self, config: &KEAD2Config) {

@@ -5,9 +5,10 @@ use serde::Deserialize;
 pub use shared::*;
 pub use subnets::KEAv4PoolVariant;
 
+use super::shared::hooks;
+
 mod client_classes;
 mod config_control;
-mod hooks;
 mod hosts_database;
 mod interfaces;
 mod lease_database;
@@ -30,7 +31,7 @@ pub struct KEAv4Config {
     pub lease_database: lease_database::KEAv4LeaseDatabase,
     pub multi_threading: Option<multithreading::KEAv4Multithreading>,
 
-    pub hooks_libraries: Option<Vec<hooks::KEAv4HookLibrary>>,
+    pub hooks_libraries: Option<Vec<hooks::KEAHookLibrary>>,
     pub client_classes: Option<Vec<client_classes::KEAv4ClientClass>>,
     pub option_def: Option<Vec<option_def::KEAv4OptionDefinition>>,
     pub option_data: Option<Vec<option_data::KEAv4OptionData>>,

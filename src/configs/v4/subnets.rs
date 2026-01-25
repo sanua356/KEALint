@@ -50,7 +50,7 @@ impl FromStr for KEAv4PoolVariant {
             let prefix_value: u8 = prefix.trim().parse().map_err(|_| "Bad prefix in CIDR.")?;
 
             if prefix_value > 32 {
-                return Err(format!("Bad prefix value in CIDR: {}", s).into());
+                return Err(format!("Bad prefix value in CIDR: {}", s));
             }
 
             return Ok(KEAv4PoolVariant::Cidr(start_ip, prefix_value));

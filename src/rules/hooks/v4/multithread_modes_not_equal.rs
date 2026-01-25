@@ -52,8 +52,8 @@ impl RuleV4 for MultithreadingModesNotEqualInConfigAndHARule {
                         description: "The multithreading control flags in the global server configuration and the high availability hook configuration are not equal.".to_string(),
                         snapshot: None,
                         links: Some(vec![
-							"https://kea.readthedocs.io/en/latest/arm/dhcp6-srv.html#multi-threading-settings".to_string(),
-							"https://kea.readthedocs.io/en/latest/arm/hooks.html#multi-threaded-configuration-ha-mt".to_string()
+							"https://kea.readthedocs.io/en/latest/arm/dhcp6-srv.html#multi-threading-settings",
+							"https://kea.readthedocs.io/en/latest/arm/hooks.html#multi-threaded-configuration-ha-mt"
 						])
                     }]);
                 }
