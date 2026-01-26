@@ -8,7 +8,7 @@ use crate::constants::{CIDR_V4_REGEXP, IPV4_RANGE_REGEXP};
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "kebab-case")]
 pub struct KEAv4Subnet {
-    pub subnet: String,
+    pub subnet: KEAv4PoolVariant,
     pub id: Option<u32>,
     pub pools: Option<Vec<KEAv4Pool>>,
 

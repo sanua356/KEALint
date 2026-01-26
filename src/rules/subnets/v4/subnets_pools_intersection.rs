@@ -31,7 +31,7 @@ impl RuleV4 for SubnetsPoolsIntersectionRule {
             if let Some(pools) = &subnet.pools {
                 for pool in pools {
                     all_subnets_pools.push(SubnetPool {
-                        subnet: subnet.subnet.clone(),
+                        subnet: subnet.subnet.to_string().clone(),
                         pool: pool.pool,
                     });
                 }

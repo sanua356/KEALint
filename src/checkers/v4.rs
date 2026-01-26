@@ -13,7 +13,7 @@ use crate::{
         interfaces::NoInterfacesInInterfacesConfigRule,
         lease_database::NoEnabledPersistFlagForMemfileLeasesRule,
         shared_networks::OneSubnetInSharedNetworksRule,
-        subnets::SubnetsPoolsIntersectionRule,
+        subnets::{SubnetsOverlappingRule, SubnetsPoolsIntersectionRule},
     },
 };
 
@@ -37,7 +37,10 @@ impl RulesV4 {
                 Box::new(NoActivatedHostCMDsHookForDatabaseBackendRule),
                 Box::new(BadHooksOrderRule),
             ],
-            subnets: vec![Box::new(SubnetsPoolsIntersectionRule)],
+            subnets: vec![
+                Box::new(SubnetsPoolsIntersectionRule),
+                Box::new(SubnetsOverlappingRule),
+            ],
             client_classes: vec![Box::new(EvaluateRequiredAsAdditionalClassesRule)],
             shared_networks: vec![Box::new(OneSubnetInSharedNetworksRule)],
         }
