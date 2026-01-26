@@ -7,7 +7,7 @@ use crate::{
     rules::{
         client_classes::EvaluateRequiredAsAdditionalClassesRule,
         hooks::{
-            MultithreadingModesNotEqualInConfigAndHARule,
+            BadHooksOrderRule, MultithreadingModesNotEqualInConfigAndHARule,
             NoActivatedHostCMDsHookForDatabaseBackendRule, UnnecessaryActivatedDatabaseHooksRule,
         },
         interfaces::NoInterfacesInInterfacesConfigRule,
@@ -35,6 +35,7 @@ impl RulesV4 {
                 Box::new(MultithreadingModesNotEqualInConfigAndHARule),
                 Box::new(UnnecessaryActivatedDatabaseHooksRule),
                 Box::new(NoActivatedHostCMDsHookForDatabaseBackendRule),
+                Box::new(BadHooksOrderRule),
             ],
             subnets: vec![Box::new(SubnetsPoolsIntersectionRule)],
             client_classes: vec![Box::new(EvaluateRequiredAsAdditionalClassesRule)],

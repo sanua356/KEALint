@@ -7,6 +7,10 @@ pub static HIGH_AVAILABILITY_HOOK_LIBRARY: &str = "libdhcp_ha.so";
 pub static MYSQL_HOOK_LIBRARY: &str = "libdhcp_mysql.so";
 pub static PGSQL_HOOK_LIBRARY: &str = "libdhcp_pgsql.so";
 pub static HOST_CMDS_HOOK_LIBRARY: &str = "libdhcp_host_cmds.so";
+pub static FLEX_ID_HOOK_LIBRARY: &str = "libdhcp_flex_id.so";
+pub static FORENSIC_LOGGING_HOOK_LIBRARY: &str = "libdhcp_legal_log.so";
+pub static LEASE_COMMANDS_HOOK_LIBRARY: &str = "libdhcp_lease_cmds.so";
+pub static PING_CHECK_HOOK_LIBRARY: &str = "libdhcp_ping_check.so";
 
 pub static GSS_TSIG_HOOK_LIBRARY: &str = "libddns_gss_tsig.so";
 
@@ -116,8 +120,11 @@ pub static TEMPLATE_CONFIG_FOR_TESTS_V4: &str = r#"
 	],
 	"hooks-libraries": [
 		{
-			"library": "libdhcp_lease_cmds.so",
-			"parameters": {}
+			"library": "libdhcp_legal_log.so",
+			"parameters": {
+				"path": "/var/lib/kea/log",
+				"base-name": "kea-forensic4"
+			}
 		},
 		{
 			"library": "libdhcp_pgsql.so",
@@ -126,6 +133,12 @@ pub static TEMPLATE_CONFIG_FOR_TESTS_V4: &str = r#"
 		{
 			"library": "libdhcp_mysql.so",
 			"parameters": {}
+		},
+		{
+			"library": "libdhcp_flex_id.so",
+			"parameters": {
+				"identifier-expression": "substring(relay4[0].option[18].hex,0,8)"
+			}
 		},
 		{
 			"library": "libdhcp_ha.so",
@@ -154,6 +167,20 @@ pub static TEMPLATE_CONFIG_FOR_TESTS_V4: &str = r#"
 						]
 					}
 				]
+			}
+		},
+		{
+			"library": "libdhcp_lease_cmds.so",
+			"parameters": {}
+		},
+		{
+			"library": "libdhcp_ping_check.so",
+			"parameters": {
+				"enable-ping-check": true,
+				"min-ping-requests": 1,
+				"reply-timeout": 100,
+				"ping-cltt-secs": 60,
+				"ping-channel-threads": 0
 			}
 		}
 	]
