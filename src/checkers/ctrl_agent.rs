@@ -4,7 +4,7 @@ use crate::{
     checkers::{Problem, tabled_print_problems},
     common::RuleCtrlAgent,
     configs::KEACtrlAgentConfig,
-    rules::ctrl_agent::NotLocalIPWithoutHTTPSRule,
+    rules::ctrl_agent::{NoAllControlSocketsSpecifiedRule, NotLocalIPWithoutHTTPSRule},
 };
 
 pub struct RulesCtrlAgent {
@@ -14,7 +14,10 @@ pub struct RulesCtrlAgent {
 impl RulesCtrlAgent {
     pub fn default() -> Self {
         RulesCtrlAgent {
-            global: vec![Box::new(NotLocalIPWithoutHTTPSRule)],
+            global: vec![
+                Box::new(NotLocalIPWithoutHTTPSRule),
+                Box::new(NoAllControlSocketsSpecifiedRule),
+            ],
         }
     }
 

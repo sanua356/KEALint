@@ -260,10 +260,6 @@ pub static TEMPLATE_CONFIG_FOR_TESTS_CTRL_AGENT: &str = r#"
 		"dhcp6": {
 			"socket-type": "unix",
 			"socket-name": "kea6-ctrl-socket"
-		},
-		"d2": {
-			"socket-type": "unix",
-			"socket-name": "kea-ddns-ctrl-socket"
 		}
 	},
 	"hooks-libraries": [],
