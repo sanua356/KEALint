@@ -36,6 +36,21 @@ pub static TEMPLATE_CONFIG_FOR_TESTS_V4: &str = r#"
 		"persist": false,
 		"name": "/var/lib/kea/dhcp4.leases"
 	},
+	"loggers": [
+		{
+			"name": "kea-dhcp4",
+			"output-options": [
+				{
+					"output": "kea-dhcp4.log",
+					"maxsize": 52428800,
+					"maxver": 100,
+					"pattern": "%d{%Y-%m-%d %H:%M:%S.%q} %-5p [%c/%i.%t] %m\n"
+				}
+			],
+			"severity": "DEBUG",
+			"debuglevel": 0
+		}
+	],
 	"subnet4": [
 		{
 			"id": 3,
@@ -222,6 +237,21 @@ pub static TEMPLATE_CONFIG_FOR_TESTS_D2: &str = r#"
 	"reverse-ddns": {
 		"ddns-domains": []
 	},
+	"loggers": [
+		{
+			"name": "kea-dhcp-ddns",
+			"output-options": [
+				{
+					"output": "kea-dhcp-ddns.log",
+					"maxsize": 52428800,
+					"maxver": 100,
+					"pattern": "%d{%Y-%m-%d %H:%M:%S.%q} %-5p [%c/%i.%t] %m\n"
+				}
+			],
+			"severity": "DEBUG",
+			"debuglevel": 0
+		}
+	],
 	"hooks-libraries": [
 		{
 			"library": "/opt/lib/libddns_gss_tsig.so",
@@ -293,7 +323,7 @@ pub static TEMPLATE_CONFIG_FOR_TESTS_CTRL_AGENT: &str = r#"
 					"pattern": "%d{%Y-%m-%d %H:%M:%S.%q} %-5p [%c/%i.%t] %m\n"
 				}
 			],
-			"severity": "INFO",
+			"severity": "DEBUG",
 			"debuglevel": 0
 		}
 	]

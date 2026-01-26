@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use std::net::IpAddr;
 
-use super::shared::hooks::KEAHookLibrary;
+use super::shared::{hooks, loggers};
 
 mod sockets;
 
@@ -17,5 +17,7 @@ pub struct KEACtrlAgentConfig {
 
     pub control_sockets: Option<sockets::KEACtrlAgentControlSockets>,
 
-    pub hooks_libraries: Option<Vec<KEAHookLibrary>>,
+    pub hooks_libraries: Option<Vec<hooks::KEAHookLibrary>>,
+
+    pub loggers: Option<Vec<loggers::KEALogger>>,
 }

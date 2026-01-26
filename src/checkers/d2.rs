@@ -6,12 +6,14 @@ use crate::{
     configs::KEAD2Config,
     rules::{
         ddns_server::NotLocalIPAddressInD2ServerConfigRule, hooks::BadTKeyGSSTSIGHookTimeoutsRule,
+        loggers::DebugLoggersD2Rule,
     },
 };
 
 pub struct RulesD2 {
     pub global: Vec<Box<dyn RuleD2>>,
     pub hooks: Vec<Box<dyn RuleD2>>,
+    pub loggers: Vec<Box<dyn RuleD2>>,
 }
 
 impl RulesD2 {
@@ -19,14 +21,16 @@ impl RulesD2 {
         RulesD2 {
             global: vec![Box::new(NotLocalIPAddressInD2ServerConfigRule)],
             hooks: vec![Box::new(BadTKeyGSSTSIGHookTimeoutsRule)],
+            loggers: vec![Box::new(DebugLoggersD2Rule)],
         }
     }
 
     fn values(&self) -> impl Iterator<Item = &Vec<Box<dyn RuleD2>>> {
         let global = iter::once(&self.global);
         let hooks = iter::once(&self.hooks);
+        let loggers = iter::once(&self.loggers);
 
-        global.chain(hooks)
+        global.chain(hooks).chain(loggers)
     }
 
     pub fn run(&self, config: &KEAD2Config) {

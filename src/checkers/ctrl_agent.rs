@@ -4,11 +4,15 @@ use crate::{
     checkers::{Problem, tabled_print_problems},
     common::RuleCtrlAgent,
     configs::KEACtrlAgentConfig,
-    rules::ctrl_agent::{NoAllControlSocketsSpecifiedRule, NotLocalIPWithoutHTTPSRule},
+    rules::{
+        ctrl_agent::{NoAllControlSocketsSpecifiedRule, NotLocalIPWithoutHTTPSRule},
+        loggers::DebugLoggersCtrlAgentRule,
+    },
 };
 
 pub struct RulesCtrlAgent {
     pub global: Vec<Box<dyn RuleCtrlAgent>>,
+    pub loggers: Vec<Box<dyn RuleCtrlAgent>>,
 }
 
 impl RulesCtrlAgent {
@@ -18,11 +22,15 @@ impl RulesCtrlAgent {
                 Box::new(NotLocalIPWithoutHTTPSRule),
                 Box::new(NoAllControlSocketsSpecifiedRule),
             ],
+            loggers: vec![Box::new(DebugLoggersCtrlAgentRule)],
         }
     }
 
     fn values(&self) -> impl Iterator<Item = &Vec<Box<dyn RuleCtrlAgent>>> {
-        iter::once(&self.global)
+        let global = iter::once(&self.global);
+        let loggers = iter::once(&self.loggers);
+
+        global.chain(loggers)
     }
 
     pub fn run(&self, config: &KEACtrlAgentConfig) {

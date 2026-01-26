@@ -6,7 +6,7 @@ pub use option_data::KEAv4OptionData;
 pub use shared::*;
 pub use subnets::{KEAv4PoolVariant, KEAv4Subnet};
 
-use super::shared::hooks;
+use super::shared::{hooks, loggers};
 
 mod client_classes;
 mod config_control;
@@ -44,4 +44,6 @@ pub struct KEAv4Config {
     pub hosts_databases: Option<Vec<hosts_database::KEAv4HostsDatabase>>,
     pub hosts_database: Option<hosts_database::KEAv4HostsDatabase>,
     pub config_control: Option<config_control::KEAv4ConfigControl>,
+
+    pub loggers: Option<Vec<loggers::KEALogger>>,
 }

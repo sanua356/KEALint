@@ -2,7 +2,7 @@ use std::net::IpAddr;
 
 use serde::{Deserialize, Serialize};
 
-use crate::configs::hooks::KEAHookLibrary;
+use super::shared::{hooks, loggers};
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "kebab-case")]
@@ -13,5 +13,7 @@ pub struct KEAD2Config {
     pub ncr_protocol: Option<String>,
     pub ncr_format: Option<String>,
 
-    pub hooks_libraries: Option<Vec<KEAHookLibrary>>,
+    pub hooks_libraries: Option<Vec<hooks::KEAHookLibrary>>,
+
+    pub loggers: Option<Vec<loggers::KEALogger>>,
 }
