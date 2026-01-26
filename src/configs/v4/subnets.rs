@@ -3,7 +3,10 @@ use std::{fmt::Display, net::Ipv4Addr, str::FromStr};
 
 use super::KEAv4OptionData;
 
-use crate::constants::{CIDR_V4_REGEXP, IPV4_RANGE_REGEXP};
+use crate::{
+    configs::reservations::KEAReservation,
+    constants::{CIDR_V4_REGEXP, IPV4_RANGE_REGEXP},
+};
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "kebab-case")]
@@ -16,8 +19,11 @@ pub struct KEAv4Subnet {
     pub renew_timer: Option<u32>,
     pub rebind_timer: Option<u32>,
     pub evaluate_additional_classes: Option<Vec<String>>,
+    pub reservations_out_of_pool: Option<bool>,
 
     pub option_data: Option<Vec<KEAv4OptionData>>,
+
+    pub reservations: Option<Vec<KEAReservation>>,
 }
 
 #[derive(Debug, PartialEq, Clone, Copy)]

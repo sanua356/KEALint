@@ -12,6 +12,7 @@ pub struct KEAv4SharedNetwork {
     pub rebind_timer: Option<u32>,
     pub interface: Option<String>,
     pub evaluate_additional_classes: Option<Vec<String>>,
+    pub reservations_out_of_pool: Option<bool>,
 
     pub subnet4: Option<Vec<KEAv4Subnet>>,
 

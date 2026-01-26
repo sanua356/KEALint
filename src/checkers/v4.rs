@@ -12,6 +12,7 @@ use crate::{
         },
         interfaces::NoInterfacesInInterfacesConfigRule,
         lease_database::NoEnabledPersistFlagForMemfileLeasesRule,
+        reservations::AllReservationsOutOfPoolsRule,
         shared_networks::OneSubnetInSharedNetworksRule,
         subnets::{SubnetsOverlappingRule, SubnetsPoolsIntersectionRule},
     },
@@ -24,6 +25,7 @@ pub struct RulesV4 {
     pub subnets: Vec<Box<dyn RuleV4>>,
     pub client_classes: Vec<Box<dyn RuleV4>>,
     pub shared_networks: Vec<Box<dyn RuleV4>>,
+    pub reservations: Vec<Box<dyn RuleV4>>,
 }
 
 impl RulesV4 {
@@ -43,6 +45,7 @@ impl RulesV4 {
             ],
             client_classes: vec![Box::new(EvaluateRequiredAsAdditionalClassesRule)],
             shared_networks: vec![Box::new(OneSubnetInSharedNetworksRule)],
+            reservations: vec![Box::new(AllReservationsOutOfPoolsRule)],
         }
     }
 
@@ -53,6 +56,7 @@ impl RulesV4 {
         let subnets = iter::once(&self.subnets);
         let client_classes = iter::once(&self.client_classes);
         let shared_networks = iter::once(&self.shared_networks);
+        let reservations = iter::once(&self.reservations);
 
         interfaces
             .chain(lease_database)
@@ -60,6 +64,7 @@ impl RulesV4 {
             .chain(subnets)
             .chain(client_classes)
             .chain(shared_networks)
+            .chain(reservations)
     }
 
     pub fn run(&self, config: &KEAv4Config) {

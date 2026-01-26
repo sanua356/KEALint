@@ -62,6 +62,18 @@ pub static TEMPLATE_CONFIG_FOR_TESTS_V4: &str = r#"
 				{
 					"pool": "1.8.8.10-1.8.8.20"
 				}
+			],
+			"reservations": [
+				{
+					"hostname": "special-snowflake",
+					"hw-address": "1a:1b:1c:1d:1e:1f",
+					"ip-address": "1.0.0.100"
+				},
+				{
+					"hostname": "out_of_pool_reservation",
+					"hw-address": "11:22:33:44:55:66",
+					"ip-address": "1.8.8.30"
+				}
 			]
 		}
 	],
@@ -90,6 +102,13 @@ pub static TEMPLATE_CONFIG_FOR_TESTS_V4: &str = r#"
 					"pools": [
 						{
 							"pool": "10.0.0.1 - 10.0.0.99"
+						}
+					],
+					"reservations": [
+						{
+							"hostname": "hostname",
+							"hw-address": "2a:2b:2c:2d:2e:2f",
+							"ip-address": "10.0.0.150"
 						}
 					]
 				}

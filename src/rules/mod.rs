@@ -4,5 +4,6 @@ pub mod ddns_server;
 pub mod hooks;
 pub mod interfaces;
 pub mod lease_database;
+pub mod reservations;
 pub mod shared_networks;
 pub mod subnets;
