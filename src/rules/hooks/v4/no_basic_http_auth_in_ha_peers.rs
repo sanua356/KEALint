@@ -1,0 +1,93 @@
+use crate::{
+    common::{Rule, RuleConfigs, RuleLevels, RuleResult},
+    configs::KEAv4Config,
+    constants::HIGH_AVAILABILITY_HOOK_LIBRARY,
+};
+
+pub struct NoBasicHTTPAuthInHAPeersRule;
+
+impl Rule<KEAv4Config> for NoBasicHTTPAuthInHAPeersRule {
+    fn get_name(&self) -> &'static str {
+        "HOOKS::NoBasicHTTPAuthInHAPeersRule"
+    }
+    fn get_level(&self) -> RuleLevels {
+        RuleLevels::Warning
+    }
+    fn get_config_type(&self) -> RuleConfigs {
+        RuleConfigs::Dhcp4
+    }
+    fn check(&self, config: &KEAv4Config) -> Option<Vec<RuleResult>> {
+        let mut results: Vec<RuleResult> = Vec::new();
+
+        if let Some(hooks) = &config.hooks_libraries {
+            let ha_hook = hooks
+                .iter()
+                .find(|item| item.library.contains(HIGH_AVAILABILITY_HOOK_LIBRARY));
+
+            if let Some(hook_info) = ha_hook
+                && hook_info.parameters.is_some()
+            {
+                let parameters = hook_info.parameters.as_ref().unwrap();
+
+                if let Some(builds) = parameters["high-availability"].as_array() {
+                    for ha in builds {
+                        if let Some(peers) = ha["peers"].as_array() {
+                            for peer in peers {
+                                if peer.get("basic-auth-user").is_none()
+                                    && peer.get("basic-auth-password").is_none()
+                                {
+                                    results.push(RuleResult {
+                                        description: format!("The peer named '{}' of the high availability hook lacks basic HTTP authentication.", peer["name"].as_str().unwrap()),
+                                        snapshot: Some(serde_json::to_string(peers).unwrap()),
+                                        links: Some(vec!["https://kea.readthedocs.io/en/latest/arm/hooks.html#hot-standby-configuration"]),
+                                    });
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if !results.is_empty() {
+            return Some(results);
+        }
+
+        None
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use serde_json::Value;
+
+    use crate::{
+        common::Rule, configs::v4::KEAv4Config, constants::TEMPLATE_CONFIG_FOR_TESTS_V4,
+        rules::hooks::NoBasicHTTPAuthInHAPeersRule,
+    };
+
+    #[test]
+    fn check_expected_trigger() {
+        let data: KEAv4Config = serde_json::from_str(TEMPLATE_CONFIG_FOR_TESTS_V4).unwrap();
+
+        let rule = NoBasicHTTPAuthInHAPeersRule;
+        assert!(rule.check(&data).is_some());
+    }
+
+    #[test]
+    fn check_absense_trigger() {
+        let mut json_value: Value = serde_json::from_str(TEMPLATE_CONFIG_FOR_TESTS_V4).unwrap();
+        json_value.as_object_mut().unwrap()["hooks-libraries"][4]["parameters"]["high-availability"][0]["peers"]
+            .as_array_mut()
+            .unwrap()
+            .remove(0);
+        json_value.as_object_mut().unwrap()["hooks-libraries"][4]["parameters"]["high-availability"][0]["peers"]
+            .as_array_mut()
+            .unwrap()
+            .remove(0);
+        let data: KEAv4Config = serde_json::from_value(json_value).unwrap();
+
+        let rule = NoBasicHTTPAuthInHAPeersRule;
+        assert!(rule.check(&data).is_none());
+    }
+}

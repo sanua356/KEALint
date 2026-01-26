@@ -8,7 +8,8 @@ use crate::{
         client_classes::EvaluateRequiredAsAdditionalClassesRule,
         hooks::{
             BadHooksOrderRule, MultithreadingModesNotEqualInConfigAndHARule,
-            NoActivatedHostCMDsHookForDatabaseBackendRule, UnnecessaryActivatedDatabaseHooksRule,
+            NoActivatedHostCMDsHookForDatabaseBackendRule, NoBasicHTTPAuthInHAPeersRule,
+            UnnecessaryActivatedDatabaseHooksRule,
         },
         interfaces::NoInterfacesInInterfacesConfigRule,
         lease_database::NoEnabledPersistFlagForMemfileLeasesRule,
@@ -40,6 +41,7 @@ impl RulesV4 {
                 Box::new(UnnecessaryActivatedDatabaseHooksRule),
                 Box::new(NoActivatedHostCMDsHookForDatabaseBackendRule),
                 Box::new(BadHooksOrderRule),
+                Box::new(NoBasicHTTPAuthInHAPeersRule),
             ],
             subnets: vec![
                 Box::new(SubnetsPoolsIntersectionRule),
