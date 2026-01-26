@@ -8,8 +8,8 @@ mod utils;
 use std::{env, fs, path::Path};
 
 use crate::{
-    checkers::{RulesD2, RulesV4},
-    configs::{KEAD2Config, KEAv4Config},
+    checkers::{RulesCtrlAgent, RulesD2, RulesV4},
+    configs::{KEACtrlAgentConfig, KEAD2Config, KEAv4Config},
 };
 
 fn main() {
@@ -31,4 +31,12 @@ fn main() {
 
     let checker_d2: RulesD2 = RulesD2::default();
     checker_d2.run(&d2);
+
+    let content_ctrl_agent_path = Path::new(current_path.as_os_str()).join("kea-ctrl-agent.conf");
+    let content_ctrl_agent = fs::read_to_string(content_ctrl_agent_path)
+        .expect("An error occurred while reading ctrl-agent the configuration file.");
+    let ctrl_agent: KEACtrlAgentConfig = serde_json::from_str(&content_ctrl_agent).unwrap();
+
+    let checker_ctrl_agent: RulesCtrlAgent = RulesCtrlAgent::default();
+    checker_ctrl_agent.run(&ctrl_agent);
 }

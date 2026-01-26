@@ -2,7 +2,7 @@
 
 use std::fmt::Display;
 
-use crate::configs::{KEAD2Config, KEAv4Config};
+use crate::configs::{KEACtrlAgentConfig, KEAD2Config, KEAv4Config};
 
 #[derive(Debug)]
 pub enum RuleConfigs {
@@ -68,5 +68,17 @@ pub trait RuleD2 {
 
     fn get_config_type(&self) -> RuleConfigs {
         RuleConfigs::D2
+    }
+}
+
+pub trait RuleCtrlAgent {
+    fn check(&self, config: &KEACtrlAgentConfig) -> Option<Vec<RuleResult>>;
+
+    fn get_name(&self) -> &'static str;
+
+    fn get_level(&self) -> RuleLevels;
+
+    fn get_config_type(&self) -> RuleConfigs {
+        RuleConfigs::ControlAgent
     }
 }

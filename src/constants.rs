@@ -244,3 +244,43 @@ pub static TEMPLATE_CONFIG_FOR_TESTS_D2: &str = r#"
 	]
 }
 "#;
+
+// Not production. Only for tests.
+// This file should cause all rules in tests to fire correctly.
+pub static TEMPLATE_CONFIG_FOR_TESTS_CTRL_AGENT: &str = r#"
+{
+	"http-host": "0.0.0.0",
+	"http-port": 8002,
+	"cert-required": true,
+	"control-sockets": {
+		"dhcp4": {
+			"socket-type": "unix",
+			"socket-name": "kea4-ctrl-socket"
+		},
+		"dhcp6": {
+			"socket-type": "unix",
+			"socket-name": "kea6-ctrl-socket"
+		},
+		"d2": {
+			"socket-type": "unix",
+			"socket-name": "kea-ddns-ctrl-socket"
+		}
+	},
+	"hooks-libraries": [],
+	"loggers": [
+		{
+			"name": "kea-ctrl-agent",
+			"output-options": [
+				{
+					"output": "kea-ctrl-agent.log",
+					"maxsize": 52428800,
+					"maxver": 100,
+					"pattern": "%d{%Y-%m-%d %H:%M:%S.%q} %-5p [%c/%i.%t] %m\n"
+				}
+			],
+			"severity": "INFO",
+			"debuglevel": 0
+		}
+	]
+}
+"#;

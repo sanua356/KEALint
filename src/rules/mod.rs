@@ -1,4 +1,5 @@
 pub mod client_classes;
+pub mod ctrl_agent;
 pub mod ddns_server;
 pub mod hooks;
 pub mod interfaces;
