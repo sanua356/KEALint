@@ -1,11 +1,11 @@
 use crate::{
-    common::{RuleConfigs, RuleCtrlAgent, RuleLevels, RuleResult},
+    common::{Rule, RuleConfigs, RuleLevels, RuleResult},
     configs::KEACtrlAgentConfig,
 };
 
 pub struct NotLocalIPWithoutHTTPSRule;
 
-impl RuleCtrlAgent for NotLocalIPWithoutHTTPSRule {
+impl Rule<KEACtrlAgentConfig> for NotLocalIPWithoutHTTPSRule {
     fn get_name(&self) -> &'static str {
         "CTRL_AGENT::NotLocalIPWithoutHTTPSRule"
     }
@@ -40,8 +40,7 @@ mod tests {
     use serde_json::Value;
 
     use crate::{
-        common::RuleCtrlAgent, configs::KEACtrlAgentConfig,
-        constants::TEMPLATE_CONFIG_FOR_TESTS_CTRL_AGENT,
+        common::Rule, configs::KEACtrlAgentConfig, constants::TEMPLATE_CONFIG_FOR_TESTS_CTRL_AGENT,
         rules::ctrl_agent::NotLocalIPWithoutHTTPSRule,
     };
 

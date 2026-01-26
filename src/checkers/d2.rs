@@ -2,7 +2,7 @@ use std::iter;
 
 use crate::{
     checkers::{Problem, tabled_print_problems},
-    common::RuleD2,
+    common::Rule,
     configs::KEAD2Config,
     rules::{
         ddns_server::NotLocalIPAddressInD2ServerConfigRule, hooks::BadTKeyGSSTSIGHookTimeoutsRule,
@@ -11,9 +11,9 @@ use crate::{
 };
 
 pub struct RulesD2 {
-    pub global: Vec<Box<dyn RuleD2>>,
-    pub hooks: Vec<Box<dyn RuleD2>>,
-    pub loggers: Vec<Box<dyn RuleD2>>,
+    pub global: Vec<Box<dyn Rule<KEAD2Config>>>,
+    pub hooks: Vec<Box<dyn Rule<KEAD2Config>>>,
+    pub loggers: Vec<Box<dyn Rule<KEAD2Config>>>,
 }
 
 impl RulesD2 {
@@ -25,7 +25,7 @@ impl RulesD2 {
         }
     }
 
-    fn values(&self) -> impl Iterator<Item = &Vec<Box<dyn RuleD2>>> {
+    fn values(&self) -> impl Iterator<Item = &Vec<Box<dyn Rule<KEAD2Config>>>> {
         let global = iter::once(&self.global);
         let hooks = iter::once(&self.hooks);
         let loggers = iter::once(&self.loggers);

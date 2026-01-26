@@ -1,7 +1,7 @@
 use std::net::IpAddr;
 
 use crate::{
-    common::{RuleConfigs, RuleLevels, RuleResult, RuleV4},
+    common::{Rule, RuleConfigs, RuleLevels, RuleResult},
     configs::{KEAv4Config, KEAv4PoolVariant, KEAv4Subnet},
     utils::v4_pool_to_start_end_available_ips,
 };
@@ -57,7 +57,7 @@ fn get_reservations_out_of_pool_in_subnet(subnets: &Vec<KEAv4Subnet>) -> Vec<Rul
     out_of_pool
 }
 
-impl RuleV4 for AllReservationsOutOfPoolsRule {
+impl Rule<KEAv4Config> for AllReservationsOutOfPoolsRule {
     fn get_name(&self) -> &'static str {
         "RESERVATIONS::AllReservationsOutOfPoolsRule"
     }
@@ -95,7 +95,7 @@ mod tests {
     use serde_json::Value;
 
     use crate::{
-        common::RuleV4, configs::v4::KEAv4Config, constants::TEMPLATE_CONFIG_FOR_TESTS_V4,
+        common::Rule, configs::v4::KEAv4Config, constants::TEMPLATE_CONFIG_FOR_TESTS_V4,
         rules::reservations::AllReservationsOutOfPoolsRule,
     };
 

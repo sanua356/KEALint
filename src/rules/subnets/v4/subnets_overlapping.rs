@@ -1,12 +1,12 @@
 use crate::{
-    common::{RuleConfigs, RuleLevels, RuleResult, RuleV4},
+    common::{Rule, RuleConfigs, RuleLevels, RuleResult},
     configs::KEAv4Config,
     utils::v4_pool_to_start_end_available_ips,
 };
 
 pub struct SubnetsOverlappingRule;
 
-impl RuleV4 for SubnetsOverlappingRule {
+impl Rule<KEAv4Config> for SubnetsOverlappingRule {
     fn get_name(&self) -> &'static str {
         "SUBNETS::SubnetsOverlappingRule"
     }
@@ -56,7 +56,7 @@ mod tests {
     use serde_json::Value;
 
     use crate::{
-        common::RuleV4, configs::v4::KEAv4Config, constants::TEMPLATE_CONFIG_FOR_TESTS_V4,
+        common::Rule, configs::v4::KEAv4Config, constants::TEMPLATE_CONFIG_FOR_TESTS_V4,
         rules::subnets::SubnetsOverlappingRule,
     };
 

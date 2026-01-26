@@ -2,7 +2,7 @@ use std::iter;
 
 use crate::{
     checkers::{Problem, tabled_print_problems},
-    common::RuleCtrlAgent,
+    common::Rule,
     configs::KEACtrlAgentConfig,
     rules::{
         ctrl_agent::{NoAllControlSocketsSpecifiedRule, NotLocalIPWithoutHTTPSRule},
@@ -11,8 +11,8 @@ use crate::{
 };
 
 pub struct RulesCtrlAgent {
-    pub global: Vec<Box<dyn RuleCtrlAgent>>,
-    pub loggers: Vec<Box<dyn RuleCtrlAgent>>,
+    pub global: Vec<Box<dyn Rule<KEACtrlAgentConfig>>>,
+    pub loggers: Vec<Box<dyn Rule<KEACtrlAgentConfig>>>,
 }
 
 impl RulesCtrlAgent {
@@ -26,7 +26,7 @@ impl RulesCtrlAgent {
         }
     }
 
-    fn values(&self) -> impl Iterator<Item = &Vec<Box<dyn RuleCtrlAgent>>> {
+    fn values(&self) -> impl Iterator<Item = &Vec<Box<dyn Rule<KEACtrlAgentConfig>>>> {
         let global = iter::once(&self.global);
         let loggers = iter::once(&self.loggers);
 

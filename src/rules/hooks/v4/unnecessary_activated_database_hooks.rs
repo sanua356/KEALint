@@ -1,14 +1,14 @@
 use std::collections::HashSet;
 
 use crate::{
-    common::{RuleConfigs, RuleLevels, RuleResult, RuleV4},
+    common::{Rule, RuleConfigs, RuleLevels, RuleResult},
     configs::v4::{KEALeaseDatabaseTypes, KEAv4Config, KEAv4HostsDatabasesTypes},
     constants::{MYSQL_HOOK_LIBRARY, PGSQL_HOOK_LIBRARY},
 };
 
 pub struct UnnecessaryActivatedDatabaseHooksRule;
 
-impl RuleV4 for UnnecessaryActivatedDatabaseHooksRule {
+impl Rule<KEAv4Config> for UnnecessaryActivatedDatabaseHooksRule {
     fn get_name(&self) -> &'static str {
         "HOOKS::UnnecessaryActivatedDatabaseHooksRule"
     }
@@ -108,7 +108,7 @@ mod tests {
     use serde_json::Value;
 
     use crate::{
-        common::RuleV4, configs::v4::KEAv4Config, constants::TEMPLATE_CONFIG_FOR_TESTS_V4,
+        common::Rule, configs::v4::KEAv4Config, constants::TEMPLATE_CONFIG_FOR_TESTS_V4,
         rules::hooks::UnnecessaryActivatedDatabaseHooksRule,
     };
 

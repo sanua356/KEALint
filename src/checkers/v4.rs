@@ -2,7 +2,7 @@ use std::iter;
 
 use crate::{
     checkers::{common::Problem, tabled_print_problems},
-    common::RuleV4,
+    common::Rule,
     configs::v4::KEAv4Config,
     rules::{
         client_classes::EvaluateRequiredAsAdditionalClassesRule,
@@ -20,14 +20,14 @@ use crate::{
 };
 
 pub struct RulesV4 {
-    pub interfaces: Vec<Box<dyn RuleV4>>,
-    pub lease_database: Vec<Box<dyn RuleV4>>,
-    pub hooks: Vec<Box<dyn RuleV4>>,
-    pub subnets: Vec<Box<dyn RuleV4>>,
-    pub client_classes: Vec<Box<dyn RuleV4>>,
-    pub shared_networks: Vec<Box<dyn RuleV4>>,
-    pub reservations: Vec<Box<dyn RuleV4>>,
-    pub loggers: Vec<Box<dyn RuleV4>>,
+    pub interfaces: Vec<Box<dyn Rule<KEAv4Config>>>,
+    pub lease_database: Vec<Box<dyn Rule<KEAv4Config>>>,
+    pub hooks: Vec<Box<dyn Rule<KEAv4Config>>>,
+    pub subnets: Vec<Box<dyn Rule<KEAv4Config>>>,
+    pub client_classes: Vec<Box<dyn Rule<KEAv4Config>>>,
+    pub shared_networks: Vec<Box<dyn Rule<KEAv4Config>>>,
+    pub reservations: Vec<Box<dyn Rule<KEAv4Config>>>,
+    pub loggers: Vec<Box<dyn Rule<KEAv4Config>>>,
 }
 
 impl RulesV4 {
@@ -52,7 +52,7 @@ impl RulesV4 {
         }
     }
 
-    fn values(&self) -> impl Iterator<Item = &Vec<Box<dyn RuleV4>>> {
+    fn values(&self) -> impl Iterator<Item = &Vec<Box<dyn Rule<KEAv4Config>>>> {
         let interfaces = iter::once(&self.interfaces);
         let lease_database = iter::once(&self.lease_database);
         let hooks = iter::once(&self.hooks);

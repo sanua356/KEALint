@@ -1,12 +1,12 @@
 use crate::{
-    common::{RuleConfigs, RuleLevels, RuleResult, RuleV4},
+    common::{Rule, RuleConfigs, RuleLevels, RuleResult},
     configs::KEAv4Config,
     constants::HOST_CMDS_HOOK_LIBRARY,
 };
 
 pub struct NoActivatedHostCMDsHookForDatabaseBackendRule;
 
-impl RuleV4 for NoActivatedHostCMDsHookForDatabaseBackendRule {
+impl Rule<KEAv4Config> for NoActivatedHostCMDsHookForDatabaseBackendRule {
     fn get_name(&self) -> &'static str {
         "HOOKS::NoActivatedHostCMDsHookForDatabaseBackendRule"
     }

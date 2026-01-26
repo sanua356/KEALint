@@ -1,9 +1,9 @@
-use crate::common::{RuleConfigs, RuleLevels, RuleResult, RuleV4};
+use crate::common::{Rule, RuleConfigs, RuleLevels, RuleResult};
 use crate::configs::KEAv4Config;
 
 pub struct NoInterfacesInInterfacesConfigRule;
 
-impl RuleV4 for NoInterfacesInInterfacesConfigRule {
+impl Rule<KEAv4Config> for NoInterfacesInInterfacesConfigRule {
     fn get_level(&self) -> RuleLevels {
         RuleLevels::Info
     }
@@ -35,7 +35,7 @@ mod tests {
     use serde_json::Value;
 
     use crate::{
-        common::RuleV4, configs::v4::KEAv4Config, constants::TEMPLATE_CONFIG_FOR_TESTS_V4,
+        common::Rule, configs::v4::KEAv4Config, constants::TEMPLATE_CONFIG_FOR_TESTS_V4,
         rules::interfaces::v4::no_active_interfaces::NoInterfacesInInterfacesConfigRule,
     };
 

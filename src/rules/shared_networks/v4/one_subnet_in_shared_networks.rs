@@ -1,11 +1,11 @@
 use crate::{
-    common::{RuleConfigs, RuleLevels, RuleResult, RuleV4},
+    common::{Rule, RuleConfigs, RuleLevels, RuleResult},
     configs::KEAv4Config,
 };
 
 pub struct OneSubnetInSharedNetworksRule;
 
-impl RuleV4 for OneSubnetInSharedNetworksRule {
+impl Rule<KEAv4Config> for OneSubnetInSharedNetworksRule {
     fn get_name(&self) -> &'static str {
         "SHARED_NETWORKS::OneSubnetInSharedNetworksRule"
     }
@@ -47,7 +47,7 @@ mod tests {
     use serde_json::Value;
 
     use crate::{
-        common::RuleV4, configs::v4::KEAv4Config, constants::TEMPLATE_CONFIG_FOR_TESTS_V4,
+        common::Rule, configs::v4::KEAv4Config, constants::TEMPLATE_CONFIG_FOR_TESTS_V4,
         rules::shared_networks::OneSubnetInSharedNetworksRule,
     };
 

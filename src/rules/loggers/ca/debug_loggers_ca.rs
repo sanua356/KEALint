@@ -1,5 +1,5 @@
 use crate::{
-    common::{RuleConfigs, RuleCtrlAgent, RuleLevels, RuleResult},
+    common::{Rule, RuleConfigs, RuleLevels, RuleResult},
     configs::KEACtrlAgentConfig,
 };
 
@@ -7,7 +7,7 @@ use super::super::shared::get_debug_loggers_rule;
 
 pub struct DebugLoggersCtrlAgentRule;
 
-impl RuleCtrlAgent for DebugLoggersCtrlAgentRule {
+impl Rule<KEACtrlAgentConfig> for DebugLoggersCtrlAgentRule {
     fn get_name(&self) -> &'static str {
         "LOGGERS::DebugLoggersCtrlAgentRule"
     }
@@ -30,7 +30,7 @@ mod tests {
     use serde_json::Value;
 
     use crate::{
-        common::RuleCtrlAgent,
+        common::Rule,
         configs::{KEACtrlAgentConfig, loggers::KEALoggerSeverityTypes},
         constants::TEMPLATE_CONFIG_FOR_TESTS_CTRL_AGENT,
         rules::loggers::DebugLoggersCtrlAgentRule,

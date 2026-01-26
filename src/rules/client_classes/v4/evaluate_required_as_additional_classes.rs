@@ -1,7 +1,7 @@
 use std::collections::HashSet;
 
 use crate::{
-    common::{RuleConfigs, RuleLevels, RuleResult, RuleV4},
+    common::{Rule, RuleConfigs, RuleLevels, RuleResult},
     configs::{KEAv4Config, KEAv4Subnet},
 };
 
@@ -31,7 +31,7 @@ fn find_additional_classes_from_subnets(subnets: &Vec<KEAv4Subnet>) -> HashSet<S
     classes
 }
 
-impl RuleV4 for EvaluateRequiredAsAdditionalClassesRule {
+impl Rule<KEAv4Config> for EvaluateRequiredAsAdditionalClassesRule {
     fn get_name(&self) -> &'static str {
         "CLIENT_CLASSES::EvaluateRequiredAsAdditionalClassesRule"
     }
@@ -99,7 +99,7 @@ mod tests {
     use serde_json::Value;
 
     use crate::{
-        common::RuleV4, configs::v4::KEAv4Config, constants::TEMPLATE_CONFIG_FOR_TESTS_V4,
+        common::Rule, configs::v4::KEAv4Config, constants::TEMPLATE_CONFIG_FOR_TESTS_V4,
         rules::client_classes::EvaluateRequiredAsAdditionalClassesRule,
     };
 

@@ -1,7 +1,7 @@
 use serde_json::Value;
 
 use crate::{
-    common::{RuleConfigs, RuleD2, RuleLevels, RuleResult},
+    common::{Rule, RuleConfigs, RuleLevels, RuleResult},
     configs::KEAD2Config,
     constants::GSS_TSIG_HOOK_LIBRARY,
 };
@@ -47,7 +47,7 @@ fn check_retry_interval(
     None
 }
 
-impl RuleD2 for BadTKeyGSSTSIGHookTimeoutsRule {
+impl Rule<KEAD2Config> for BadTKeyGSSTSIGHookTimeoutsRule {
     fn get_name(&self) -> &'static str {
         "HOOKS::BadTKeyGSSTSIGHookTimeoutsRule"
     }
@@ -123,7 +123,7 @@ mod tests {
     use serde_json::Value;
 
     use crate::{
-        common::RuleD2, configs::KEAD2Config, constants::TEMPLATE_CONFIG_FOR_TESTS_D2,
+        common::Rule, configs::KEAD2Config, constants::TEMPLATE_CONFIG_FOR_TESTS_D2,
         rules::hooks::BadTKeyGSSTSIGHookTimeoutsRule,
     };
 

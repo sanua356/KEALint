@@ -1,12 +1,12 @@
 use crate::{
-    common::{RuleConfigs, RuleLevels, RuleResult, RuleV4},
+    common::{Rule, RuleConfigs, RuleLevels, RuleResult},
     configs::KEAv4Config,
     constants::HIGH_AVAILABILITY_HOOK_LIBRARY,
 };
 
 pub struct MultithreadingModesNotEqualInConfigAndHARule;
 
-impl RuleV4 for MultithreadingModesNotEqualInConfigAndHARule {
+impl Rule<KEAv4Config> for MultithreadingModesNotEqualInConfigAndHARule {
     fn get_name(&self) -> &'static str {
         "HOOKS::MultithreadingModesNotEqualInConfigAndHARule"
     }
@@ -72,7 +72,7 @@ mod tests {
     use serde_json::Value;
 
     use crate::{
-        common::RuleV4, configs::v4::KEAv4Config, constants::TEMPLATE_CONFIG_FOR_TESTS_V4,
+        common::Rule, configs::v4::KEAv4Config, constants::TEMPLATE_CONFIG_FOR_TESTS_V4,
         rules::hooks::v4::multithread_modes_not_equal::MultithreadingModesNotEqualInConfigAndHARule,
     };
 

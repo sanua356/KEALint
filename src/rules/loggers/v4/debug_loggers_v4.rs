@@ -1,5 +1,5 @@
 use crate::{
-    common::{RuleConfigs, RuleLevels, RuleResult, RuleV4},
+    common::{Rule, RuleConfigs, RuleLevels, RuleResult},
     configs::KEAv4Config,
 };
 
@@ -7,7 +7,7 @@ use super::super::shared::get_debug_loggers_rule;
 
 pub struct DebugLoggersV4Rule;
 
-impl RuleV4 for DebugLoggersV4Rule {
+impl Rule<KEAv4Config> for DebugLoggersV4Rule {
     fn get_name(&self) -> &'static str {
         "LOGGERS::DebugLoggersV4Rule"
     }
@@ -30,7 +30,7 @@ mod tests {
     use serde_json::Value;
 
     use crate::{
-        common::RuleV4,
+        common::Rule,
         configs::{loggers::KEALoggerSeverityTypes, v4::KEAv4Config},
         constants::TEMPLATE_CONFIG_FOR_TESTS_V4,
         rules::loggers::DebugLoggersV4Rule,

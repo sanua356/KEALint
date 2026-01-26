@@ -1,11 +1,11 @@
 use crate::{
-    common::{RuleConfigs, RuleLevels, RuleResult, RuleV4},
+    common::{Rule, RuleConfigs, RuleLevels, RuleResult},
     configs::{KEALeaseDatabaseTypes, KEAv4Config},
 };
 
 pub struct NoEnabledPersistFlagForMemfileLeasesRule;
 
-impl RuleV4 for NoEnabledPersistFlagForMemfileLeasesRule {
+impl Rule<KEAv4Config> for NoEnabledPersistFlagForMemfileLeasesRule {
     fn get_name(&self) -> &'static str {
         "LEASE_DATABASE::NoEnabledPersistFlagForMemfileLeases"
     }
@@ -41,7 +41,7 @@ mod tests {
     use serde_json::Value;
 
     use crate::{
-        common::RuleV4, configs::v4::KEAv4Config, constants::TEMPLATE_CONFIG_FOR_TESTS_V4,
+        common::Rule, configs::v4::KEAv4Config, constants::TEMPLATE_CONFIG_FOR_TESTS_V4,
         rules::lease_database::v4::no_enabled_persist_flag::NoEnabledPersistFlagForMemfileLeasesRule,
     };
 

@@ -1,5 +1,5 @@
 use crate::{
-    common::{RuleConfigs, RuleLevels, RuleResult, RuleV4},
+    common::{Rule, RuleConfigs, RuleLevels, RuleResult},
     configs::{KEAv4Config, KEAv4PoolVariant},
     utils::v4_pool_to_start_end_available_ips,
 };
@@ -12,7 +12,7 @@ struct SubnetPool {
     pool: KEAv4PoolVariant,
 }
 
-impl RuleV4 for SubnetsPoolsIntersectionRule {
+impl Rule<KEAv4Config> for SubnetsPoolsIntersectionRule {
     fn get_name(&self) -> &'static str {
         "SUBNETS::SubnetsPoolsIntersectionRule"
     }
@@ -77,7 +77,7 @@ mod tests {
     use serde_json::Value;
 
     use crate::{
-        common::RuleV4, configs::v4::KEAv4Config, constants::TEMPLATE_CONFIG_FOR_TESTS_V4,
+        common::Rule, configs::v4::KEAv4Config, constants::TEMPLATE_CONFIG_FOR_TESTS_V4,
         rules::subnets::SubnetsPoolsIntersectionRule,
     };
 

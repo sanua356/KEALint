@@ -1,11 +1,11 @@
 use crate::{
-    common::{RuleConfigs, RuleD2, RuleLevels, RuleResult},
+    common::{Rule, RuleConfigs, RuleLevels, RuleResult},
     configs::KEAD2Config,
 };
 
 pub struct NotLocalIPAddressInD2ServerConfigRule;
 
-impl RuleD2 for NotLocalIPAddressInD2ServerConfigRule {
+impl Rule<KEAD2Config> for NotLocalIPAddressInD2ServerConfigRule {
     fn get_name(&self) -> &'static str {
         "DDNS_SERVER::NotLocalIPAddressInD2ServerConfigRule"
     }
@@ -44,7 +44,7 @@ mod tests {
     use serde_json::Value;
 
     use crate::{
-        common::RuleD2, configs::KEAD2Config, constants::TEMPLATE_CONFIG_FOR_TESTS_D2,
+        common::Rule, configs::KEAD2Config, constants::TEMPLATE_CONFIG_FOR_TESTS_D2,
         rules::ddns_server::NotLocalIPAddressInD2ServerConfigRule,
     };
 

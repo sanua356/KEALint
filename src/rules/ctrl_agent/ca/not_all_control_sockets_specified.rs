@@ -1,5 +1,5 @@
 use crate::{
-    common::{RuleConfigs, RuleCtrlAgent, RuleLevels, RuleResult},
+    common::{Rule, RuleConfigs, RuleLevels, RuleResult},
     configs::KEACtrlAgentConfig,
 };
 
@@ -18,7 +18,7 @@ fn get_template_rule(socket_type: &str) -> RuleResult {
     }
 }
 
-impl RuleCtrlAgent for NoAllControlSocketsSpecifiedRule {
+impl Rule<KEACtrlAgentConfig> for NoAllControlSocketsSpecifiedRule {
     fn get_name(&self) -> &'static str {
         "CTRL_AGENT::NoAllControlSocketsSpecifiedRule"
     }
@@ -66,8 +66,7 @@ mod tests {
     use serde_json::Value;
 
     use crate::{
-        common::RuleCtrlAgent, configs::KEACtrlAgentConfig,
-        constants::TEMPLATE_CONFIG_FOR_TESTS_CTRL_AGENT,
+        common::Rule, configs::KEACtrlAgentConfig, constants::TEMPLATE_CONFIG_FOR_TESTS_CTRL_AGENT,
         rules::ctrl_agent::NoAllControlSocketsSpecifiedRule,
     };
 

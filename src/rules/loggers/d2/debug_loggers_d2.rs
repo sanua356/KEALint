@@ -1,5 +1,5 @@
 use crate::{
-    common::{RuleConfigs, RuleD2, RuleLevels, RuleResult},
+    common::{Rule, RuleConfigs, RuleLevels, RuleResult},
     configs::KEAD2Config,
 };
 
@@ -7,7 +7,7 @@ use super::super::shared::get_debug_loggers_rule;
 
 pub struct DebugLoggersD2Rule;
 
-impl RuleD2 for DebugLoggersD2Rule {
+impl Rule<KEAD2Config> for DebugLoggersD2Rule {
     fn get_name(&self) -> &'static str {
         "LOGGERS::DebugLoggersD2Rule"
     }
@@ -30,7 +30,7 @@ mod tests {
     use serde_json::Value;
 
     use crate::{
-        common::RuleD2,
+        common::Rule,
         configs::{KEAD2Config, loggers::KEALoggerSeverityTypes},
         constants::TEMPLATE_CONFIG_FOR_TESTS_D2,
         rules::loggers::DebugLoggersD2Rule,

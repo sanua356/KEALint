@@ -197,6 +197,13 @@ pub static TEMPLATE_CONFIG_FOR_TESTS_V4: &str = r#"
 								"name": "server2",
 								"url": "http://192.168.56.66:8005/",
 								"role": "secondary"
+							},
+							{
+								"name": "server3",
+								"url": "http://192.168.56.99:8005/",
+								"basic-auth-user": "foo",
+								"basic-auth-password": "1234",
+								"role": "backup"
 							}
 						]
 					}

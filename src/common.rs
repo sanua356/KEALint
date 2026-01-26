@@ -2,8 +2,6 @@
 
 use std::fmt::Display;
 
-use crate::configs::{KEACtrlAgentConfig, KEAD2Config, KEAv4Config};
-
 #[derive(Debug)]
 pub enum RuleConfigs {
     Dhcp4,
@@ -47,8 +45,8 @@ pub struct RuleResult {
     pub links: Option<Vec<&'static str>>,
 }
 
-pub trait RuleV4 {
-    fn check(&self, config: &KEAv4Config) -> Option<Vec<RuleResult>>;
+pub trait Rule<T> {
+    fn check(&self, config: &T) -> Option<Vec<RuleResult>>;
 
     fn get_name(&self) -> &'static str;
 
@@ -56,29 +54,5 @@ pub trait RuleV4 {
 
     fn get_config_type(&self) -> RuleConfigs {
         RuleConfigs::Dhcp4
-    }
-}
-
-pub trait RuleD2 {
-    fn check(&self, config: &KEAD2Config) -> Option<Vec<RuleResult>>;
-
-    fn get_name(&self) -> &'static str;
-
-    fn get_level(&self) -> RuleLevels;
-
-    fn get_config_type(&self) -> RuleConfigs {
-        RuleConfigs::D2
-    }
-}
-
-pub trait RuleCtrlAgent {
-    fn check(&self, config: &KEACtrlAgentConfig) -> Option<Vec<RuleResult>>;
-
-    fn get_name(&self) -> &'static str;
-
-    fn get_level(&self) -> RuleLevels;
-
-    fn get_config_type(&self) -> RuleConfigs {
-        RuleConfigs::ControlAgent
     }
 }
