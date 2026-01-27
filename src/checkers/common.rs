@@ -3,6 +3,8 @@ use tabled::{
     settings::{Modify, Style, Width, object::Columns},
 };
 
+use crate::common::Rule;
+
 #[derive(Tabled)]
 #[tabled(display(Option, "tabled::derive::display::option", ""))]
 pub struct Problem {
@@ -24,4 +26,34 @@ pub fn tabled_print_problems(problems: Vec<Problem>) {
     println!("{}", table);
 
     println!("{} problem(s) found.", &table.count_rows() - 1);
+}
+
+pub fn find_problems<T>(config: &T, values: Vec<&[Box<dyn Rule<T>>]>) -> Vec<Problem> {
+    let mut problems: Vec<Problem> = Vec::new();
+
+    for rules_item in values {
+        for rule in rules_item {
+            let checks = rule.check(config);
+            if let Some(check_items) = checks {
+                for item in check_items {
+                    problems.push(Problem {
+                        name: rule.get_name().to_string(),
+                        importance: rule.get_level().to_string(),
+                        config_type: rule.get_config_type().to_string(),
+                        description: item.description,
+                        snapshot: item.snapshot,
+                        links: Some(item.links.unwrap_or_default().join("\n\n")),
+                    });
+                }
+            }
+        }
+    }
+
+    problems
+}
+
+pub trait RuleChecker<T> {
+    fn default() -> Self;
+    fn values(&self) -> Vec<&[Box<dyn Rule<T>>]>;
+    fn run(&self, config: &T);
 }

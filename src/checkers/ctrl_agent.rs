@@ -1,7 +1,5 @@
-use std::iter;
-
 use crate::{
-    checkers::{Problem, tabled_print_problems},
+    checkers::{RuleChecker, find_problems, tabled_print_problems},
     common::Rule,
     configs::KEACtrlAgentConfig,
     rules::{
@@ -11,49 +9,26 @@ use crate::{
 };
 
 pub struct RulesCtrlAgent {
-    pub global: Vec<Box<dyn Rule<KEACtrlAgentConfig>>>,
-    pub loggers: Vec<Box<dyn Rule<KEACtrlAgentConfig>>>,
+    pub global: [Box<dyn Rule<KEACtrlAgentConfig>>; 2],
+    pub loggers: [Box<dyn Rule<KEACtrlAgentConfig>>; 1],
 }
 
-impl RulesCtrlAgent {
-    pub fn default() -> Self {
+impl RuleChecker<KEACtrlAgentConfig> for RulesCtrlAgent {
+    fn default() -> Self {
         RulesCtrlAgent {
-            global: vec![
+            global: [
                 Box::new(NotLocalIPWithoutHTTPSRule),
                 Box::new(NoAllControlSocketsSpecifiedRule),
             ],
-            loggers: vec![Box::new(DebugLoggersCtrlAgentRule)],
+            loggers: [Box::new(DebugLoggersCtrlAgentRule)],
         }
     }
 
-    fn values(&self) -> impl Iterator<Item = &Vec<Box<dyn Rule<KEACtrlAgentConfig>>>> {
-        let global = iter::once(&self.global);
-        let loggers = iter::once(&self.loggers);
-
-        global.chain(loggers)
+    fn values(&self) -> Vec<&[Box<dyn Rule<KEACtrlAgentConfig>>]> {
+        vec![&self.global, &self.loggers]
     }
 
-    pub fn run(&self, config: &KEACtrlAgentConfig) {
-        let mut problems: Vec<Problem> = Vec::new();
-
-        for rules_item in self.values() {
-            for rule in rules_item {
-                let checks = rule.check(config);
-                if let Some(check_items) = checks {
-                    for item in check_items {
-                        problems.push(Problem {
-                            name: rule.get_name().to_string(),
-                            importance: rule.get_level().to_string(),
-                            config_type: rule.get_config_type().to_string(),
-                            description: item.description,
-                            snapshot: item.snapshot,
-                            links: Some(item.links.unwrap_or_default().join("\n\n")),
-                        });
-                    }
-                }
-            }
-        }
-
-        tabled_print_problems(problems);
+    fn run(&self, config: &KEACtrlAgentConfig) {
+        tabled_print_problems(find_problems(config, self.values()));
     }
 }
