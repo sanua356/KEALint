@@ -35,13 +35,18 @@ mod tests {
     use serde_json::Value;
 
     use crate::{
-        common::Rule, configs::v4::KEAv4Config, constants::TEMPLATE_CONFIG_FOR_TESTS_V4,
-        rules::interfaces::v4::no_active_interfaces::NoInterfacesInInterfacesConfigRule,
+        common::Rule,
+        configs::v4::KEAv4Config,
+        rules::interfaces::v4::{
+            _tests::NO_INTERFACES_IN_INTERFACES_CONFIG_RULE_TEST_TEMPLATE,
+            no_active_interfaces::NoInterfacesInInterfacesConfigRule,
+        },
     };
 
     #[test]
     fn check_expected_trigger() {
-        let data: KEAv4Config = serde_json::from_str(TEMPLATE_CONFIG_FOR_TESTS_V4).unwrap();
+        let data: KEAv4Config =
+            serde_json::from_str(NO_INTERFACES_IN_INTERFACES_CONFIG_RULE_TEST_TEMPLATE).unwrap();
 
         let rule = NoInterfacesInInterfacesConfigRule;
         assert!(rule.check(&data).is_some());
@@ -49,7 +54,8 @@ mod tests {
 
     #[test]
     fn check_absense_trigger() {
-        let mut json_value: Value = serde_json::from_str(TEMPLATE_CONFIG_FOR_TESTS_V4).unwrap();
+        let mut json_value: Value =
+            serde_json::from_str(NO_INTERFACES_IN_INTERFACES_CONFIG_RULE_TEST_TEMPLATE).unwrap();
         json_value["interfaces-config"]
             .as_object_mut()
             .unwrap()

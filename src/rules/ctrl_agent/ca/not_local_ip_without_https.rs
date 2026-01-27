@@ -40,14 +40,17 @@ mod tests {
     use serde_json::Value;
 
     use crate::{
-        common::Rule, configs::KEACtrlAgentConfig, constants::TEMPLATE_CONFIG_FOR_TESTS_CTRL_AGENT,
-        rules::ctrl_agent::NotLocalIPWithoutHTTPSRule,
+        common::Rule,
+        configs::KEACtrlAgentConfig,
+        rules::ctrl_agent::{
+            NotLocalIPWithoutHTTPSRule, ca::_tests::NOT_LOCAL_IP_WITHOUT_HTTPS_RULE_TEST_TEMPLATE,
+        },
     };
 
     #[test]
     fn check_expected_trigger() {
         let data: KEACtrlAgentConfig =
-            serde_json::from_str(TEMPLATE_CONFIG_FOR_TESTS_CTRL_AGENT).unwrap();
+            serde_json::from_str(NOT_LOCAL_IP_WITHOUT_HTTPS_RULE_TEST_TEMPLATE).unwrap();
 
         let rule = NotLocalIPWithoutHTTPSRule;
         assert!(rule.check(&data).is_some());
@@ -56,7 +59,7 @@ mod tests {
     #[test]
     fn check_absense_trigger() {
         let mut json_value: Value =
-            serde_json::from_str(TEMPLATE_CONFIG_FOR_TESTS_CTRL_AGENT).unwrap();
+            serde_json::from_str(NOT_LOCAL_IP_WITHOUT_HTTPS_RULE_TEST_TEMPLATE).unwrap();
         json_value["http-host"] = Value::from("127.0.0.1");
         let data: KEACtrlAgentConfig = serde_json::from_value(json_value).unwrap();
 

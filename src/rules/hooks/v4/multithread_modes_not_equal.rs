@@ -72,13 +72,20 @@ mod tests {
     use serde_json::Value;
 
     use crate::{
-        common::Rule, configs::v4::KEAv4Config, constants::TEMPLATE_CONFIG_FOR_TESTS_V4,
-        rules::hooks::v4::multithread_modes_not_equal::MultithreadingModesNotEqualInConfigAndHARule,
+        common::Rule,
+        configs::v4::KEAv4Config,
+        rules::hooks::v4::{
+            _tests::MULTITHREADING_MODES_NOT_EQUAL_IN_CONFIG_AND_HA_RULE_TEST_TEMPLATE,
+            multithread_modes_not_equal::MultithreadingModesNotEqualInConfigAndHARule,
+        },
     };
 
     #[test]
     fn check_expected_trigger() {
-        let data: KEAv4Config = serde_json::from_str(TEMPLATE_CONFIG_FOR_TESTS_V4).unwrap();
+        let data: KEAv4Config = serde_json::from_str(
+            MULTITHREADING_MODES_NOT_EQUAL_IN_CONFIG_AND_HA_RULE_TEST_TEMPLATE,
+        )
+        .unwrap();
 
         let rule = MultithreadingModesNotEqualInConfigAndHARule;
         assert!(rule.check(&data).is_some());
@@ -86,7 +93,10 @@ mod tests {
 
     #[test]
     fn check_absense_trigger() {
-        let mut json_value: Value = serde_json::from_str(TEMPLATE_CONFIG_FOR_TESTS_V4).unwrap();
+        let mut json_value: Value = serde_json::from_str(
+            MULTITHREADING_MODES_NOT_EQUAL_IN_CONFIG_AND_HA_RULE_TEST_TEMPLATE,
+        )
+        .unwrap();
         json_value["multi-threading"]
             .as_object_mut()
             .unwrap()

@@ -32,13 +32,12 @@ mod tests {
     use crate::{
         common::Rule,
         configs::{KEAD2Config, loggers::KEALoggerSeverityTypes},
-        constants::TEMPLATE_CONFIG_FOR_TESTS_D2,
-        rules::loggers::DebugLoggersD2Rule,
+        rules::loggers::{DebugLoggersD2Rule, d2::_tests::DEBUG_LOGGERS_D2_RULE_TEMPLATE},
     };
 
     #[test]
     fn check_expected_trigger() {
-        let data: KEAD2Config = serde_json::from_str(TEMPLATE_CONFIG_FOR_TESTS_D2).unwrap();
+        let data: KEAD2Config = serde_json::from_str(DEBUG_LOGGERS_D2_RULE_TEMPLATE).unwrap();
 
         let rule = DebugLoggersD2Rule;
         assert!(rule.check(&data).is_some());
@@ -46,7 +45,7 @@ mod tests {
 
     #[test]
     fn check_absense_trigger() {
-        let mut json_value: Value = serde_json::from_str(TEMPLATE_CONFIG_FOR_TESTS_D2).unwrap();
+        let mut json_value: Value = serde_json::from_str(DEBUG_LOGGERS_D2_RULE_TEMPLATE).unwrap();
         json_value["loggers"].as_array_mut().unwrap()[0]["severity"] =
             Value::from(KEALoggerSeverityTypes::INFO.to_string());
 

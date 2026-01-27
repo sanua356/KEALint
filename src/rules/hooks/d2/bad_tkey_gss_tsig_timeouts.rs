@@ -120,13 +120,18 @@ mod tests {
     use serde_json::Value;
 
     use crate::{
-        common::Rule, configs::KEAD2Config, constants::TEMPLATE_CONFIG_FOR_TESTS_D2,
-        rules::hooks::BadTKeyGSSTSIGHookTimeoutsRule,
+        common::Rule,
+        configs::KEAD2Config,
+        rules::hooks::{
+            BadTKeyGSSTSIGHookTimeoutsRule,
+            d2::_tests::BAD_TKEY_GSS_TSIG_HOOK_TIMEOUTS_RULE_TEST_TEMPLATE,
+        },
     };
 
     #[test]
     fn check_expected_trigger() {
-        let data: KEAD2Config = serde_json::from_str(TEMPLATE_CONFIG_FOR_TESTS_D2).unwrap();
+        let data: KEAD2Config =
+            serde_json::from_str(BAD_TKEY_GSS_TSIG_HOOK_TIMEOUTS_RULE_TEST_TEMPLATE).unwrap();
 
         let rule = BadTKeyGSSTSIGHookTimeoutsRule;
         assert!(rule.check(&data).is_some());
@@ -134,7 +139,8 @@ mod tests {
 
     #[test]
     fn check_absense_trigger() {
-        let mut json_value: Value = serde_json::from_str(TEMPLATE_CONFIG_FOR_TESTS_D2).unwrap();
+        let mut json_value: Value =
+            serde_json::from_str(BAD_TKEY_GSS_TSIG_HOOK_TIMEOUTS_RULE_TEST_TEMPLATE).unwrap();
         let x = json_value["hooks-libraries"][0]["parameters"]
             .as_object_mut()
             .unwrap();

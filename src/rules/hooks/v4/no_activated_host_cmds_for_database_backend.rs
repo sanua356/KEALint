@@ -52,13 +52,20 @@ mod tests {
     use serde_json::Value;
 
     use crate::{
-        common::Rule, configs::v4::KEAv4Config, constants::TEMPLATE_CONFIG_FOR_TESTS_V4,
-        rules::hooks::NoActivatedHostCMDsHookForDatabaseBackendRule,
+        common::Rule,
+        configs::v4::KEAv4Config,
+        rules::hooks::{
+            NoActivatedHostCMDsHookForDatabaseBackendRule,
+            v4::_tests::NO_ACTIVATED_HOST_CMDS_HOOK_FOR_DATABASE_BACKEND_RULE_TEST_TEMPLATE,
+        },
     };
 
     #[test]
     fn check_expected_trigger() {
-        let data: KEAv4Config = serde_json::from_str(TEMPLATE_CONFIG_FOR_TESTS_V4).unwrap();
+        let data: KEAv4Config = serde_json::from_str(
+            NO_ACTIVATED_HOST_CMDS_HOOK_FOR_DATABASE_BACKEND_RULE_TEST_TEMPLATE,
+        )
+        .unwrap();
 
         let rule = NoActivatedHostCMDsHookForDatabaseBackendRule;
         assert!(rule.check(&data).is_some());
@@ -66,7 +73,10 @@ mod tests {
 
     #[test]
     fn check_absense_trigger() {
-        let mut json_value: Value = serde_json::from_str(TEMPLATE_CONFIG_FOR_TESTS_V4).unwrap();
+        let mut json_value: Value = serde_json::from_str(
+            NO_ACTIVATED_HOST_CMDS_HOOK_FOR_DATABASE_BACKEND_RULE_TEST_TEMPLATE,
+        )
+        .unwrap();
         json_value.as_object_mut().unwrap().remove("hosts-database");
         json_value
             .as_object_mut()

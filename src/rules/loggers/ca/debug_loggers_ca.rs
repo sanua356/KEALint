@@ -32,14 +32,15 @@ mod tests {
     use crate::{
         common::Rule,
         configs::{KEACtrlAgentConfig, loggers::KEALoggerSeverityTypes},
-        constants::TEMPLATE_CONFIG_FOR_TESTS_CTRL_AGENT,
-        rules::loggers::DebugLoggersCtrlAgentRule,
+        rules::loggers::{
+            DebugLoggersCtrlAgentRule, ca::_tests::DEBUG_LOGGERS_CTRL_AGENT_RULE_TEMPLATE,
+        },
     };
 
     #[test]
     fn check_expected_trigger() {
         let data: KEACtrlAgentConfig =
-            serde_json::from_str(TEMPLATE_CONFIG_FOR_TESTS_CTRL_AGENT).unwrap();
+            serde_json::from_str(DEBUG_LOGGERS_CTRL_AGENT_RULE_TEMPLATE).unwrap();
 
         let rule = DebugLoggersCtrlAgentRule;
         assert!(rule.check(&data).is_some());
@@ -48,7 +49,7 @@ mod tests {
     #[test]
     fn check_absense_trigger() {
         let mut json_value: Value =
-            serde_json::from_str(TEMPLATE_CONFIG_FOR_TESTS_CTRL_AGENT).unwrap();
+            serde_json::from_str(DEBUG_LOGGERS_CTRL_AGENT_RULE_TEMPLATE).unwrap();
         json_value["loggers"].as_array_mut().unwrap()[0]["severity"] =
             Value::from(KEALoggerSeverityTypes::INFO.to_string());
 

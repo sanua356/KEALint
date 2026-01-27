@@ -62,13 +62,18 @@ mod tests {
     use serde_json::Value;
 
     use crate::{
-        common::Rule, configs::v4::KEAv4Config, constants::TEMPLATE_CONFIG_FOR_TESTS_V4,
-        rules::hooks::NoBasicHTTPAuthInHAPeersRule,
+        common::Rule,
+        configs::v4::KEAv4Config,
+        rules::hooks::{
+            NoBasicHTTPAuthInHAPeersRule,
+            v4::_tests::NO_BASIC_HTTP_AUTH_IN_HA_PEERS_RULE_TEST_TEMPLATE,
+        },
     };
 
     #[test]
     fn check_expected_trigger() {
-        let data: KEAv4Config = serde_json::from_str(TEMPLATE_CONFIG_FOR_TESTS_V4).unwrap();
+        let data: KEAv4Config =
+            serde_json::from_str(NO_BASIC_HTTP_AUTH_IN_HA_PEERS_RULE_TEST_TEMPLATE).unwrap();
 
         let rule = NoBasicHTTPAuthInHAPeersRule;
         assert!(rule.check(&data).is_some());
@@ -76,12 +81,13 @@ mod tests {
 
     #[test]
     fn check_absense_trigger() {
-        let mut json_value: Value = serde_json::from_str(TEMPLATE_CONFIG_FOR_TESTS_V4).unwrap();
-        json_value.as_object_mut().unwrap()["hooks-libraries"][4]["parameters"]["high-availability"][0]["peers"]
+        let mut json_value: Value =
+            serde_json::from_str(NO_BASIC_HTTP_AUTH_IN_HA_PEERS_RULE_TEST_TEMPLATE).unwrap();
+        json_value.as_object_mut().unwrap()["hooks-libraries"][0]["parameters"]["high-availability"][0]["peers"]
             .as_array_mut()
             .unwrap()
             .remove(0);
-        json_value.as_object_mut().unwrap()["hooks-libraries"][4]["parameters"]["high-availability"][0]["peers"]
+        json_value.as_object_mut().unwrap()["hooks-libraries"][0]["parameters"]["high-availability"][0]["peers"]
             .as_array_mut()
             .unwrap()
             .remove(0);

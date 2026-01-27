@@ -107,13 +107,14 @@ mod tests {
     use serde_json::Value;
 
     use crate::{
-        common::Rule, configs::v4::KEAv4Config, constants::TEMPLATE_CONFIG_FOR_TESTS_V4,
-        rules::hooks::BadHooksOrderRule,
+        common::Rule,
+        configs::v4::KEAv4Config,
+        rules::hooks::{BadHooksOrderRule, v4::_tests::BAD_HOOKS_ORDER_RULE_TEST_TEMPLATE},
     };
 
     #[test]
     fn check_expected_trigger() {
-        let data: KEAv4Config = serde_json::from_str(TEMPLATE_CONFIG_FOR_TESTS_V4).unwrap();
+        let data: KEAv4Config = serde_json::from_str(BAD_HOOKS_ORDER_RULE_TEST_TEMPLATE).unwrap();
 
         let rule = BadHooksOrderRule;
         assert!(rule.check(&data).is_some());
@@ -121,7 +122,8 @@ mod tests {
 
     #[test]
     fn check_absense_trigger() {
-        let mut json_value: Value = serde_json::from_str(TEMPLATE_CONFIG_FOR_TESTS_V4).unwrap();
+        let mut json_value: Value =
+            serde_json::from_str(BAD_HOOKS_ORDER_RULE_TEST_TEMPLATE).unwrap();
         json_value["hooks-libraries"]
             .as_array_mut()
             .unwrap()

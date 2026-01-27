@@ -97,13 +97,19 @@ mod tests {
     use serde_json::Value;
 
     use crate::{
-        common::Rule, configs::v4::KEAv4Config, constants::TEMPLATE_CONFIG_FOR_TESTS_V4,
-        rules::client_classes::EvaluateRequiredAsAdditionalClassesRule,
+        common::Rule,
+        configs::v4::KEAv4Config,
+        rules::client_classes::{
+            EvaluateRequiredAsAdditionalClassesRule,
+            v4::_tests::EVALUATE_REQUIRED_AS_ADDITIONAL_CLASSES_RULE_TEST_TEMPLATE,
+        },
     };
 
     #[test]
     fn check_expected_trigger() {
-        let data: KEAv4Config = serde_json::from_str(TEMPLATE_CONFIG_FOR_TESTS_V4).unwrap();
+        let data: KEAv4Config =
+            serde_json::from_str(EVALUATE_REQUIRED_AS_ADDITIONAL_CLASSES_RULE_TEST_TEMPLATE)
+                .unwrap();
 
         let rule = EvaluateRequiredAsAdditionalClassesRule;
         assert!(rule.check(&data).is_some());
@@ -111,7 +117,9 @@ mod tests {
 
     #[test]
     fn check_absense_trigger() {
-        let mut json_value: Value = serde_json::from_str(TEMPLATE_CONFIG_FOR_TESTS_V4).unwrap();
+        let mut json_value: Value =
+            serde_json::from_str(EVALUATE_REQUIRED_AS_ADDITIONAL_CLASSES_RULE_TEST_TEMPLATE)
+                .unwrap();
         json_value["client-classes"].as_array_mut().unwrap()[0]["only-in-additional-list"] =
             Value::from(true);
         let data: KEAv4Config = serde_json::from_value(json_value).unwrap();

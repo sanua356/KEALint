@@ -42,13 +42,19 @@ mod tests {
     use serde_json::Value;
 
     use crate::{
-        common::Rule, configs::KEAD2Config, constants::TEMPLATE_CONFIG_FOR_TESTS_D2,
-        rules::ddns_server::NotLocalIPAddressInD2ServerConfigRule,
+        common::Rule,
+        configs::KEAD2Config,
+        rules::ddns_server::{
+            NotLocalIPAddressInD2ServerConfigRule,
+            d2::_tests::NOT_LOCAL_IP_ADDRESS_IN_D2_SERVER_CONFIG_RULE_TEST_TEMPLATE,
+        },
     };
 
     #[test]
     fn check_expected_trigger() {
-        let data: KEAD2Config = serde_json::from_str(TEMPLATE_CONFIG_FOR_TESTS_D2).unwrap();
+        let data: KEAD2Config =
+            serde_json::from_str(NOT_LOCAL_IP_ADDRESS_IN_D2_SERVER_CONFIG_RULE_TEST_TEMPLATE)
+                .unwrap();
 
         let rule = NotLocalIPAddressInD2ServerConfigRule;
         assert!(rule.check(&data).is_some());
@@ -56,7 +62,9 @@ mod tests {
 
     #[test]
     fn check_absense_trigger() {
-        let mut json_value: Value = serde_json::from_str(TEMPLATE_CONFIG_FOR_TESTS_D2).unwrap();
+        let mut json_value: Value =
+            serde_json::from_str(NOT_LOCAL_IP_ADDRESS_IN_D2_SERVER_CONFIG_RULE_TEST_TEMPLATE)
+                .unwrap();
         json_value["ip-address"] = Value::from("127.0.0.1");
         let data: KEAD2Config = serde_json::from_value(json_value).unwrap();
 

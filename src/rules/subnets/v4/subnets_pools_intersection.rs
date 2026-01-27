@@ -77,13 +77,17 @@ mod tests {
     use serde_json::Value;
 
     use crate::{
-        common::Rule, configs::v4::KEAv4Config, constants::TEMPLATE_CONFIG_FOR_TESTS_V4,
-        rules::subnets::SubnetsPoolsIntersectionRule,
+        common::Rule,
+        configs::v4::KEAv4Config,
+        rules::subnets::{
+            SubnetsPoolsIntersectionRule, v4::_tests::SUBNETS_POOLS_INTERSECTION_TEST_TEMPLATE,
+        },
     };
 
     #[test]
     fn check_expected_trigger() {
-        let data: KEAv4Config = serde_json::from_str(TEMPLATE_CONFIG_FOR_TESTS_V4).unwrap();
+        let data: KEAv4Config =
+            serde_json::from_str(SUBNETS_POOLS_INTERSECTION_TEST_TEMPLATE).unwrap();
 
         let rule = SubnetsPoolsIntersectionRule;
         assert!(rule.check(&data).is_some());
@@ -91,7 +95,8 @@ mod tests {
 
     #[test]
     fn check_absense_trigger() {
-        let mut json_value: Value = serde_json::from_str(TEMPLATE_CONFIG_FOR_TESTS_V4).unwrap();
+        let mut json_value: Value =
+            serde_json::from_str(SUBNETS_POOLS_INTERSECTION_TEST_TEMPLATE).unwrap();
         json_value["subnet4"].as_array_mut().unwrap()[1]["pools"][0]["pool"] =
             Value::from("1.0.0.1-1.0.0.10");
         let data: KEAv4Config = serde_json::from_value(json_value).unwrap();

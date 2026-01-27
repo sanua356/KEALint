@@ -95,13 +95,17 @@ mod tests {
     use serde_json::Value;
 
     use crate::{
-        common::Rule, configs::v4::KEAv4Config, constants::TEMPLATE_CONFIG_FOR_TESTS_V4,
-        rules::reservations::AllReservationsOutOfPoolsRule,
+        common::Rule,
+        configs::v4::KEAv4Config,
+        rules::reservations::{
+            AllReservationsOutOfPoolsRule, v4::_tests::ALL_RESERVATIONS_OUT_OF_POOLS_RULE_TEMPLATE,
+        },
     };
 
     #[test]
     fn check_expected_trigger() {
-        let data: KEAv4Config = serde_json::from_str(TEMPLATE_CONFIG_FOR_TESTS_V4).unwrap();
+        let data: KEAv4Config =
+            serde_json::from_str(ALL_RESERVATIONS_OUT_OF_POOLS_RULE_TEMPLATE).unwrap();
 
         let rule = AllReservationsOutOfPoolsRule;
         assert!(rule.check(&data).is_some());
@@ -109,8 +113,9 @@ mod tests {
 
     #[test]
     fn check_absense_trigger() {
-        let mut json_value: Value = serde_json::from_str(TEMPLATE_CONFIG_FOR_TESTS_V4).unwrap();
-        json_value["subnet4"][1]["reservations"] = Value::from(());
+        let mut json_value: Value =
+            serde_json::from_str(ALL_RESERVATIONS_OUT_OF_POOLS_RULE_TEMPLATE).unwrap();
+        json_value["subnet4"][0]["reservations"] = Value::from(());
         json_value["shared-networks"][0]["subnet4"][0]["reservations"] = Value::from(());
         let data: KEAv4Config = serde_json::from_value(json_value).unwrap();
 

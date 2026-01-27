@@ -41,13 +41,19 @@ mod tests {
     use serde_json::Value;
 
     use crate::{
-        common::Rule, configs::v4::KEAv4Config, constants::TEMPLATE_CONFIG_FOR_TESTS_V4,
-        rules::lease_database::v4::no_enabled_persist_flag::NoEnabledPersistFlagForMemfileLeasesRule,
+        common::Rule,
+        configs::v4::KEAv4Config,
+        rules::lease_database::v4::{
+            _tests::NO_ENABLED_PERSIST_FLAG_FOR_MEMFILE_LEASES_RULE_TEST_TEMPLATE,
+            no_enabled_persist_flag::NoEnabledPersistFlagForMemfileLeasesRule,
+        },
     };
 
     #[test]
     fn check_expected_trigger() {
-        let data: KEAv4Config = serde_json::from_str(TEMPLATE_CONFIG_FOR_TESTS_V4).unwrap();
+        let data: KEAv4Config =
+            serde_json::from_str(NO_ENABLED_PERSIST_FLAG_FOR_MEMFILE_LEASES_RULE_TEST_TEMPLATE)
+                .unwrap();
 
         let rule = NoEnabledPersistFlagForMemfileLeasesRule;
         assert!(rule.check(&data).is_some());
@@ -55,7 +61,9 @@ mod tests {
 
     #[test]
     fn check_absense_trigger() {
-        let mut json_value: Value = serde_json::from_str(TEMPLATE_CONFIG_FOR_TESTS_V4).unwrap();
+        let mut json_value: Value =
+            serde_json::from_str(NO_ENABLED_PERSIST_FLAG_FOR_MEMFILE_LEASES_RULE_TEST_TEMPLATE)
+                .unwrap();
         json_value["lease-database"]
             .as_object_mut()
             .unwrap()

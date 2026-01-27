@@ -37,7 +37,8 @@ impl Rule<KEAv4Config> for SubnetWithoutPoolsAndReservationsRule {
     fn check(&self, config: &KEAv4Config) -> Option<Vec<RuleResult>> {
         let is_found_host_cmds_hook = config
             .hooks_libraries
-            .as_ref()?
+            .as_ref()
+            .unwrap_or(&vec![])
             .iter()
             .any(|item| item.library.contains(HOST_CMDS_HOOK_LIBRARY));
 
@@ -54,8 +55,8 @@ impl Rule<KEAv4Config> for SubnetWithoutPoolsAndReservationsRule {
 
         if let Some(shared_networks) = &config.shared_networks {
             for shared_network in shared_networks {
-                if let Some(subnets) = &shared_network.subnet4 {
-                    results.extend(get_empty_subnets(subnets));
+                if let Some(shared_subnets) = &shared_network.subnet4 {
+                    results.extend(get_empty_subnets(shared_subnets));
                 }
             }
         }
@@ -73,13 +74,18 @@ mod tests {
     use serde_json::Value;
 
     use crate::{
-        common::Rule, configs::v4::KEAv4Config, constants::TEMPLATE_CONFIG_FOR_TESTS_V4,
-        rules::subnets::SubnetWithoutPoolsAndReservationsRule,
+        common::Rule,
+        configs::v4::KEAv4Config,
+        rules::subnets::{
+            SubnetWithoutPoolsAndReservationsRule,
+            v4::_tests::SUBNETS_WITHOUT_POOLS_AND_RESERVATIONS_TEST_TEMPLATE,
+        },
     };
 
     #[test]
     fn check_expected_trigger() {
-        let data: KEAv4Config = serde_json::from_str(TEMPLATE_CONFIG_FOR_TESTS_V4).unwrap();
+        let data: KEAv4Config =
+            serde_json::from_str(SUBNETS_WITHOUT_POOLS_AND_RESERVATIONS_TEST_TEMPLATE).unwrap();
 
         let rule = SubnetWithoutPoolsAndReservationsRule;
         assert!(rule.check(&data).is_some());
@@ -87,12 +93,13 @@ mod tests {
 
     #[test]
     fn check_absense_trigger() {
-        let mut json_value: Value = serde_json::from_str(TEMPLATE_CONFIG_FOR_TESTS_V4).unwrap();
-        json_value["subnet4"].as_array_mut().unwrap().remove(2);
+        let mut json_value: Value =
+            serde_json::from_str(SUBNETS_WITHOUT_POOLS_AND_RESERVATIONS_TEST_TEMPLATE).unwrap();
+        json_value["subnet4"].as_array_mut().unwrap().remove(0);
         json_value["shared-networks"]
             .as_array_mut()
             .unwrap()
-            .remove(1);
+            .remove(0);
         let data: KEAv4Config = serde_json::from_value(json_value).unwrap();
 
         let rule = SubnetWithoutPoolsAndReservationsRule;

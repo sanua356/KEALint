@@ -43,13 +43,17 @@ mod tests {
     use serde_json::Value;
 
     use crate::{
-        common::Rule, configs::v4::KEAv4Config, constants::TEMPLATE_CONFIG_FOR_TESTS_V4,
-        rules::shared_networks::OneSubnetInSharedNetworksRule,
+        common::Rule,
+        configs::v4::KEAv4Config,
+        rules::shared_networks::{
+            OneSubnetInSharedNetworksRule, v4::_tests::ONE_SUBNET_IN_SHARED_NETWORKS_RULE_TEMPLATE,
+        },
     };
 
     #[test]
     fn check_expected_trigger() {
-        let data: KEAv4Config = serde_json::from_str(TEMPLATE_CONFIG_FOR_TESTS_V4).unwrap();
+        let data: KEAv4Config =
+            serde_json::from_str(ONE_SUBNET_IN_SHARED_NETWORKS_RULE_TEMPLATE).unwrap();
 
         let rule = OneSubnetInSharedNetworksRule;
         assert!(rule.check(&data).is_some());
@@ -57,7 +61,8 @@ mod tests {
 
     #[test]
     fn check_absense_trigger() {
-        let mut json_value: Value = serde_json::from_str(TEMPLATE_CONFIG_FOR_TESTS_V4).unwrap();
+        let mut json_value: Value =
+            serde_json::from_str(ONE_SUBNET_IN_SHARED_NETWORKS_RULE_TEMPLATE).unwrap();
         let subnets: Value = serde_json::json!(
             [{
                 "id": 1,
