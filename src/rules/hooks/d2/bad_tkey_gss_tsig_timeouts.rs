@@ -58,12 +58,9 @@ impl Rule<KEAD2Config> for BadTKeyGSSTSIGHookTimeoutsRule {
         RuleConfigs::D2
     }
     fn check(&self, config: &KEAD2Config) -> Option<Vec<RuleResult>> {
-        config.hooks_libraries.as_ref()?;
-
         let gss_tsig_hook = config
             .hooks_libraries
-            .as_ref()
-            .unwrap()
+            .as_ref()?
             .iter()
             .find(|hook| hook.library.contains(GSS_TSIG_HOOK_LIBRARY));
 

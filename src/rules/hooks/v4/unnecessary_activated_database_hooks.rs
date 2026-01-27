@@ -19,19 +19,15 @@ impl Rule<KEAv4Config> for UnnecessaryActivatedDatabaseHooksRule {
         RuleConfigs::Dhcp4
     }
     fn check(&self, config: &KEAv4Config) -> Option<Vec<RuleResult>> {
-        config.hooks_libraries.as_ref()?;
-
         let mysql_hook = config
             .hooks_libraries
-            .as_ref()
-            .unwrap()
+            .as_ref()?
             .iter()
             .find(|item| item.library.contains(MYSQL_HOOK_LIBRARY));
 
         let pgsql_hook = config
             .hooks_libraries
-            .as_ref()
-            .unwrap()
+            .as_ref()?
             .iter()
             .find(|item| item.library.contains(PGSQL_HOOK_LIBRARY));
 

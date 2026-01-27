@@ -42,9 +42,7 @@ impl Rule<KEAv4Config> for EvaluateRequiredAsAdditionalClassesRule {
         RuleConfigs::Dhcp4
     }
     fn check(&self, config: &KEAv4Config) -> Option<Vec<RuleResult>> {
-        config.client_classes.as_ref()?;
-
-        let client_classes = config.client_classes.as_ref().unwrap();
+        let client_classes = config.client_classes.as_ref()?;
 
         let mut evaluate_additional_classes: HashSet<String> = HashSet::new();
 

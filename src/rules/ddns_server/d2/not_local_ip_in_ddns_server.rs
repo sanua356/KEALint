@@ -19,9 +19,7 @@ impl Rule<KEAD2Config> for NotLocalIPAddressInD2ServerConfigRule {
     }
 
     fn check(&self, config: &KEAD2Config) -> Option<Vec<RuleResult>> {
-        config.ip_address.as_ref()?;
-
-        if !config.ip_address.unwrap().is_loopback() {
+        if !config.ip_address.as_ref()?.is_loopback() {
             return Some(vec![RuleResult {
                 description: "Loopback addresses must be used as the server address to avoid attacks with fake requests.".to_string(),
                 snapshot: Some(
