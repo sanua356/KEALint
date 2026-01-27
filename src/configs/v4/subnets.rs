@@ -1,4 +1,4 @@
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use std::{fmt::Display, net::Ipv4Addr, str::FromStr};
 
 use super::KEAv4OptionData;
@@ -8,7 +8,7 @@ use crate::{
     constants::{CIDR_V4_REGEXP, IPV4_RANGE_REGEXP},
 };
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "kebab-case")]
 pub struct KEAv4Subnet {
     pub subnet: KEAv4PoolVariant,
@@ -26,7 +26,7 @@ pub struct KEAv4Subnet {
     pub reservations: Option<Vec<KEAReservation>>,
 }
 
-#[derive(Debug, PartialEq, Clone, Copy)]
+#[derive(Debug, Serialize, PartialEq, Clone, Copy)]
 pub enum KEAv4PoolVariant {
     Range(Ipv4Addr, Ipv4Addr),
     Cidr(Ipv4Addr, u8),
@@ -84,7 +84,7 @@ impl<'de> Deserialize<'de> for KEAv4PoolVariant {
     }
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "kebab-case")]
 pub struct KEAv4Pool {
     pub pool: KEAv4PoolVariant,

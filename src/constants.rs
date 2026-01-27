@@ -90,6 +90,11 @@ pub static TEMPLATE_CONFIG_FOR_TESTS_V4: &str = r#"
 					"ip-address": "1.8.8.30"
 				}
 			]
+		},
+		{
+			"id": 10,
+			"subnet": "254.254.254.254/32",
+			"pools": []
 		}
 	],
 	"multi-threading": {
@@ -126,6 +131,21 @@ pub static TEMPLATE_CONFIG_FOR_TESTS_V4: &str = r#"
 							"ip-address": "10.0.0.150"
 						}
 					]
+				}
+			]
+		},
+		{
+			"name": "qqq",
+			"subnet4": [
+				{
+					"id": 11,
+					"subnet": "254.254.254.254/32",
+					"pools": [],
+					"reservations": []
+				},
+				{
+					"id": 12,
+					"subnet": "253.253.253.253/32"
 				}
 			]
 		}

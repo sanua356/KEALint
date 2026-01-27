@@ -14,7 +14,10 @@ use crate::{
         loggers::DebugLoggersV4Rule,
         reservations::AllReservationsOutOfPoolsRule,
         shared_networks::OneSubnetInSharedNetworksRule,
-        subnets::{SubnetsOverlappingRule, SubnetsPoolsIntersectionRule},
+        subnets::{
+            SubnetWithoutPoolsAndReservationsRule, SubnetsOverlappingRule,
+            SubnetsPoolsIntersectionRule,
+        },
     },
 };
 
@@ -22,7 +25,7 @@ pub struct RulesV4 {
     pub interfaces: [Box<dyn Rule<KEAv4Config>>; 1],
     pub lease_database: [Box<dyn Rule<KEAv4Config>>; 1],
     pub hooks: [Box<dyn Rule<KEAv4Config>>; 5],
-    pub subnets: [Box<dyn Rule<KEAv4Config>>; 2],
+    pub subnets: [Box<dyn Rule<KEAv4Config>>; 3],
     pub client_classes: [Box<dyn Rule<KEAv4Config>>; 1],
     pub shared_networks: [Box<dyn Rule<KEAv4Config>>; 1],
     pub reservations: [Box<dyn Rule<KEAv4Config>>; 1],
@@ -44,6 +47,7 @@ impl RuleChecker<KEAv4Config> for RulesV4 {
             subnets: [
                 Box::new(SubnetsPoolsIntersectionRule),
                 Box::new(SubnetsOverlappingRule),
+                Box::new(SubnetWithoutPoolsAndReservationsRule),
             ],
             client_classes: [Box::new(EvaluateRequiredAsAdditionalClassesRule)],
             shared_networks: [Box::new(OneSubnetInSharedNetworksRule)],
