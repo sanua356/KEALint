@@ -2,6 +2,7 @@ pub mod d2;
 pub mod v4;
 
 pub use d2::bad_tkey_gss_tsig_timeouts::BadTKeyGSSTSIGHookTimeoutsRule;
+pub use d2::no_credentials_cache_and_client_keytab_together_in_gss_tsig::NoCredentialsCacheAndClientKeytabTogetherInGSSTSIGRule;
 
 pub use v4::bad_hooks_order::BadHooksOrderRule;
 pub use v4::multithread_modes_not_equal::MultithreadingModesNotEqualInConfigAndHARule;

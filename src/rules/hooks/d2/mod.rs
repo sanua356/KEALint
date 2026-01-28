@@ -1,2 +1,3 @@
 pub mod _tests;
 pub mod bad_tkey_gss_tsig_timeouts;
+pub mod no_credentials_cache_and_client_keytab_together_in_gss_tsig;
