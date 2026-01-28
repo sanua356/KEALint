@@ -5,7 +5,8 @@ use crate::{
     configs::KEAv4Config,
     constants::{
         FLEX_ID_HOOK_LIBRARY, FORENSIC_LOGGING_HOOK_LIBRARY, HIGH_AVAILABILITY_HOOK_LIBRARY,
-        LEASE_COMMANDS_HOOK_LIBRARY, PING_CHECK_HOOK_LIBRARY,
+        HOST_CACHE_HOOK_LIBRARY, LEASE_COMMANDS_HOOK_LIBRARY, PING_CHECK_HOOK_LIBRARY,
+        RADIUS_HOOK_LIBRARY,
     },
 };
 
@@ -90,6 +91,27 @@ impl Rule<KEAv4Config> for BadHooksOrderRule {
 			            snapshot: Some(serde_json::to_string(&(&hooks[lease_index], &hooks[ping_check_index])).unwrap()),
 			            links: Some(vec!["https://kea.readthedocs.io/en/kea-2.7.7/arm/hooks.html#binding-variables"]),
 		            });
+                }
+            }
+
+            let host_cache_hook_index = hooks
+                .iter()
+                .position(|hook| hook.library.contains(HOST_CACHE_HOOK_LIBRARY));
+
+            let radius_hook_index = hooks
+                .iter()
+                .position(|hook| hook.library.contains(RADIUS_HOOK_LIBRARY));
+
+            if let (Some(host_cache_index), Some(radius_index)) =
+                (host_cache_hook_index, radius_hook_index)
+            {
+                // Host Cache must be placed before RADIUS (clause 16.15.12)
+                if host_cache_index > radius_index {
+                    results.push(RuleResult {
+				            description: format!("For correct operation, the '{}' hook must be specified before the '{}' hook.", HOST_CACHE_HOOK_LIBRARY, RADIUS_HOOK_LIBRARY),
+				            snapshot: Some(serde_json::to_string(&(&hooks[host_cache_index], &hooks[radius_index])).unwrap()),
+				            links: Some(vec!["https://kea.readthedocs.io/en/latest/arm/integrations.html#radius-hook-library-configuration"]),
+			            });
                 }
             }
         }

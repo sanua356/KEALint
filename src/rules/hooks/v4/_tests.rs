@@ -25,6 +25,18 @@ pub static BAD_HOOKS_ORDER_RULE_TEST_TEMPLATE: &str = r#"
 			"library": "libdhcp_pgsql.so",
 			"parameters": {}
 		},
+	    {
+	        "library": "/usr/local/lib/kea/hooks/libdhcp_radius.so",
+	        "parameters": {
+
+	          "dictionary": "/etc/kea/radius/dictionary",
+
+	          "bindaddr": "*"
+	         }
+        },
+        {
+          	"library": "/usr/local/lib/kea/hooks/libdhcp_host_cache.so"
+	    },
 		{
 			"library": "libdhcp_mysql.so",
 			"parameters": {}
@@ -262,6 +274,33 @@ pub static UNNECESSARY_ACTIVATED_DATABASE_HOOKS_RULE_TEST_TEMPLATE: &str = r#"
 			"library": "libdhcp_mysql.so",
 			"parameters": {}
 		}
+	]
+}
+"#;
+
+pub static NO_ACTIVATED_HOST_CACHE_HOOK_FOR_RADIUS_HOOK_RULE_TEST_TEMPLATE: &str = r#"
+{
+	"valid-lifetime": 4000,
+	"renew-timer": 1000,
+	"rebind-timer": 2000,
+	"interfaces-config": {
+		"interfaces": []
+	},
+	"lease-database": {
+		"type": "memfile",
+		"persist": false,
+		"name": "/var/lib/kea/dhcp4.leases"
+	},
+	"hooks-libraries": [
+	    {
+	        "library": "/usr/local/lib/kea/hooks/libdhcp_radius.so",
+	        "parameters": {
+
+	          "dictionary": "/etc/kea/radius/dictionary",
+
+	          "bindaddr": "*"
+	         }
+        }
 	]
 }
 "#;

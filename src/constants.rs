@@ -11,8 +11,11 @@ pub static FLEX_ID_HOOK_LIBRARY: &str = "libdhcp_flex_id.so";
 pub static FORENSIC_LOGGING_HOOK_LIBRARY: &str = "libdhcp_legal_log.so";
 pub static LEASE_COMMANDS_HOOK_LIBRARY: &str = "libdhcp_lease_cmds.so";
 pub static PING_CHECK_HOOK_LIBRARY: &str = "libdhcp_ping_check.so";
+pub static HOST_CACHE_HOOK_LIBRARY: &str = "libdhcp_host_cache.so";
+pub static USER_CHK_HOOK_LIBRARY: &str = "libdhcp_user_chk.so";
 
 pub static GSS_TSIG_HOOK_LIBRARY: &str = "libddns_gss_tsig.so";
+pub static RADIUS_HOOK_LIBRARY: &str = "libdhcp_radius.so";
 
 lazy_static! {
     // Validate ip range in format: IPV4-IPV4

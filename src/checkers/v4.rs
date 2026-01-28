@@ -6,7 +6,8 @@ use crate::{
         client_classes::EvaluateRequiredAsAdditionalClassesRule,
         hooks::{
             BadHooksOrderRule, MultithreadingModesNotEqualInConfigAndHARule,
-            NoActivatedHostCMDsHookForDatabaseBackendRule, NoBasicHTTPAuthInHAPeersRule,
+            NoActivatedHostCMDsHookForDatabaseBackendRule,
+            NoActivatedHostCacheHookForRADIUSHookRule, NoBasicHTTPAuthInHAPeersRule,
             UnnecessaryActivatedDatabaseHooksRule,
         },
         interfaces::NoInterfacesInInterfacesConfigRule,
@@ -24,7 +25,7 @@ use crate::{
 pub struct RulesV4 {
     pub interfaces: [Box<dyn Rule<KEAv4Config>>; 1],
     pub lease_database: [Box<dyn Rule<KEAv4Config>>; 1],
-    pub hooks: [Box<dyn Rule<KEAv4Config>>; 5],
+    pub hooks: [Box<dyn Rule<KEAv4Config>>; 6],
     pub subnets: [Box<dyn Rule<KEAv4Config>>; 3],
     pub client_classes: [Box<dyn Rule<KEAv4Config>>; 1],
     pub shared_networks: [Box<dyn Rule<KEAv4Config>>; 1],
@@ -43,6 +44,7 @@ impl RuleChecker<KEAv4Config> for RulesV4 {
                 Box::new(NoActivatedHostCMDsHookForDatabaseBackendRule),
                 Box::new(BadHooksOrderRule),
                 Box::new(NoBasicHTTPAuthInHAPeersRule),
+                Box::new(NoActivatedHostCacheHookForRADIUSHookRule),
             ],
             subnets: [
                 Box::new(SubnetsPoolsIntersectionRule),
