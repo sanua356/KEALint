@@ -51,9 +51,3 @@ pub fn find_problems<T>(config: &T, values: Vec<&[Box<dyn Rule<T>>]>) -> Vec<Pro
 
     problems
 }
-
-pub trait RuleChecker<T> {
-    fn default() -> Self;
-    fn values(&self) -> Vec<&[Box<dyn Rule<T>>]>;
-    fn run(&self, config: &T);
-}

@@ -1,6 +1,6 @@
 use crate::{
-    checkers::{RuleChecker, find_problems, tabled_print_problems},
-    common::Rule,
+    checkers::{find_problems, tabled_print_problems},
+    common::{Rule, RuleChecker},
     configs::KEAD2Config,
     rules::{
         ddns_server::NotLocalIPAddressInD2ServerConfigRule, hooks::BadTKeyGSSTSIGHookTimeoutsRule,

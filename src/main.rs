@@ -8,7 +8,8 @@ mod utils;
 use std::{env, fs, path::Path};
 
 use crate::{
-    checkers::{RuleChecker, RulesCtrlAgent, RulesD2, RulesV4},
+    checkers::{RulesCtrlAgent, RulesD2, RulesV4},
+    common::RuleChecker,
     configs::{KEACtrlAgentConfig, KEAD2Config, KEAv4Config},
 };
 

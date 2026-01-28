@@ -56,3 +56,9 @@ pub trait Rule<T> {
         RuleConfigs::Dhcp4
     }
 }
+
+pub trait RuleChecker<T> {
+    fn default() -> Self;
+    fn values(&self) -> Vec<&[Box<dyn Rule<T>>]>;
+    fn run(&self, config: &T);
+}

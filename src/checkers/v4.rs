@@ -1,6 +1,6 @@
 use crate::{
-    checkers::{RuleChecker, find_problems, tabled_print_problems},
-    common::Rule,
+    checkers::{find_problems, tabled_print_problems},
+    common::{Rule, RuleChecker},
     configs::v4::KEAv4Config,
     rules::{
         client_classes::EvaluateRequiredAsAdditionalClassesRule,
