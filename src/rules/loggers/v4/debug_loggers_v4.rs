@@ -9,7 +9,7 @@ pub struct DebugLoggersV4Rule;
 
 impl Rule<KEAv4Config> for DebugLoggersV4Rule {
     fn get_name(&self) -> &'static str {
-        "LOGGERS::DebugLoggersV4Rule"
+        "LOGGERS::DebugLoggersRule"
     }
     fn get_level(&self) -> RuleLevels {
         RuleLevels::Info
@@ -19,7 +19,7 @@ impl Rule<KEAv4Config> for DebugLoggersV4Rule {
     }
     fn check(&self, config: &KEAv4Config) -> Option<Vec<RuleResult>> {
         if let Some(loggers) = &config.loggers {
-            return get_debug_loggers_rule(loggers, RuleConfigs::Dhcp4.to_string().as_str());
+            return get_debug_loggers_rule(loggers, &self.get_config_type().to_string());
         }
         None
     }

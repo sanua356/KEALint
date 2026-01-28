@@ -12,7 +12,7 @@ use crate::{
         },
         interfaces::NoInterfacesInInterfacesConfigRule,
         lease_database::NoEnabledPersistFlagForMemfileLeasesRule,
-        loggers::DebugLoggersV4Rule,
+        loggers::{DebugLoggersV4Rule, NoLinebreakMessagesLoggersV4},
         reservations::AllReservationsOutOfPoolsRule,
         shared_networks::OneSubnetInSharedNetworksRule,
         subnets::{
@@ -30,7 +30,7 @@ pub struct RulesV4 {
     pub client_classes: [Box<dyn Rule<KEAv4Config>>; 1],
     pub shared_networks: [Box<dyn Rule<KEAv4Config>>; 1],
     pub reservations: [Box<dyn Rule<KEAv4Config>>; 1],
-    pub loggers: [Box<dyn Rule<KEAv4Config>>; 1],
+    pub loggers: [Box<dyn Rule<KEAv4Config>>; 2],
 }
 
 impl RuleChecker<KEAv4Config> for RulesV4 {
@@ -54,7 +54,10 @@ impl RuleChecker<KEAv4Config> for RulesV4 {
             client_classes: [Box::new(EvaluateRequiredAsAdditionalClassesRule)],
             shared_networks: [Box::new(OneSubnetInSharedNetworksRule)],
             reservations: [Box::new(AllReservationsOutOfPoolsRule)],
-            loggers: [Box::new(DebugLoggersV4Rule)],
+            loggers: [
+                Box::new(DebugLoggersV4Rule),
+                Box::new(NoLinebreakMessagesLoggersV4),
+            ],
         }
     }
 

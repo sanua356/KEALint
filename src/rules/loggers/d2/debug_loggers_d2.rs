@@ -9,7 +9,7 @@ pub struct DebugLoggersD2Rule;
 
 impl Rule<KEAD2Config> for DebugLoggersD2Rule {
     fn get_name(&self) -> &'static str {
-        "LOGGERS::DebugLoggersD2Rule"
+        "LOGGERS::DebugLoggersRule"
     }
     fn get_level(&self) -> RuleLevels {
         RuleLevels::Info

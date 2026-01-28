@@ -41,6 +41,5 @@ pub struct KEALogger {
     pub severity: Option<KEALoggerSeverityTypes>,
     pub debuglevel: Option<u32>,
 
-    #[serde(rename = "output_options")]
     pub output_options: Option<Vec<KEALoggerOutputOptions>>,
 }

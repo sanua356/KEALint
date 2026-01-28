@@ -3,15 +3,18 @@ use crate::{
     common::{Rule, RuleChecker},
     configs::KEAD2Config,
     rules::{
-        ddns_server::NotLocalIPAddressInD2ServerConfigRule, hooks::BadTKeyGSSTSIGHookTimeoutsRule,
-        hooks::NoCredentialsCacheAndClientKeytabTogetherInGSSTSIGRule, loggers::DebugLoggersD2Rule,
+        ddns_server::NotLocalIPAddressInD2ServerConfigRule,
+        hooks::{
+            BadTKeyGSSTSIGHookTimeoutsRule, NoCredentialsCacheAndClientKeytabTogetherInGSSTSIGRule,
+        },
+        loggers::{DebugLoggersD2Rule, NoLinebreakMessagesLoggersD2},
     },
 };
 
 pub struct RulesD2 {
     pub global: [Box<dyn Rule<KEAD2Config>>; 1],
     pub hooks: [Box<dyn Rule<KEAD2Config>>; 2],
-    pub loggers: [Box<dyn Rule<KEAD2Config>>; 1],
+    pub loggers: [Box<dyn Rule<KEAD2Config>>; 2],
 }
 
 impl RuleChecker<KEAD2Config> for RulesD2 {
@@ -22,7 +25,10 @@ impl RuleChecker<KEAD2Config> for RulesD2 {
                 Box::new(BadTKeyGSSTSIGHookTimeoutsRule),
                 Box::new(NoCredentialsCacheAndClientKeytabTogetherInGSSTSIGRule),
             ],
-            loggers: [Box::new(DebugLoggersD2Rule)],
+            loggers: [
+                Box::new(DebugLoggersD2Rule),
+                Box::new(NoLinebreakMessagesLoggersD2),
+            ],
         }
     }
 

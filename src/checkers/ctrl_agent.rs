@@ -4,13 +4,13 @@ use crate::{
     configs::KEACtrlAgentConfig,
     rules::{
         ctrl_agent::{NoAllControlSocketsSpecifiedRule, NotLocalIPWithoutHTTPSRule},
-        loggers::DebugLoggersCtrlAgentRule,
+        loggers::{DebugLoggersCtrlAgentRule, NoLinebreakMessagesLoggersCtrlAgent},
     },
 };
 
 pub struct RulesCtrlAgent {
     pub global: [Box<dyn Rule<KEACtrlAgentConfig>>; 2],
-    pub loggers: [Box<dyn Rule<KEACtrlAgentConfig>>; 1],
+    pub loggers: [Box<dyn Rule<KEACtrlAgentConfig>>; 2],
 }
 
 impl RuleChecker<KEACtrlAgentConfig> for RulesCtrlAgent {
@@ -20,7 +20,10 @@ impl RuleChecker<KEACtrlAgentConfig> for RulesCtrlAgent {
                 Box::new(NotLocalIPWithoutHTTPSRule),
                 Box::new(NoAllControlSocketsSpecifiedRule),
             ],
-            loggers: [Box::new(DebugLoggersCtrlAgentRule)],
+            loggers: [
+                Box::new(DebugLoggersCtrlAgentRule),
+                Box::new(NoLinebreakMessagesLoggersCtrlAgent),
+            ],
         }
     }
 

@@ -9,7 +9,7 @@ pub struct DebugLoggersCtrlAgentRule;
 
 impl Rule<KEACtrlAgentConfig> for DebugLoggersCtrlAgentRule {
     fn get_name(&self) -> &'static str {
-        "LOGGERS::DebugLoggersCtrlAgentRule"
+        "LOGGERS::DebugLoggersRule"
     }
     fn get_level(&self) -> RuleLevels {
         RuleLevels::Info
