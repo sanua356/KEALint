@@ -115,8 +115,30 @@ mod tests {
     fn check_absense_trigger() {
         let mut json_value: Value =
             serde_json::from_str(ALL_RESERVATIONS_OUT_OF_POOLS_RULE_TEMPLATE).unwrap();
-        json_value["subnet4"][0]["reservations"] = Value::from(());
-        json_value["shared-networks"][0]["subnet4"][0]["reservations"] = Value::from(());
+        json_value["subnet4"][0]["reservations"] = serde_json::json!([
+            {
+                "hostname": "in_pool_reservation1",
+                "hw-address": "1a:1b:1c:1d:1e:1f",
+                "ip-address": "1.8.8.11"
+            },
+            {
+                "hostname": "in_pool_reservation2",
+                "hw-address": "11:22:33:44:55:66",
+                "ip-address": "1.8.8.12"
+            }
+        ]);
+        json_value["shared-networks"][0]["subnet4"][0]["reservations"] = serde_json::json!([
+            {
+                "hostname": "qqq",
+                "hw-address": "2a:2b:2c:2d:2e:2f",
+                "ip-address": "10.0.0.80"
+            },
+            {
+                "hostname": "eee",
+                "hw-address": "aa:bb:cc:dd:ee:ff",
+                "ip-address": "10.0.0.90"
+            }
+        ]);
         let data: KEAv4Config = serde_json::from_value(json_value).unwrap();
 
         let rule = AllReservationsOutOfPoolsRule;

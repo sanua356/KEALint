@@ -146,10 +146,90 @@ mod tests {
     fn check_absense_trigger() {
         let mut json_value: Value =
             serde_json::from_str(BAD_HOOKS_ORDER_RULE_TEST_TEMPLATE).unwrap();
-        json_value["hooks-libraries"]
-            .as_array_mut()
-            .unwrap()
-            .clear();
+        json_value["hooks-libraries"] = serde_json::json!([
+        {
+            "library": "libdhcp_flex_id.so",
+            "parameters": {
+                "identifier-expression": "substring(relay4[0].option[18].hex,0,8)"
+            }
+        },
+        {
+            "library": "libdhcp_pgsql.so",
+            "parameters": {}
+        },
+        {
+            "library": "host_cache.so",
+            "parameters": {}
+        },
+        {
+            "library": "/usr/local/lib/kea/hooks/libdhcp_radius.so",
+            "parameters": {
+                "dictionary": "/etc/kea/radius/dictionary",
+                "bindaddr": "*"
+            }
+        },
+        {
+            "library": "libdhcp_mysql.so",
+            "parameters": {}
+        },
+        {
+            "library": "libdhcp_ping_check.so",
+            "parameters": {
+                "enable-ping-check": true,
+                "min-ping-requests": 1,
+                "reply-timeout": 100,
+                "ping-cltt-secs": 60,
+                "ping-channel-threads": 0
+            }
+        },
+        {
+            "library": "libdhcp_lease_cmds.so",
+            "parameters": {}
+        },
+        {
+            "library": "libdhcp_ha.so",
+            "parameters": {
+                "high-availability": [
+                    {
+                        "this-server-name": "server1",
+                        "mode": "load-balancing",
+                        "multi-threading": {
+                            "enable-multi-threading": true,
+                            "http-dedicated-listener": true,
+                            "http-listener-threads": 4,
+                            "http-client-threads": 4
+                        },
+                        "peers": [
+                            {
+                                "name": "server1",
+                                "url": "http://192.168.56.33:8005/",
+                                "role": "primary"
+                            },
+                            {
+                                "name": "server2",
+                                "url": "http://192.168.56.66:8005/",
+                                "role": "secondary"
+                            },
+                            {
+                                "name": "server3",
+                                "url": "http://192.168.56.99:8005/",
+                                "basic-auth-user": "foo",
+                                "basic-auth-password": "1234",
+                                "role": "backup"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "library": "libdhcp_legal_log.so",
+            "parameters": {
+                "path": "/var/lib/kea/log",
+                "base-name": "kea-forensic4"
+            }
+        }
+        ]);
         let data: KEAv4Config = serde_json::from_value(json_value).unwrap();
 
         let rule = BadHooksOrderRule;

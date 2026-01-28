@@ -53,7 +53,6 @@ mod tests {
         json_value["loggers"].as_array_mut().unwrap()[0]["severity"] =
             Value::from(KEALoggerSeverityTypes::INFO.to_string());
 
-        println!("{:?}", json_value["loggers"]);
         let data: KEACtrlAgentConfig = serde_json::from_value(json_value).unwrap();
 
         let rule = DebugLoggersCtrlAgentRule;

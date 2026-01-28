@@ -83,14 +83,22 @@ mod tests {
     fn check_absense_trigger() {
         let mut json_value: Value =
             serde_json::from_str(NO_BASIC_HTTP_AUTH_IN_HA_PEERS_RULE_TEST_TEMPLATE).unwrap();
-        json_value.as_object_mut().unwrap()["hooks-libraries"][0]["parameters"]["high-availability"][0]["peers"]
-            .as_array_mut()
-            .unwrap()
-            .remove(0);
-        json_value.as_object_mut().unwrap()["hooks-libraries"][0]["parameters"]["high-availability"][0]["peers"]
-            .as_array_mut()
-            .unwrap()
-            .remove(0);
+        json_value["hooks-libraries"][0]["parameters"]["high-availability"][0]["peers"] = serde_json::json!([
+        {
+            "name": "server2",
+            "url": "http://1.2.3.4:8005/",
+            "basic-auth-user": "qqq",
+            "basic-auth-password": "eee",
+            "role": "backup"
+        },
+        {
+            "name": "server3",
+            "url": "http://192.168.56.99:8005/",
+            "basic-auth-user": "foo",
+            "basic-auth-password": "1234",
+            "role": "backup"
+        }
+        ]);
         let data: KEAv4Config = serde_json::from_value(json_value).unwrap();
 
         let rule = NoBasicHTTPAuthInHAPeersRule;

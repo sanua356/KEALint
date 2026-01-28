@@ -77,11 +77,10 @@ mod tests {
             NO_ACTIVATED_HOST_CMDS_HOOK_FOR_DATABASE_BACKEND_RULE_TEST_TEMPLATE,
         )
         .unwrap();
-        json_value.as_object_mut().unwrap().remove("hosts-database");
-        json_value
-            .as_object_mut()
-            .unwrap()
-            .remove("hosts-databases");
+        json_value["hooks-libraries"] = serde_json::json!([{
+            "library": "libdhcp_host_cmds.so",
+            "parameters": {}
+        }]);
         let data: KEAv4Config = serde_json::from_value(json_value).unwrap();
 
         let rule = NoActivatedHostCMDsHookForDatabaseBackendRule;
