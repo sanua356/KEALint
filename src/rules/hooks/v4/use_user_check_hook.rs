@@ -1,0 +1,75 @@
+use crate::{
+    common::{Rule, RuleConfigs, RuleLevels, RuleResult},
+    configs::KEAv4Config,
+    constants::USER_CHK_HOOK_LIBRARY,
+};
+
+pub struct UseUsrCheckHookRule;
+
+impl Rule<KEAv4Config> for UseUsrCheckHookRule {
+    fn get_name(&self) -> &'static str {
+        "HOOKS::UseUsrCheckHookRule"
+    }
+    fn get_level(&self) -> RuleLevels {
+        RuleLevels::Info
+    }
+    fn get_config_type(&self) -> RuleConfigs {
+        RuleConfigs::Dhcp4
+    }
+    fn check(&self, config: &KEAv4Config) -> Option<Vec<RuleResult>> {
+        let usr_check_hook = config
+            .hooks_libraries
+            .as_ref()?
+            .iter()
+            .find(|hook| hook.library.contains(USER_CHK_HOOK_LIBRARY));
+
+        if usr_check_hook.is_some() {
+            return Some(vec![RuleResult {
+                description: format!(
+                    "The '{}' hook is outdated. It is recommended to use it only for educational purposes. Use the hosts reservations mechanisms of the global configuration instead of the hook.",
+                    USER_CHK_HOOK_LIBRARY
+                ),
+                snapshot: Some(serde_json::to_string(&usr_check_hook).unwrap()),
+                links: Some(vec![
+                    "https://kea.readthedocs.io/en/latest/arm/hooks.html#libdhcp-user-chk-so-user-check",
+                ]),
+            }]);
+        }
+
+        None
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use serde_json::Value;
+
+    use crate::{
+        common::Rule,
+        configs::v4::KEAv4Config,
+        rules::hooks::{UseUsrCheckHookRule, v4::_tests::USE_USER_CHECK_HOOK_RULE_TEST_TEMPLATE},
+    };
+
+    #[test]
+    fn check_expected_trigger() {
+        let data: KEAv4Config =
+            serde_json::from_str(USE_USER_CHECK_HOOK_RULE_TEST_TEMPLATE).unwrap();
+
+        let rule = UseUsrCheckHookRule;
+        assert!(rule.check(&data).is_some());
+    }
+
+    #[test]
+    fn check_absense_trigger() {
+        let mut json_value: Value =
+            serde_json::from_str(USE_USER_CHECK_HOOK_RULE_TEST_TEMPLATE).unwrap();
+        json_value["hooks-libraries"]
+            .as_array_mut()
+            .unwrap()
+            .clear();
+        let data: KEAv4Config = serde_json::from_value(json_value).unwrap();
+
+        let rule = UseUsrCheckHookRule;
+        assert!(rule.check(&data).is_none());
+    }
+}

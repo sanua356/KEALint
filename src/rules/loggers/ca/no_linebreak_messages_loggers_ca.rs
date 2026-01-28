@@ -8,7 +8,7 @@ pub struct NoLinebreakMessagesLoggersCtrlAgent;
 
 impl Rule<KEACtrlAgentConfig> for NoLinebreakMessagesLoggersCtrlAgent {
     fn get_name(&self) -> &'static str {
-        "LOGGERS::NoLinebreakMessagesLoggers"
+        "LOGGERS::NoLinebreakMessagesLoggersRule"
     }
     fn get_level(&self) -> RuleLevels {
         RuleLevels::Info

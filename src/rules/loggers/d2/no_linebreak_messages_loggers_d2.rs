@@ -8,7 +8,7 @@ pub struct NoLinebreakMessagesLoggersD2;
 
 impl Rule<KEAD2Config> for NoLinebreakMessagesLoggersD2 {
     fn get_name(&self) -> &'static str {
-        "LOGGERS::NoLinebreakMessagesLoggers"
+        "LOGGERS::NoLinebreakMessagesLoggersRule"
     }
     fn get_level(&self) -> RuleLevels {
         RuleLevels::Info

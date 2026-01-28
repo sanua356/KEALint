@@ -8,7 +8,7 @@ pub struct NoLinebreakMessagesLoggersV4;
 
 impl Rule<KEAv4Config> for NoLinebreakMessagesLoggersV4 {
     fn get_name(&self) -> &'static str {
-        "LOGGERS::NoLinebreakMessagesLoggers"
+        "LOGGERS::NoLinebreakMessagesLoggersRule"
     }
     fn get_level(&self) -> RuleLevels {
         RuleLevels::Info

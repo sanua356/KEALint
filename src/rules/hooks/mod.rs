@@ -10,3 +10,4 @@ pub use v4::no_activated_host_cache_hook_for_radius_hook::NoActivatedHostCacheHo
 pub use v4::no_activated_host_cmds_for_database_backend::NoActivatedHostCMDsHookForDatabaseBackendRule;
 pub use v4::no_basic_http_auth_in_ha_peers::NoBasicHTTPAuthInHAPeersRule;
 pub use v4::unnecessary_activated_database_hooks::UnnecessaryActivatedDatabaseHooksRule;
+pub use v4::use_user_check_hook::UseUsrCheckHookRule;
