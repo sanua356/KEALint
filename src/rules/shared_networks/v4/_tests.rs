@@ -131,3 +131,50 @@ pub static MISSING_SUBNET_ID_SHARED_NETWORKS_WITH_HOST_DATABASES_RULE_TEMPLATE: 
 	]
 }
 "#;
+
+pub static SAME_HOST_RESERVATIONS_IN_DIFFERENT_SUBNETS_SHARED_NETWORKS_RULE_TEMPLATE: &str = r#"
+{
+	"valid-lifetime": 4000,
+	"renew-timer": 1000,
+	"rebind-timer": 2000,
+	"interfaces-config": {
+		"interfaces": []
+	},
+	"lease-database": {
+		"type": "memfile",
+		"persist": false,
+		"name": "/var/lib/kea/dhcp4.leases"
+	},
+	"shared-networks": [
+		{
+			"name": "qqq",
+			"subnet4": [
+				{
+					"id": 11,
+					"subnet": "254.254.254.254/32",
+					"pools": [],
+					"interface": "eth1",
+					"reservations": [
+						{
+							"hostname": "qqq",
+							"hw-address": "2a:2b:2c:2d:2e:2f",
+							"ip-address": "10.0.0.150"
+						}
+					]
+				},
+				{
+					"id": 12,
+					"subnet": "253.253.253.253/32",
+					"reservations": [
+						{
+							"hostname": "www",
+							"hw-address": "2a:2b:2c:2d:2e:2f",
+							"ip-address": "10.0.0.160"
+						}
+					]
+				}
+			]
+		}
+	]
+}
+"#;

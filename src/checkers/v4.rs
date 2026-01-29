@@ -27,6 +27,7 @@ use crate::{
         shared_networks::{
             InterfaceOrRelaysInsideSubnetsSharedNetworksRule,
             MissingSubnetIdSharedNetworksWithHostDatabases, OneSubnetInSharedNetworksRule,
+            SameHostReservationsInDifferentSubnetsSharedNetworksRule,
         },
         subnets::{
             SubnetWithoutPoolsAndReservationsRule, SubnetsOverlappingRule,
@@ -41,7 +42,7 @@ pub struct RulesV4 {
     pub hooks: [Box<dyn Rule<KEAv4Config>>; 9],
     pub subnets: [Box<dyn Rule<KEAv4Config>>; 3],
     pub client_classes: [Box<dyn Rule<KEAv4Config>>; 3],
-    pub shared_networks: [Box<dyn Rule<KEAv4Config>>; 3],
+    pub shared_networks: [Box<dyn Rule<KEAv4Config>>; 4],
     pub reservations: [Box<dyn Rule<KEAv4Config>>; 1],
     pub queue_control: [Box<dyn Rule<KEAv4Config>>; 1],
     pub loggers: [Box<dyn Rule<KEAv4Config>>; 3],
@@ -80,6 +81,7 @@ impl RuleChecker<KEAv4Config> for RulesV4 {
                 Box::new(OneSubnetInSharedNetworksRule),
                 Box::new(InterfaceOrRelaysInsideSubnetsSharedNetworksRule),
                 Box::new(MissingSubnetIdSharedNetworksWithHostDatabases),
+                Box::new(SameHostReservationsInDifferentSubnetsSharedNetworksRule),
             ],
             reservations: [Box::new(AllReservationsOutOfPoolsRule)],
             queue_control: [Box::new(NoEnableQueueAndMultithreadingTogetherRule)],
