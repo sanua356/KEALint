@@ -1,8 +1,8 @@
+use super::{KEALeaseDatabaseTypes, KEAv4HostsDatabasesFailStrategers};
 use serde::{Deserialize, Serialize};
 
-use super::{KEALeaseDatabaseTypes, KEAv4HostsDatabasesFailStrategers};
-
 #[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "kebab-case")]
 pub struct KEAv4LeaseDatabase {
     pub r#type: KEALeaseDatabaseTypes,
     pub persist: Option<bool>,
