@@ -26,9 +26,7 @@ impl Rule<KEAv4Config> for MoreOneObjectConfigHARule {
         if let Some(hook) = ha_hook {
             let parameters = hook.parameters.as_ref()?.as_object()?;
 
-            if parameters.contains_key("high-availability")
-                && parameters["high-availability"].as_array()?.len() > 1
-            {
+            if parameters["high-availability"].as_array()?.len() > 1 {
                 return Some(vec![RuleResult {
                     description: format!(
                         "For the hook '{}', the 'high-availability' key cannot contain more than one object in the array.",

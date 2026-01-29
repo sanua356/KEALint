@@ -28,6 +28,7 @@ pub struct KEAv4Config {
     pub valid_lifetime: u32,
     pub renew_timer: u32,
     pub rebind_timer: u32,
+    pub match_client_id: Option<bool>,
 
     pub interfaces_config: interfaces::KEAv4InterfacesConfig,
     pub lease_database: lease_database::KEAv4LeaseDatabase,
