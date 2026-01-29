@@ -3,6 +3,7 @@
 use serde::Deserialize;
 
 pub use option_data::KEAv4OptionData;
+pub use relay::KEAv4Relay;
 pub use shared::*;
 pub use subnets::{KEAv4PoolVariant, KEAv4Subnet};
 
@@ -16,6 +17,7 @@ mod lease_database;
 mod multithreading;
 mod option_data;
 mod option_def;
+mod relay;
 mod shared;
 mod shared_networks;
 mod subnets;

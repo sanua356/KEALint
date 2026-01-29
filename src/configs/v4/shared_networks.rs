@@ -1,18 +1,19 @@
 use serde::Deserialize;
 
-use super::{KEAv4OptionData, KEAv4Subnet};
+use super::{KEAv4OptionData, KEAv4Relay, KEAv4Subnet};
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "kebab-case")]
 pub struct KEAv4SharedNetwork {
     pub name: String,
 
+    pub interface: Option<String>,
     pub valid_lifetime: Option<u32>,
     pub renew_timer: Option<u32>,
     pub rebind_timer: Option<u32>,
-    pub interface: Option<String>,
     pub evaluate_additional_classes: Option<Vec<String>>,
     pub reservations_out_of_pool: Option<bool>,
+    pub relay: Option<KEAv4Relay>,
 
     pub subnet4: Option<Vec<KEAv4Subnet>>,
 

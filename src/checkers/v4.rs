@@ -24,7 +24,9 @@ use crate::{
         },
         queue_control::NoEnableQueueAndMultithreadingTogetherRule,
         reservations::AllReservationsOutOfPoolsRule,
-        shared_networks::OneSubnetInSharedNetworksRule,
+        shared_networks::{
+            InterfaceOrRelaysInsideSubnetsSharedNetworksRule, OneSubnetInSharedNetworksRule,
+        },
         subnets::{
             SubnetWithoutPoolsAndReservationsRule, SubnetsOverlappingRule,
             SubnetsPoolsIntersectionRule,
@@ -38,7 +40,7 @@ pub struct RulesV4 {
     pub hooks: [Box<dyn Rule<KEAv4Config>>; 9],
     pub subnets: [Box<dyn Rule<KEAv4Config>>; 3],
     pub client_classes: [Box<dyn Rule<KEAv4Config>>; 3],
-    pub shared_networks: [Box<dyn Rule<KEAv4Config>>; 1],
+    pub shared_networks: [Box<dyn Rule<KEAv4Config>>; 2],
     pub reservations: [Box<dyn Rule<KEAv4Config>>; 1],
     pub queue_control: [Box<dyn Rule<KEAv4Config>>; 1],
     pub loggers: [Box<dyn Rule<KEAv4Config>>; 3],
@@ -73,7 +75,10 @@ impl RuleChecker<KEAv4Config> for RulesV4 {
                 Box::new(NotLifetimeForAdditionalClassesRule),
                 Box::new(NotRecommendedPrefixAFTER_ClassesRule),
             ],
-            shared_networks: [Box::new(OneSubnetInSharedNetworksRule)],
+            shared_networks: [
+                Box::new(OneSubnetInSharedNetworksRule),
+                Box::new(InterfaceOrRelaysInsideSubnetsSharedNetworksRule),
+            ],
             reservations: [Box::new(AllReservationsOutOfPoolsRule)],
             queue_control: [Box::new(NoEnableQueueAndMultithreadingTogetherRule)],
             loggers: [
