@@ -20,6 +20,7 @@ use crate::{
         loggers::{
             DebugLoggersV4Rule, NoLinebreakMessagesLoggersV4, NoPercentMMessagesLoggersV4Rule,
         },
+        queue_control::NoEnableQueueAndMultithreadingTogetherRule,
         reservations::AllReservationsOutOfPoolsRule,
         shared_networks::OneSubnetInSharedNetworksRule,
         subnets::{
@@ -37,6 +38,7 @@ pub struct RulesV4 {
     pub client_classes: [Box<dyn Rule<KEAv4Config>>; 3],
     pub shared_networks: [Box<dyn Rule<KEAv4Config>>; 1],
     pub reservations: [Box<dyn Rule<KEAv4Config>>; 1],
+    pub queue_control: [Box<dyn Rule<KEAv4Config>>; 1],
     pub loggers: [Box<dyn Rule<KEAv4Config>>; 3],
 }
 
@@ -68,6 +70,7 @@ impl RuleChecker<KEAv4Config> for RulesV4 {
             ],
             shared_networks: [Box::new(OneSubnetInSharedNetworksRule)],
             reservations: [Box::new(AllReservationsOutOfPoolsRule)],
+            queue_control: [Box::new(NoEnableQueueAndMultithreadingTogetherRule)],
             loggers: [
                 Box::new(DebugLoggersV4Rule),
                 Box::new(NoLinebreakMessagesLoggersV4),
@@ -85,6 +88,7 @@ impl RuleChecker<KEAv4Config> for RulesV4 {
             &self.client_classes,
             &self.shared_networks,
             &self.reservations,
+            &self.queue_control,
             &self.loggers,
         ]
     }
