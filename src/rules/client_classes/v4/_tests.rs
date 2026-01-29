@@ -54,5 +54,29 @@ pub static EVALUATE_REQUIRED_AS_ADDITIONAL_CLASSES_RULE_TEST_TEMPLATE: &str = r#
 		}
 	]
 }
+"#;
 
+pub static NOT_LIFETIME_FOR_ADDITIONAL_CLASSES_RULE_TEST_TEMPLATE: &str = r#"
+{
+    "interfaces-config": {
+        "interfaces": [ "eth0" ],
+        "dhcp-socket-type": "raw"
+    },
+    "lease-database": {
+		"type": "memfile",
+		"persist": false,
+		"name": "/var/lib/kea/dhcp4.leases"
+	},
+    "valid-lifetime": 4000,
+    "renew-timer": 1000,
+    "rebind-timer": 2000,
+    "client-classes": [
+    	{
+			"name": "test_not_required_class",
+			"test": "",
+			"only-in-additional-list": true,
+			"valid-lifetime": 4000
+		}
+	]
+}
 "#;

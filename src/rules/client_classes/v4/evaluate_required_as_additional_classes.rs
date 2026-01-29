@@ -73,7 +73,6 @@ impl Rule<KEAv4Config> for EvaluateRequiredAsAdditionalClassesRule {
                 .find(|item| item.name == additional_class);
 
             if let Some(class_info) = class
-                && !class_info.only_if_required.unwrap_or_default()
                 && !class_info.only_in_additional_list.unwrap_or_default()
             {
                 results.push(RuleResult {

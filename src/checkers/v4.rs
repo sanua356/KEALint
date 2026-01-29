@@ -3,7 +3,9 @@ use crate::{
     common::{Rule, RuleChecker},
     configs::v4::KEAv4Config,
     rules::{
-        client_classes::EvaluateRequiredAsAdditionalClassesRule,
+        client_classes::{
+            EvaluateRequiredAsAdditionalClassesRule, NotLifetimeForAdditionalClassesRule,
+        },
         hooks::{
             BadHooksOrderRule, MoreOneObjectConfigHARule,
             MultithreadingModesNotEqualInConfigAndHARule,
@@ -30,7 +32,7 @@ pub struct RulesV4 {
     pub lease_database: [Box<dyn Rule<KEAv4Config>>; 1],
     pub hooks: [Box<dyn Rule<KEAv4Config>>; 8],
     pub subnets: [Box<dyn Rule<KEAv4Config>>; 3],
-    pub client_classes: [Box<dyn Rule<KEAv4Config>>; 1],
+    pub client_classes: [Box<dyn Rule<KEAv4Config>>; 2],
     pub shared_networks: [Box<dyn Rule<KEAv4Config>>; 1],
     pub reservations: [Box<dyn Rule<KEAv4Config>>; 1],
     pub loggers: [Box<dyn Rule<KEAv4Config>>; 3],
@@ -56,7 +58,10 @@ impl RuleChecker<KEAv4Config> for RulesV4 {
                 Box::new(SubnetsOverlappingRule),
                 Box::new(SubnetWithoutPoolsAndReservationsRule),
             ],
-            client_classes: [Box::new(EvaluateRequiredAsAdditionalClassesRule)],
+            client_classes: [
+                Box::new(EvaluateRequiredAsAdditionalClassesRule),
+                Box::new(NotLifetimeForAdditionalClassesRule),
+            ],
             shared_networks: [Box::new(OneSubnetInSharedNetworksRule)],
             reservations: [Box::new(AllReservationsOutOfPoolsRule)],
             loggers: [
