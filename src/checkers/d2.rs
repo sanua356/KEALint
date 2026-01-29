@@ -7,14 +7,16 @@ use crate::{
         hooks::{
             BadTKeyGSSTSIGHookTimeoutsRule, NoCredentialsCacheAndClientKeytabTogetherInGSSTSIGRule,
         },
-        loggers::{DebugLoggersD2Rule, NoLinebreakMessagesLoggersD2},
+        loggers::{
+            DebugLoggersD2Rule, NoLinebreakMessagesLoggersD2, NoPercentMMessagesLoggersD2Rule,
+        },
     },
 };
 
 pub struct RulesD2 {
     pub global: [Box<dyn Rule<KEAD2Config>>; 1],
     pub hooks: [Box<dyn Rule<KEAD2Config>>; 2],
-    pub loggers: [Box<dyn Rule<KEAD2Config>>; 2],
+    pub loggers: [Box<dyn Rule<KEAD2Config>>; 3],
 }
 
 impl RuleChecker<KEAD2Config> for RulesD2 {
@@ -28,6 +30,7 @@ impl RuleChecker<KEAD2Config> for RulesD2 {
             loggers: [
                 Box::new(DebugLoggersD2Rule),
                 Box::new(NoLinebreakMessagesLoggersD2),
+                Box::new(NoPercentMMessagesLoggersD2Rule),
             ],
         }
     }
