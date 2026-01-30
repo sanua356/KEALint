@@ -23,3 +23,100 @@ lazy_static! {
     // Validate ip range in format: IPV4-IPV4
     pub static ref CIDR_V4_REGEXP: Regex = Regex::new(r"^(25[0-5]|2[0-4]\d|1?\d?\d)(?:\.(25[0-5]|2[0-4]\d|1?\d?\d)){3}/(3[0-2]|[12]?\d)$").unwrap();
 }
+
+pub struct KEANoConfigurableOption {
+    pub code: u8,
+    pub name: &'static str,
+}
+
+#[allow(dead_code)]
+pub static KEA_NO_CONFIGURABLE_OPTIONS: [KEANoConfigurableOption; 22] = [
+    KEANoConfigurableOption {
+        code: 1,
+        name: "subnet-mask",
+    },
+    KEANoConfigurableOption {
+        code: 12,
+        name: "host-name",
+    },
+    KEANoConfigurableOption {
+        code: 50,
+        name: "dhcp-requested-address",
+    },
+    KEANoConfigurableOption {
+        code: 51,
+        name: "dhcp-lease-time",
+    },
+    KEANoConfigurableOption {
+        code: 53,
+        name: "dhcp-message-type",
+    },
+    KEANoConfigurableOption {
+        code: 55,
+        name: "dhcp-parameter-required-list",
+    },
+    KEANoConfigurableOption {
+        code: 58,
+        name: "dhcp-renewal-time",
+    },
+    KEANoConfigurableOption {
+        code: 59,
+        name: "dhcp-rebinding-time",
+    },
+    KEANoConfigurableOption {
+        code: 61,
+        name: "dhcp-client-identifier",
+    },
+    KEANoConfigurableOption {
+        code: 81,
+        name: "fqdn",
+    },
+    KEANoConfigurableOption {
+        code: 1,
+        name: "dhcp-agent-options",
+    },
+    KEANoConfigurableOption {
+        code: 90,
+        name: "authenticate",
+    },
+    KEANoConfigurableOption {
+        code: 91,
+        name: "client-last-transaction-time",
+    },
+    KEANoConfigurableOption {
+        code: 92,
+        name: "associated-ip",
+    },
+    KEANoConfigurableOption {
+        code: 118,
+        name: "subnet-selection",
+    },
+    KEANoConfigurableOption {
+        code: 151,
+        name: "status-code",
+    },
+    KEANoConfigurableOption {
+        code: 152,
+        name: "base-ttme",
+    },
+    KEANoConfigurableOption {
+        code: 153,
+        name: "start-time-of-state",
+    },
+    KEANoConfigurableOption {
+        code: 154,
+        name: "query-start-time",
+    },
+    KEANoConfigurableOption {
+        code: 155,
+        name: "query-end-time",
+    },
+    KEANoConfigurableOption {
+        code: 156,
+        name: "dhcp-state",
+    },
+    KEANoConfigurableOption {
+        code: 157,
+        name: "data-source",
+    },
+];

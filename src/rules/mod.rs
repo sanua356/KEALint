@@ -5,6 +5,7 @@ pub mod hooks;
 pub mod interfaces;
 pub mod lease_database;
 pub mod loggers;
+pub mod option_data;
 pub mod queue_control;
 pub mod reservations;
 pub mod shared_networks;

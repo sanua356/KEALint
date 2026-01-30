@@ -1,6 +1,8 @@
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
+use super::KEAv4OptionData;
+
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "kebab-case")]
 pub struct KEAv4ClientClass {
@@ -18,4 +20,6 @@ pub struct KEAv4ClientClass {
     pub offer_lifetime: Option<u32>,
     pub renew_timer: Option<u32>,
     pub rebind_timer: Option<u32>,
+
+    pub option_data: Option<Vec<KEAv4OptionData>>,
 }

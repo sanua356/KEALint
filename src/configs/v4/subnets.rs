@@ -94,4 +94,6 @@ impl<'de> Deserialize<'de> for KEAv4PoolVariant {
 pub struct KEAv4Pool {
     pub pool: KEAv4PoolVariant,
     pub evaluate_additional_classes: Option<Vec<String>>,
+
+    pub option_data: Option<Vec<KEAv4OptionData>>,
 }
