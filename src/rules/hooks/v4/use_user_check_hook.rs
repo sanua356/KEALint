@@ -17,26 +17,23 @@ impl Rule<KEAv4Config> for UseUsrCheckHookRule {
         RuleConfigs::Dhcp4
     }
     fn check(&self, config: &KEAv4Config) -> Option<Vec<RuleResult>> {
-        let usr_check_hook = config
+        let (idx_hook, _) = config
             .hooks_libraries
             .as_ref()?
             .iter()
-            .find(|hook| hook.library.contains(USER_CHK_HOOK_LIBRARY));
+            .enumerate()
+            .find(|(_, hook)| hook.library.contains(USER_CHK_HOOK_LIBRARY))?;
 
-        if usr_check_hook.is_some() {
-            return Some(vec![RuleResult {
-                description: format!(
-                    "The '{}' hook is outdated. It is recommended to use it only for educational purposes. Use the hosts reservations mechanisms of the global configuration instead of the hook.",
-                    USER_CHK_HOOK_LIBRARY
-                ),
-                snapshot: Some(serde_json::to_string(&usr_check_hook).unwrap()),
-                links: Some(vec![
-                    "https://kea.readthedocs.io/en/latest/arm/hooks.html#libdhcp-user-chk-so-user-check",
-                ]),
-            }]);
-        }
-
-        None
+        Some(vec![RuleResult {
+            description: format!(
+                "The '{}' hook is outdated. It is recommended to use it only for educational purposes. Use the hosts reservations mechanisms of the global configuration instead of the hook.",
+                USER_CHK_HOOK_LIBRARY
+            ),
+            places: Some(vec![format!("hooks-libraries.{}", idx_hook)]),
+            links: Some(vec![
+                "https://kea.readthedocs.io/en/latest/arm/hooks.html#libdhcp-user-chk-so-user-check",
+            ]),
+        }])
     }
 }
 

@@ -17,32 +17,34 @@ impl Rule<KEAv4Config> for NoMatchClientIdForFlexIDHookRule {
         RuleConfigs::Dhcp4
     }
     fn check(&self, config: &KEAv4Config) -> Option<Vec<RuleResult>> {
-        let flex_id_hook = &config
+        let (idx_hook, flex_id_hook) = &config
             .hooks_libraries
             .as_ref()?
             .iter()
-            .find(|hook| hook.library.contains(FLEX_ID_HOOK_LIBRARY));
+            .enumerate()
+            .find(|(_, hook)| hook.library.contains(FLEX_ID_HOOK_LIBRARY))?;
 
         let match_client_id = &config.match_client_id.unwrap_or_default();
 
-        if let Some(hook) = flex_id_hook {
-            let parameters = hook.parameters.as_ref()?.as_object()?;
-            let replace_client_id = parameters["replace-client-id"]
-                .as_bool()
-                .unwrap_or_default();
+        let parameters = flex_id_hook.parameters.as_ref()?.as_object()?;
+        let replace_client_id = parameters["replace-client-id"]
+            .as_bool()
+            .unwrap_or_default();
 
-            if replace_client_id && !match_client_id {
-                return Some(vec![RuleResult {
-                    description: format!(
-                        "The 'replace-client-id' parameter is set to 'true' inside the '{}' hook. For it to work, the 'match-client-id' parameter must be set to 'true' in the global configuration.",
-                        FLEX_ID_HOOK_LIBRARY
-                    ),
-                    links: Some(vec![
-                        "https://kea.readthedocs.io/en/lastest/arm/hooks.html#the-replace-client-id-flag",
-                    ]),
-                    snapshot: Some(serde_json::to_string(hook).unwrap()),
-                }]);
-            }
+        if replace_client_id && !match_client_id {
+            return Some(vec![RuleResult {
+                description: format!(
+                    "The 'replace-client-id' parameter is set to 'true' inside the '{}' hook. For it to work, the 'match-client-id' parameter must be set to 'true' in the global configuration.",
+                    FLEX_ID_HOOK_LIBRARY
+                ),
+                places: Some(vec![
+                    "match-client-id".to_string(),
+                    format!("hooks-libraries.{}.parameters.replace-client-id", idx_hook),
+                ]),
+                links: Some(vec![
+                    "https://kea.readthedocs.io/en/lastest/arm/hooks.html#the-replace-client-id-flag",
+                ]),
+            }]);
         }
 
         None

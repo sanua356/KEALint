@@ -11,7 +11,7 @@ fn get_template_rule(socket_type: &str) -> RuleResult {
             "The socket handler '{}' is not specified in the configuration for the 'control-sockets' key. Working with the API of this service may not be available.",
             socket_type
         ),
-        snapshot: None,
+        places: None,
         links: Some(vec![
             "https://kea.readthedocs.io/en/stable/arm/agent.html#configuration",
         ]),
@@ -46,7 +46,7 @@ impl Rule<KEACtrlAgentConfig> for NoAllControlSocketsSpecifiedRule {
         } else {
             return Some(vec![RuleResult {
                 description: "The configuration does not specify the 'control-sockets' key with socket handlers. Working with the API may not be available.".to_string(),
-                snapshot: None,
+                places: None,
                 links: Some(vec![
                     "https://kea.readthedocs.io/en/stable/arm/agent.html#configuration",
                 ]),

@@ -17,32 +17,31 @@ impl Rule<KEAD2Config> for NoCredentialsCacheAndClientKeytabTogetherInGSSTSIGRul
         RuleConfigs::D2
     }
     fn check(&self, config: &KEAD2Config) -> Option<Vec<RuleResult>> {
-        let gss_tsig_hook = config
+        let (idx_hook, gss_tsig) = config
             .hooks_libraries
             .as_ref()?
             .iter()
-            .find(|hook| hook.library.contains(GSS_TSIG_HOOK_LIBRARY));
+            .enumerate()
+            .find(|(_, hook)| hook.library.contains(GSS_TSIG_HOOK_LIBRARY))?;
 
-        if let Some(gss_tsig) = gss_tsig_hook {
-            let parameters = gss_tsig.parameters.as_ref().unwrap_or_default();
+        let parameters = gss_tsig.parameters.as_ref().unwrap_or_default();
 
-            if let (Some(credentials_cache), Some(client_keytab)) = (
-                parameters.get("credentials-cache"),
-                parameters.get("client-keytab"),
-            ) && (credentials_cache.as_str().unwrap_or("").chars().count() > 0
-                && client_keytab.as_str().unwrap_or("").chars().count() > 0)
-            {
-                return Some(vec![RuleResult {
-                    description: format!(
-                        "It is not recommended to specify both the 'credentials-cache' and 'client-keytab' parameters in the configuration of the '{}' hook. Use one of the two above.",
-                        GSS_TSIG_HOOK_LIBRARY
-                    ),
-                    snapshot: Some(serde_json::to_string(gss_tsig).unwrap()),
-                    links: Some(vec![
-                        "https://kea.readthedocs.io/en/latest/arm/integrations.html#using-gss-tsig",
-                    ]),
-                }]);
-            }
+        if let (Some(credentials_cache), Some(client_keytab)) = (
+            parameters.get("credentials-cache"),
+            parameters.get("client-keytab"),
+        ) && (credentials_cache.as_str().unwrap_or("").chars().count() > 0
+            && client_keytab.as_str().unwrap_or("").chars().count() > 0)
+        {
+            return Some(vec![RuleResult {
+                description: format!(
+                    "It is not recommended to specify both the 'credentials-cache' and 'client-keytab' parameters in the configuration of the '{}' hook. Use one of the two above.",
+                    GSS_TSIG_HOOK_LIBRARY
+                ),
+                places: Some(vec![format!("hooks-libraries.{}", idx_hook)]),
+                links: Some(vec![
+                    "https://kea.readthedocs.io/en/latest/arm/integrations.html#using-gss-tsig",
+                ]),
+            }]);
         }
 
         None

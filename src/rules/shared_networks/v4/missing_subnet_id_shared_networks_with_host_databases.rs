@@ -28,9 +28,11 @@ impl Rule<KEAv4Config> for MissingSubnetIdSharedNetworksWithHostDatabases {
 
         let mut results: Vec<RuleResult> = Vec::new();
 
-        for shared_network in config.shared_networks.as_ref()? {
+        for (idx_shared_network, shared_network) in
+            config.shared_networks.as_ref()?.into_iter().enumerate()
+        {
             if let Some(subnets) = &shared_network.subnet4 {
-                for subnet in subnets {
+                for (idx_subnet, subnet) in subnets.into_iter().enumerate() {
                     if subnet.id.is_none() {
                         results.push(RuleResult {
                             description: format!(
@@ -38,7 +40,7 @@ impl Rule<KEAv4Config> for MissingSubnetIdSharedNetworksWithHostDatabases {
 	                            shared_network.name,
 	                            subnet.subnet
                             ),
-                            snapshot: Some(serde_json::to_string(subnet).unwrap()),
+                            places: Some(vec![format!("shared-networks.{}.subnet4.{}", idx_shared_network, idx_subnet)]),
                             links: Some(vec!["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#host-reservations-in-shared-networks"]),
                         });
                     }

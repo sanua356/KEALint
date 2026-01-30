@@ -20,47 +20,34 @@ impl Rule<KEAv4Config> for MultithreadingModesNotEqualInConfigAndHARule {
     }
 
     fn check(&self, config: &KEAv4Config) -> Option<Vec<RuleResult>> {
-        if config.hooks_libraries.is_none() || config.multi_threading.is_none() {
-            return None;
-        }
-        // Unwrap safety, presence of the value is checked above.
         let is_multithreading_enabled: bool = config
             .multi_threading
-            .as_ref()
-            .unwrap()
+            .as_ref()?
             .enable_multi_threading
             .unwrap_or(true);
 
-        // Unwrap safety, presence of the value is checked above.
-        let ha_hook = config
+        let (idx_hook, ha_hook) = config
             .hooks_libraries
-            .as_ref()
-            .unwrap()
+            .as_ref()?
             .iter()
-            .find(|item| item.library.contains(HIGH_AVAILABILITY_HOOK_LIBRARY));
+            .enumerate()
+            .find(|(_, hook)| hook.library.contains(HIGH_AVAILABILITY_HOOK_LIBRARY))?;
 
-        match ha_hook {
-            Some(hook_info) => {
-                let parameters = hook_info.parameters.as_ref().unwrap_or_default();
-                let is_hook_multithreading_enabled =
-                    parameters["multi-threading"]["enable-multi-threading"]
-                        .as_bool()
-                        .unwrap_or(true);
+        let parameters = ha_hook.parameters.as_ref().unwrap_or_default();
+        let is_hook_multithreading_enabled = parameters["high-availability"][0]["multi-threading"]
+            ["enable-multi-threading"]
+            .as_bool()
+            .unwrap_or(true);
 
-                if is_multithreading_enabled != is_hook_multithreading_enabled {
-                    return Some(vec![RuleResult {
-                        description: "The multithreading control flags in the global server configuration and the high availability hook configuration are not equal.".to_string(),
-                        snapshot: None,
-                        links: Some(vec![
-							"https://kea.readthedocs.io/en/latest/arm/dhcp6-srv.html#multi-threading-settings",
-							"https://kea.readthedocs.io/en/latest/arm/hooks.html#multi-threaded-configuration-ha-mt"
-						])
-                    }]);
-                }
-            }
-            None => {
-                return None;
-            }
+        if is_multithreading_enabled != is_hook_multithreading_enabled {
+            return Some(vec![RuleResult {
+                description: "The multithreading control flags in the global server configuration and the high availability hook configuration are not equal.".to_string(),
+                places: Some(vec!["multi-threading".to_string(), format!("hooks-libraries.{}.parameters.high-availability.0.multi-threading", idx_hook)]),
+                links: Some(vec![
+					"https://kea.readthedocs.io/en/latest/arm/dhcp6-srv.html#multi-threading-settings",
+					"https://kea.readthedocs.io/en/latest/arm/hooks.html#multi-threaded-configuration-ha-mt"
+				])
+            }]);
         }
 
         None

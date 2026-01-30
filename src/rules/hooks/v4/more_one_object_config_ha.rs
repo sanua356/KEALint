@@ -17,27 +17,29 @@ impl Rule<KEAv4Config> for MoreOneObjectConfigHARule {
         RuleConfigs::Dhcp4
     }
     fn check(&self, config: &KEAv4Config) -> Option<Vec<RuleResult>> {
-        let ha_hook = config
+        let (idx_hook, hook) = config
             .hooks_libraries
             .as_ref()?
             .iter()
-            .find(|hook| hook.library.contains(HIGH_AVAILABILITY_HOOK_LIBRARY));
+            .enumerate()
+            .find(|(_, hook)| hook.library.contains(HIGH_AVAILABILITY_HOOK_LIBRARY))?;
 
-        if let Some(hook) = ha_hook {
-            let parameters = hook.parameters.as_ref()?.as_object()?;
+        let parameters = hook.parameters.as_ref()?.as_object()?;
 
-            if parameters["high-availability"].as_array()?.len() > 1 {
-                return Some(vec![RuleResult {
-                    description: format!(
-                        "For the hook '{}', the 'high-availability' key cannot contain more than one object in the array.",
-                        HIGH_AVAILABILITY_HOOK_LIBRARY
-                    ),
-                    links: Some(vec![
-                        "https://kea.readthedocs.io/en/latest/arm/hooks.html#load-balancing-configuration",
-                    ]),
-                    snapshot: Some(serde_json::to_string(hook).unwrap()),
-                }]);
-            }
+        if parameters["high-availability"].as_array()?.len() > 1 {
+            return Some(vec![RuleResult {
+                description: format!(
+                    "For the hook '{}', the 'high-availability' key cannot contain more than one object in the array.",
+                    HIGH_AVAILABILITY_HOOK_LIBRARY
+                ),
+                links: Some(vec![
+                    "https://kea.readthedocs.io/en/latest/arm/hooks.html#load-balancing-configuration",
+                ]),
+                places: Some(vec![format!(
+                    "hooks-libraries.{}.parameters.high-availability",
+                    idx_hook
+                )]),
+            }]);
         }
 
         None

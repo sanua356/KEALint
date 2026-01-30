@@ -18,9 +18,11 @@ impl Rule<KEAv4Config> for InterfaceOrRelaysInsideSubnetsSharedNetworksRule {
     fn check(&self, config: &KEAv4Config) -> Option<Vec<RuleResult>> {
         let mut results: Vec<RuleResult> = Vec::new();
 
-        for shared_network in config.shared_networks.as_ref()? {
+        for (idx_shared_network, shared_network) in
+            config.shared_networks.as_ref()?.into_iter().enumerate()
+        {
             if let Some(subnets) = &shared_network.subnet4 {
-                for subnet in subnets {
+                for (idx_subnet, subnet) in subnets.into_iter().enumerate() {
                     if let Some(interface) = &subnet.interface
                         && !interface.is_empty()
                     {
@@ -31,7 +33,7 @@ impl Rule<KEAv4Config> for InterfaceOrRelaysInsideSubnetsSharedNetworksRule {
 	                            subnet.subnet,
 	                            interface
                             ),
-                            snapshot: Some(serde_json::to_string(subnet).unwrap()),
+                            places: Some(vec![format!("shared-networks.{}.subnet4.{}.interface", idx_shared_network, idx_subnet)]),
                             links: Some(vec!["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#local-and-relayed-traffic-in-shared-networks"]),
                         });
                     }
@@ -45,7 +47,7 @@ impl Rule<KEAv4Config> for InterfaceOrRelaysInsideSubnetsSharedNetworksRule {
 	                            shared_network.name,
 	                            subnet.subnet
                             ),
-                            snapshot: Some(serde_json::to_string(subnet).unwrap()),
+                            places: Some(vec![format!("shared-networks.{}.subnet4.{}.relay", idx_shared_network, idx_subnet)]),
                             links: Some(vec!["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#local-and-relayed-traffic-in-shared-networks"]),
                         });
                     }

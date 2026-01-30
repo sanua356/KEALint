@@ -19,14 +19,14 @@ impl Rule<KEAv4Config> for NotRecommendedPrefixAFTER_ClassesRule {
     fn check(&self, config: &KEAv4Config) -> Option<Vec<RuleResult>> {
         let mut results: Vec<RuleResult> = Vec::new();
 
-        for class in config.client_classes.as_ref()? {
+        for (idx, class) in config.client_classes.as_ref()?.into_iter().enumerate() {
             if class.name.starts_with("AFTER_") {
                 results.push(RuleResult {
                     description: format!(
-                    "The client class named '{}' uses the prefix 'AFTER_'. This prefix is reserved by the system for a query processing mechanism that has not yet been written. It is recommended to replace the prefix with an arbitrary one.",
-                    class.name
+	                    "The client class named '{}' uses the prefix 'AFTER_'. This prefix is reserved by the system for a query processing mechanism that has not yet been written. It is recommended to replace the prefix with an arbitrary one.",
+	                    class.name
                     ),
-                    snapshot: Some(serde_json::to_string(class).unwrap()),
+                    places: Some(vec![format!("client-classes.{}", idx)]),
                     links: Some(vec!["https://kea.readthedocs.io/en/latest/arm/classify.html#built-in-client-classes"]),
                 });
             }

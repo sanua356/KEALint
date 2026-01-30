@@ -18,13 +18,15 @@ impl Rule<KEAv4Config> for OneSubnetInSharedNetworksRule {
     fn check(&self, config: &KEAv4Config) -> Option<Vec<RuleResult>> {
         let mut results: Vec<RuleResult> = Vec::new();
 
-        for shared_network in config.shared_networks.as_ref()? {
+        for (idx_shared_network, shared_network) in
+            config.shared_networks.as_ref()?.into_iter().enumerate()
+        {
             if let Some(subnets) = &shared_network.subnet4
                 && subnets.len() == 1
             {
                 results.push(RuleResult {
                     description: format!("There is one subnet in the network using the 'shared-networks' key named '{}'. It can be moved to the 'subnet4' global configuration.", shared_network.name),
-                    snapshot: None,
+                    places: Some(vec![format!("shared-networks.{}", idx_shared_network)]),
                     links: None,
                 });
             }

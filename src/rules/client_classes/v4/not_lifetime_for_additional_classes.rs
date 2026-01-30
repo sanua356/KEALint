@@ -18,7 +18,7 @@ impl Rule<KEAv4Config> for NotLifetimeForAdditionalClassesRule {
     fn check(&self, config: &KEAv4Config) -> Option<Vec<RuleResult>> {
         let mut results: Vec<RuleResult> = Vec::new();
 
-        for class in config.client_classes.as_ref()? {
+        for (idx, class) in config.client_classes.as_ref()?.into_iter().enumerate() {
             if class.only_in_additional_list.unwrap_or_default()
                 && (class.min_valid_lifetime.is_some()
                     || class.valid_lifetime.is_some()
@@ -30,7 +30,7 @@ impl Rule<KEAv4Config> for NotLifetimeForAdditionalClassesRule {
 	                    "For the client class '{}', the 'only-in-additional-list' flag is set to 'true'. The class contains any of the following parameters: 'min-valid-lifetime', 'valid-lifetime', 'max-valid-lifetime' or 'offer-lifetime', but they will have no effect.",
 	                    class.name
                     ),
-                    snapshot: Some(serde_json::to_string(class).unwrap()),
+                    places: Some(vec![format!("client-classes.{}", idx)]),
                     links: Some(vec![
                         "https://kea.readthedocs.io/en/stable/arm/classify.html#class-priority",
                     ]),

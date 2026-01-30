@@ -12,7 +12,7 @@ pub struct Problem {
     pub config_type: String,
     pub importance: String,
     pub description: String,
-    pub snapshot: Option<String>,
+    pub places: Option<String>,
     pub links: Option<String>,
 }
 
@@ -41,7 +41,7 @@ pub fn find_problems<T>(config: &T, values: Vec<&[Box<dyn Rule<T>>]>) -> Vec<Pro
                         importance: rule.get_level().to_string(),
                         config_type: rule.get_config_type().to_string(),
                         description: item.description,
-                        snapshot: item.snapshot,
+                        places: Some(item.places.unwrap_or_default().join("\n\n")),
                         links: Some(item.links.unwrap_or_default().join("\n\n")),
                     });
                 }

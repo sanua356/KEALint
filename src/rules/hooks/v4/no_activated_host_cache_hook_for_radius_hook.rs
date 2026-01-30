@@ -35,7 +35,7 @@ impl Rule<KEAv4Config> for NoActivatedHostCacheHookForRADIUSHookRule {
                     "The '{}' hook requires activation of the '{}' hook to work correctly.",
                     RADIUS_HOOK_LIBRARY, HOST_CACHE_HOOK_LIBRARY
                 ),
-                snapshot: None,
+                places: None,
                 links: Some(vec![
                     "https://kea.readthedocs.io/en/stable/arm/integrations.html#radius-hook-library-configuration",
                 ]),

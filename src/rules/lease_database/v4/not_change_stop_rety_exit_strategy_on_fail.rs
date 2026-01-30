@@ -22,7 +22,7 @@ impl Rule<KEAv4Config> for NotChangeStopRetryExitStrategyOnFailRule {
             return Some(vec![RuleResult {
                 description: "It is recommended to set the 'on-fail' parameter in the 'lease-database' configuration to 'stop-retry-exit' for the correct processing of leases in the production environment.".to_string(),
                 links: Some(vec!["https://kea.readthedocs.io/en/latest/arm/dhcp6-srv.html#lease-database-configuration"]),
-                snapshot: Some(serde_json::to_string(&config.lease_database).unwrap()),
+                places: Some(vec!["lease-database.on-fail".to_string()]),
             }]);
         }
 

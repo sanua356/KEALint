@@ -35,7 +35,7 @@ impl Rule<KEAv4Config> for SubnetsOverlappingRule {
                             b.subnet,
                             a.subnet,
                         ),
-                        snapshot: None,
+                        places: None,
                         links: Some(vec!["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#configuration-of-ipv4-address-pools"]),
                     });
                     }

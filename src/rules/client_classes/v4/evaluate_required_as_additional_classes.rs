@@ -67,7 +67,7 @@ impl Rule<KEAv4Config> for EvaluateRequiredAsAdditionalClassesRule {
 
         let mut results: Vec<RuleResult> = Vec::new();
 
-        for additional_class in evaluate_additional_classes {
+        for (idx, additional_class) in evaluate_additional_classes.into_iter().enumerate() {
             let class = client_classes
                 .iter()
                 .find(|item| item.name == additional_class);
@@ -77,7 +77,7 @@ impl Rule<KEAv4Config> for EvaluateRequiredAsAdditionalClassesRule {
             {
                 results.push(RuleResult {
                 description: format!("The client class named '{}' is specified as the value by the 'evaluate-additional-classes' key in the configuration, but does not have the 'only-if-required' or 'only-in-additional-list' flag set to 'true'.", class_info.name),
-                snapshot: None,
+                places: Some(vec![format!("client-classes.{}", idx)]),
                 links: Some(vec!["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#additional-classification"]),
             });
             }

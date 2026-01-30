@@ -6,16 +6,16 @@ use crate::{
 
 pub struct SubnetWithoutPoolsAndReservationsRule;
 
-fn get_empty_subnets(subnets: &Vec<KEAv4Subnet>) -> Vec<RuleResult> {
+fn get_empty_subnets(subnets: &Vec<KEAv4Subnet>, placement: String) -> Vec<RuleResult> {
     let mut results: Vec<RuleResult> = Vec::new();
 
-    for subnet in subnets {
+    for (idx_subnet, subnet) in subnets.into_iter().enumerate() {
         if subnet.reservations.as_ref().unwrap_or(&vec![]).is_empty()
             && subnet.pools.as_ref().unwrap_or(&vec![]).is_empty()
         {
             results.push(RuleResult {
                 description: format!("There are no pools or address reservations in the subnet '{}'. It can be deleted.", subnet.subnet),
-                snapshot: Some(serde_json::to_string(subnet).unwrap()),
+                places: Some(vec![format!("{}.{}", placement, idx_subnet)]),
                 links: None,
             });
         }
@@ -50,13 +50,16 @@ impl Rule<KEAv4Config> for SubnetWithoutPoolsAndReservationsRule {
         let mut results: Vec<RuleResult> = Vec::new();
 
         if let Some(subnets) = &config.subnet4 {
-            results.extend(get_empty_subnets(subnets));
+            results.extend(get_empty_subnets(subnets, "subnet4".to_string()));
         }
 
         if let Some(shared_networks) = &config.shared_networks {
-            for shared_network in shared_networks {
+            for (idx_shared_network, shared_network) in shared_networks.into_iter().enumerate() {
                 if let Some(shared_subnets) = &shared_network.subnet4 {
-                    results.extend(get_empty_subnets(shared_subnets));
+                    results.extend(get_empty_subnets(
+                        shared_subnets,
+                        format!("shared-networks.{}", idx_shared_network),
+                    ));
                 }
             }
         }

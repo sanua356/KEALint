@@ -24,7 +24,7 @@ impl Rule<KEACtrlAgentConfig> for NotLocalIPWithoutHTTPSRule {
         {
             return Some(vec![RuleResult {
             description: "The configuration specifies the 'http-port' key in a value that is not a local IP address, but HTTPS support is not enabled.".to_string(),
-            snapshot: None,
+            places: Some(vec!["http-host".to_string()]),
             links: Some(vec![
                 "https://kea.readthedocs.io/en/latest/arm/security.html#tls-https-configuration",
             ]),

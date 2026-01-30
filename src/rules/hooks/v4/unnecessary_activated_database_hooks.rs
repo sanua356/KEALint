@@ -69,26 +69,22 @@ impl Rule<KEAv4Config> for UnnecessaryActivatedDatabaseHooksRule {
 
         let mut results: Vec<RuleResult> = Vec::new();
 
-        if let Some(hook) = mysql_hook
-            && !config_types.contains(&KEAv4HostsDatabasesTypes::MySQL)
-        {
+        if mysql_hook.is_some() && !config_types.contains(&KEAv4HostsDatabasesTypes::MySQL) {
             results.push(
-	                RuleResult {
+	            RuleResult {
 	                description: "The MySQL support hook is specified in the configuration of the hooks, but it does not serve any functionality.".to_string(),
-	                snapshot: Some(serde_json::to_string(&hook).unwrap()),
+	                places: None,
 	                links: Some(vec!["https://kea.readthedocs.io/en/latest/arm/hooks.html#libdhcp-mysql-so-database-backend-for-mysql"])
             });
         }
 
-        if let Some(hook) = pgsql_hook
-            && !config_types.contains(&KEAv4HostsDatabasesTypes::PostgreSQL)
-        {
+        if pgsql_hook.is_some() && !config_types.contains(&KEAv4HostsDatabasesTypes::PostgreSQL) {
             results.push(
-	                RuleResult {
+                RuleResult {
 	                description: "The PostgreSQL support hook is specified in the configuration of the hooks, but it does not serve any functionality.".to_string(),
-	                snapshot: Some(serde_json::to_string(&hook).unwrap()),
+	                places: None,
 	                links: Some(vec!["https://kea.readthedocs.io/en/latest/arm/hooks.html#libdhcp-pgsql-so-database-backend-for-postgresql"])
-        });
+			});
         }
 
         if !results.is_empty() {

@@ -19,10 +19,13 @@ fn is_address_in_pool(address: IpAddr, pool: &KEAv4PoolVariant) -> bool {
     }
 }
 
-fn get_reservations_out_of_pool_in_subnet(subnets: &Vec<KEAv4Subnet>) -> Vec<RuleResult> {
+fn get_reservations_out_of_pool_in_subnet(
+    subnets: &Vec<KEAv4Subnet>,
+    placement: String,
+) -> Vec<RuleResult> {
     let mut out_of_pool: Vec<RuleResult> = Vec::new();
 
-    for subnet in subnets {
+    for (idx_subnet, subnet) in subnets.into_iter().enumerate() {
         if subnet.reservations_out_of_pool.unwrap_or_default() {
             continue;
         }
@@ -48,7 +51,7 @@ fn get_reservations_out_of_pool_in_subnet(subnets: &Vec<KEAv4Subnet>) -> Vec<Rul
         if !is_any_reservation_in_pool {
             out_of_pool.push(RuleResult {
                 description: format!("In the subnet '{}', all reservations are registered outside of dynamic pools. It is possible to set the 'reservations-out-of-pool' flag to 'true' to improve performance.", subnet.subnet),
-                snapshot: None,
+                places: Some(vec![format!("{}.{}", placement, idx_subnet)]),
                 links: Some(vec!["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#fine-tuning-dhcpv4-host-reservation"]),
             });
         }
@@ -71,13 +74,19 @@ impl Rule<KEAv4Config> for AllReservationsOutOfPoolsRule {
         let mut results: Vec<RuleResult> = Vec::new();
 
         if let Some(subnets) = &config.subnet4 {
-            results.extend(get_reservations_out_of_pool_in_subnet(subnets));
+            results.extend(get_reservations_out_of_pool_in_subnet(
+                subnets,
+                "subnet4".to_string(),
+            ));
         }
 
         if let Some(shared_networks) = &config.shared_networks {
-            for shared_network in shared_networks {
+            for (idx_shared_network, shared_network) in shared_networks.into_iter().enumerate() {
                 if let Some(subnets) = &shared_network.subnet4 {
-                    results.extend(get_reservations_out_of_pool_in_subnet(subnets));
+                    results.extend(get_reservations_out_of_pool_in_subnet(
+                        subnets,
+                        format!("shared-networks.{}.subnet4", idx_shared_network),
+                    ));
                 }
             }
         }

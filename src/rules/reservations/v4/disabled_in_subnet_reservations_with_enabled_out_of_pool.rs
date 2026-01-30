@@ -9,10 +9,11 @@ fn get_reservations_out_of_pool_without_in_subnet_flag(
     subnets: &Vec<KEAv4Subnet>,
     is_reservations_in_subnet_global: bool,
     shared_network_id: Option<String>,
+    placement: String,
 ) -> Vec<RuleResult> {
     let mut results: Vec<RuleResult> = Vec::new();
 
-    for subnet in subnets {
+    for (subnet_idx, subnet) in subnets.into_iter().enumerate() {
         let is_reservations_out_of_pool = subnet.reservations_out_of_pool.unwrap_or_default();
 
         let msg_subtext = match &shared_network_id {
@@ -25,29 +26,27 @@ fn get_reservations_out_of_pool_without_in_subnet_flag(
                 results.push(RuleResult {
                     description: format!(
                        	"In the subnet '{}'{}, the 'reservations-in-subnet' parameter is set to 'false'. As long as the flag is set to 'false', the 'reservations-out-of-pool' parameter will have no effect.",
-                       	subnet.subnet.to_string(),
+                       	subnet.subnet,
                         msg_subtext
                     ),
-                    snapshot: None,
+                    places: Some(vec![format!("{}.{}.reservations-out-of-pool", placement, subnet_idx)]),
                     links: Some(vec!["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#fine-tuning-dhcpv4-host-reservation"]),
                 });
             }
-        } else {
-            if !is_reservations_in_subnet_global && is_reservations_out_of_pool {
-                results.push(RuleResult {
-                    description: format!(
-                       	"At the upper configuration levels, the 'reservations-in-subnet' parameter is set to 'false'. As long as the flag is set to 'false', the 'reservations-out-of-pool' parameter inside the subnet '{}'{} will have no effect.",
-                       	subnet.subnet.to_string(),
-                        msg_subtext
-                    ),
-                    snapshot: None,
-                    links: Some(vec!["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#fine-tuning-dhcpv4-host-reservation"]),
-                });
-            }
+        } else if !is_reservations_in_subnet_global && is_reservations_out_of_pool {
+            results.push(RuleResult {
+	            description: format!(
+	               	"At the upper configuration levels, the 'reservations-in-subnet' parameter is set to 'false'. As long as the flag is set to 'false', the 'reservations-out-of-pool' parameter inside the subnet '{}'{} will have no effect.",
+	               	subnet.subnet,
+	                msg_subtext
+	            ),
+	            places: Some(vec![format!("{}.{}.reservations-out-of-pool", placement, subnet_idx)]),
+	            links: Some(vec!["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#fine-tuning-dhcpv4-host-reservation"]),
+	        });
         }
     }
 
-    return results;
+    results
 }
 
 impl Rule<KEAv4Config> for DisabledInSubnetReservationsWithEnabledOutOfPool {
@@ -70,11 +69,12 @@ impl Rule<KEAv4Config> for DisabledInSubnetReservationsWithEnabledOutOfPool {
                 subnets,
                 is_reservations_in_subnet_global,
                 None,
+                "subnet4".to_string(),
             ));
         }
 
         if let Some(shared_networks) = &config.shared_networks {
-            for shared_network in shared_networks {
+            for (idx_shared_network, shared_network) in shared_networks.into_iter().enumerate() {
                 let is_reservations_in_subnet_shared_network =
                     shared_network.reservations_in_subnet.unwrap_or(true);
 
@@ -84,6 +84,7 @@ impl Rule<KEAv4Config> for DisabledInSubnetReservationsWithEnabledOutOfPool {
                         is_reservations_in_subnet_global
                             && is_reservations_in_subnet_shared_network,
                         Some(shared_network.name.clone()),
+                        format!("shared-networks.{}.subnet4", idx_shared_network),
                     ));
                 }
             }

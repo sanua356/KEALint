@@ -20,25 +20,24 @@ impl Rule<KEAv4Config> for NoBasicHTTPAuthInHAPeersRule {
         let mut results: Vec<RuleResult> = Vec::new();
 
         if let Some(hooks) = &config.hooks_libraries {
-            let ha_hook = hooks
+            let (idx_hook, ha_hook) = hooks
                 .iter()
-                .find(|item| item.library.contains(HIGH_AVAILABILITY_HOOK_LIBRARY));
+                .enumerate()
+                .find(|(_, hook)| hook.library.contains(HIGH_AVAILABILITY_HOOK_LIBRARY))?;
 
-            if let Some(hook_info) = ha_hook
-                && hook_info.parameters.is_some()
-            {
-                let parameters = hook_info.parameters.as_ref().unwrap();
+            if ha_hook.parameters.is_some() {
+                let parameters = ha_hook.parameters.as_ref().unwrap();
 
                 if let Some(builds) = parameters["high-availability"].as_array() {
-                    for ha in builds {
+                    for (idx_ha, ha) in builds.into_iter().enumerate() {
                         if let Some(peers) = ha["peers"].as_array() {
-                            for peer in peers {
+                            for (idx_peer, peer) in peers.into_iter().enumerate() {
                                 if peer.get("basic-auth-user").is_none()
                                     && peer.get("basic-auth-password").is_none()
                                 {
                                     results.push(RuleResult {
                                         description: format!("The peer named '{}' of the high availability hook lacks basic HTTP authentication.", peer["name"].as_str().unwrap()),
-                                        snapshot: Some(serde_json::to_string(peers).unwrap()),
+                                        places: Some(vec![format!("hooks-libraries.{}.parameters.high-availability.{}.peers.{}", idx_hook, idx_ha, idx_peer)]),
                                         links: Some(vec!["https://kea.readthedocs.io/en/latest/arm/hooks.html#hot-standby-configuration"]),
                                     });
                                 }

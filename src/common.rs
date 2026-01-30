@@ -41,7 +41,7 @@ impl Display for RuleConfigs {
 #[derive(Debug)]
 pub struct RuleResult {
     pub description: String,
-    pub snapshot: Option<String>,
+    pub places: Option<Vec<String>>,
     pub links: Option<Vec<&'static str>>,
 }
 

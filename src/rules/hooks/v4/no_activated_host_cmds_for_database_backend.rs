@@ -36,7 +36,7 @@ impl Rule<KEAv4Config> for NoActivatedHostCMDsHookForDatabaseBackendRule {
                     "When using databases to store host reservations using the 'hosts-database' or 'hosts-databases' key, it is recommended to use the '{}' hook to interact with them in a predictable way.",
                     HOST_CMDS_HOOK_LIBRARY
                 ),
-                snapshot: None,
+                places: None,
                 links: Some(vec![
                     "https://kea.readthedocs.io/en/latest/arm/hooks.html#libdhcp-host-cmds-so-host-commands",
                 ]),

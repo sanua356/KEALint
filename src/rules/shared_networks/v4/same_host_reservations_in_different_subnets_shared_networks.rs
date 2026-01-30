@@ -31,7 +31,7 @@ impl Rule<KEAv4Config> for SameHostReservationsInDifferentSubnetsSharedNetworksR
                             if !hw.is_empty() {
                                 hw_address_reservations
                                     .entry(hw.clone())
-                                    .or_insert_with(Vec::new)
+                                    .or_default()
                                     .push(subnet.subnet.to_string());
                             }
                         }
@@ -48,7 +48,7 @@ impl Rule<KEAv4Config> for SameHostReservationsInDifferentSubnetsSharedNetworksR
 	                        shared_network.name,
 	                        hw_reservation.1.join(", ")
                         ),
-                        snapshot: None,
+                        places: None,
                         links: Some(vec!["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#host-reservations-in-shared-networks"]),
                     });
                 }
