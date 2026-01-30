@@ -11,6 +11,7 @@ use super::shared::{dhcp_queue_control, hooks, loggers};
 
 mod client_classes;
 mod config_control;
+mod dhcp_ddns;
 mod hosts_database;
 mod interfaces;
 mod lease_database;
@@ -52,6 +53,18 @@ pub struct KEAv4Config {
     pub hosts_database: Option<hosts_database::KEAv4HostsDatabase>,
     pub config_control: Option<config_control::KEAv4ConfigControl>,
     pub dhcp_queue_control: Option<dhcp_queue_control::KEADhcpQueueControl>,
+
+    pub dhcp_ddns: Option<dhcp_ddns::KEAv4DHCPDDNS>,
+    pub ddns_send_updates: Option<bool>,
+    pub ddns_override_no_update: Option<bool>,
+    pub ddns_override_client_update: Option<bool>,
+    pub ddns_replace_client_name: Option<String>,
+    pub ddns_generated_prefix: Option<String>,
+    pub ddns_qualifying_suffix: Option<String>,
+    pub ddns_update_on_renew: Option<bool>,
+    pub ddns_conflict_resolution_mode: Option<dhcp_ddns::DDNSConflictResolutionModeTypes>,
+    pub hostname_char_set: Option<String>,
+    pub hostname_char_replacement: Option<String>,
 
     pub loggers: Option<Vec<loggers::KEALogger>>,
 }

@@ -7,6 +7,7 @@ use crate::{
             EvaluateRequiredAsAdditionalClassesRule, NotLifetimeForAdditionalClassesRule,
             NotRecommendedPrefixAFTER_ClassesRule,
         },
+        ddns_server::NotDDNSQualifyingSuffixWithEnabledDDNSUpdatesRule,
         hooks::{
             BadHooksOrderRule, MoreOneObjectConfigHARule,
             MultithreadingModesNotEqualInConfigAndHARule,
@@ -49,6 +50,7 @@ pub struct RulesV4 {
     pub reservations: [Box<dyn Rule<KEAv4Config>>; 2],
     pub queue_control: [Box<dyn Rule<KEAv4Config>>; 1],
     pub option_data: [Box<dyn Rule<KEAv4Config>>; 1],
+    pub dhcp_ddns: [Box<dyn Rule<KEAv4Config>>; 1],
     pub loggers: [Box<dyn Rule<KEAv4Config>>; 3],
 }
 
@@ -93,6 +95,7 @@ impl RuleChecker<KEAv4Config> for RulesV4 {
             ],
             queue_control: [Box::new(NoEnableQueueAndMultithreadingTogetherRule)],
             option_data: [Box::new(SpecifiedKEAManagedOptionsRule)],
+            dhcp_ddns: [Box::new(NotDDNSQualifyingSuffixWithEnabledDDNSUpdatesRule)],
             loggers: [
                 Box::new(DebugLoggersV4Rule),
                 Box::new(NoLinebreakMessagesLoggersV4),
@@ -112,6 +115,7 @@ impl RuleChecker<KEAv4Config> for RulesV4 {
             &self.reservations,
             &self.queue_control,
             &self.option_data,
+            &self.dhcp_ddns,
             &self.loggers,
         ]
     }
