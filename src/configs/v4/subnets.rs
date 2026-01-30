@@ -20,8 +20,11 @@ pub struct KEAv4Subnet {
     pub renew_timer: Option<u32>,
     pub rebind_timer: Option<u32>,
     pub evaluate_additional_classes: Option<Vec<String>>,
-    pub reservations_out_of_pool: Option<bool>,
     pub relay: Option<KEAv4Relay>,
+
+    pub reservations_global: Option<bool>,
+    pub reservations_in_subnet: Option<bool>,
+    pub reservations_out_of_pool: Option<bool>,
 
     pub option_data: Option<Vec<KEAv4OptionData>>,
 

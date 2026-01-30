@@ -41,6 +41,10 @@ pub struct KEAv4Config {
     pub option_def: Option<Vec<option_def::KEAv4OptionDefinition>>,
     pub option_data: Option<Vec<option_data::KEAv4OptionData>>,
 
+    pub reservations_global: Option<bool>,
+    pub reservations_in_subnet: Option<bool>,
+    pub reservations_out_of_pool: Option<bool>,
+
     pub subnet4: Option<Vec<subnets::KEAv4Subnet>>,
     pub shared_networks: Option<Vec<shared_networks::KEAv4SharedNetwork>>,
 

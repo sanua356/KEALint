@@ -65,3 +65,57 @@ pub static ALL_RESERVATIONS_OUT_OF_POOLS_RULE_TEMPLATE: &str = r#"
 	]
 }
 "#;
+
+pub static DISABLED_IN_SUBNET_RESERVATIONS_WITH_ENABLED_OUT_OF_POOL_RULE_TEMPLATE: &str = r#"
+{
+	"valid-lifetime": 4000,
+	"renew-timer": 1000,
+	"rebind-timer": 2000,
+	"interfaces-config": {
+		"interfaces": []
+	},
+	"lease-database": {
+		"type": "memfile",
+		"persist": false,
+		"name": "/var/lib/kea/dhcp4.leases"
+	},
+	"reservations-in-subnet": false,
+	"subnet4": [
+		{
+			"id": 4,
+			"subnet": "1.0.0.0/8",
+			"reservations-in-subnet": true,
+			"reservations-out-of-pool": true,
+			"pools": []
+		},
+		{
+			"id": 5,
+			"subnet": "2.0.0.0/8",
+			"reservations-out-of-pool": true,
+			"pools": []
+		}
+	],
+	"shared-networks": [
+		{
+			"name": "qqq",
+			"interface": "eth1",
+			"reservations-in-subnet": false,
+			"subnet4": [
+				{
+					"id": 1,
+					"subnet": "10.0.0.0/8",
+					"pools": [],
+					"reservations-in-subnet": true,
+					"reservations-out-of-pool": true
+				},
+				{
+					"id": 2,
+					"subnet": "20.0.0.0/8",
+					"pools": [],
+					"reservations-out-of-pool": true
+				}
+			]
+		}
+	]
+}
+"#;
