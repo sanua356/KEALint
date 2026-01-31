@@ -13,8 +13,23 @@ pub struct Problem {
     pub config_type: String,
     pub importance: String,
     pub description: String,
-    pub places: Option<String>,
-    pub links: Option<String>,
+
+    #[tabled(display("display_vec"))]
+    pub places: Option<Vec<String>>,
+
+    #[tabled(display("display_vec"))]
+    pub links: Option<Vec<&'static str>>,
+}
+
+fn display_vec<T: std::fmt::Display>(v: &Option<Vec<T>>) -> String {
+    match v {
+        Some(vec) => vec
+            .iter()
+            .map(|x| x.to_string())
+            .collect::<Vec<_>>()
+            .join("\n\n "),
+        None => String::new(),
+    }
 }
 
 pub fn tabled_print_problems(problems: Vec<Problem>) -> String {
@@ -41,8 +56,8 @@ pub fn find_problems<T>(config: &T, values: Vec<&[Box<dyn Rule<T>>]>) -> Vec<Pro
                         importance: rule.get_level().to_string(),
                         config_type: rule.get_config_type().to_string(),
                         description: item.description,
-                        places: Some(item.places.unwrap_or_default().join("\n\n")),
-                        links: Some(item.links.unwrap_or_default().join("\n\n")),
+                        places: item.places,
+                        links: item.links,
                     });
                 }
             }
