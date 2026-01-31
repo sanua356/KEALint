@@ -7,7 +7,7 @@ pub use relay::KEAv4Relay;
 pub use shared::*;
 pub use subnets::{KEAv4PoolVariant, KEAv4Subnet};
 
-use super::shared::{dhcp_queue_control, hooks, loggers};
+use super::shared::{dhcp_queue_control, hooks, loggers, reservations};
 
 mod client_classes;
 mod config_control;
@@ -45,6 +45,7 @@ pub struct KEAv4Config {
     pub reservations_global: Option<bool>,
     pub reservations_in_subnet: Option<bool>,
     pub reservations_out_of_pool: Option<bool>,
+    pub reservations: Option<Vec<reservations::KEAReservation>>,
 
     pub subnet4: Option<Vec<subnets::KEAv4Subnet>>,
     pub shared_networks: Option<Vec<shared_networks::KEAv4SharedNetwork>>,

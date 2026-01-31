@@ -1,6 +1,6 @@
 #![allow(dead_code)]
 
-use std::net::Ipv4Addr;
+use std::net::{IpAddr, Ipv4Addr};
 
 use crate::configs::KEAv4PoolVariant;
 
@@ -37,12 +37,28 @@ pub fn v4_pool_to_start_end_available_ips(pool: KEAv4PoolVariant) -> (Ipv4Addr, 
     }
 }
 
+pub fn is_address_in_pool(address: IpAddr, pool: &KEAv4PoolVariant) -> bool {
+    match address {
+        IpAddr::V4(addr_v4) => {
+            let (start_ip, end_ip) = v4_pool_to_start_end_available_ips(*pool);
+
+            addr_v4 >= start_ip && addr_v4 <= end_ip
+        }
+        IpAddr::V6(_) => false,
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use rstest::rstest;
-    use std::net::Ipv4Addr;
+    use std::{
+        net::{IpAddr, Ipv4Addr},
+        str::FromStr,
+    };
 
-    use crate::{configs::KEAv4PoolVariant, utils::v4_pool_to_start_end_available_ips};
+    use crate::configs::KEAv4PoolVariant;
+
+    use super::{is_address_in_pool, v4_pool_to_start_end_available_ips};
 
     #[rstest]
     #[case(
@@ -81,5 +97,39 @@ mod tests {
         #[case] end_ip: Ipv4Addr,
     ) {
         assert_eq!(v4_pool_to_start_end_available_ips(pool), (start_ip, end_ip));
+    }
+
+    #[rstest]
+    #[case(
+        KEAv4PoolVariant::Range(Ipv4Addr::new(1, 2, 3, 10), Ipv4Addr::new(1, 2, 3, 30)),
+        IpAddr::from_str("1.2.3.25").unwrap(),
+        true
+    )]
+    #[case(
+        KEAv4PoolVariant::Cidr(Ipv4Addr::new(192, 168, 2, 1), 24),
+        IpAddr::from_str("192.168.2.100").unwrap(),
+        true
+    )]
+    #[case(
+        KEAv4PoolVariant::Range(Ipv4Addr::new(192, 168, 2, 1), Ipv4Addr::new(192, 168, 10, 100)),
+        IpAddr::from_str("192.168.8.25").unwrap(),
+        true
+    )]
+    #[case(
+        KEAv4PoolVariant::Range(Ipv4Addr::new(192, 168, 2, 1), Ipv4Addr::new(192, 168, 10, 100)),
+        IpAddr::from_str("192.168.15.100").unwrap(),
+        false
+    )]
+    #[case(
+        KEAv4PoolVariant::Cidr(Ipv4Addr::new(192, 168, 2, 1), 24),
+        IpAddr::from_str("192.168.4.22").unwrap(),
+        false
+    )]
+    fn is_address_in_pool_test(
+        #[case] pool: KEAv4PoolVariant,
+        #[case] ip: IpAddr,
+        #[case] equal: bool,
+    ) {
+        assert_eq!(is_address_in_pool(ip, &pool), equal);
     }
 }

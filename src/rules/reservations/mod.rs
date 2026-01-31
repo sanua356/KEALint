@@ -2,3 +2,4 @@ pub mod v4;
 
 pub use v4::all_reservations_out_of_pools::AllReservationsOutOfPoolsRule;
 pub use v4::disabled_in_subnet_reservations_with_enabled_out_of_pool::DisabledInSubnetReservationsWithEnabledOutOfPool;
+pub use v4::global_reservations_occupy_dynamic_pools::GlobalReservationsOccupyDynamicPoolsRule;

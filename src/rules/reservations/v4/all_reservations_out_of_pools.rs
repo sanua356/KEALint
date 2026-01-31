@@ -1,23 +1,10 @@
-use std::net::IpAddr;
-
 use crate::{
     common::{Rule, RuleConfigs, RuleLevels, RuleResult},
-    configs::{KEAv4Config, KEAv4PoolVariant, KEAv4Subnet},
-    utils::v4_pool_to_start_end_available_ips,
+    configs::{KEAv4Config, KEAv4Subnet},
+    utils::is_address_in_pool,
 };
 
 pub struct AllReservationsOutOfPoolsRule;
-
-fn is_address_in_pool(address: IpAddr, pool: &KEAv4PoolVariant) -> bool {
-    match address {
-        IpAddr::V4(addr_v4) => {
-            let (start_ip, end_ip) = v4_pool_to_start_end_available_ips(*pool);
-
-            addr_v4 >= start_ip && addr_v4 <= end_ip
-        }
-        IpAddr::V6(_) => false,
-    }
-}
 
 fn get_reservations_out_of_pool_in_subnet(
     subnets: &[KEAv4Subnet],

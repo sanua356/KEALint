@@ -119,3 +119,52 @@ pub static DISABLED_IN_SUBNET_RESERVATIONS_WITH_ENABLED_OUT_OF_POOL_RULE_TEMPLAT
 	]
 }
 "#;
+
+pub static GLOBAL_RESERVATIONS_OCCUPY_DYNAMIC_POOLS_RULE_TEMPLATE: &str = r#"
+{
+	"valid-lifetime": 4000,
+	"renew-timer": 1000,
+	"rebind-timer": 2000,
+	"interfaces-config": {
+		"interfaces": []
+	},
+	"lease-database": {
+		"type": "memfile",
+		"persist": false,
+		"name": "/var/lib/kea/dhcp4.leases"
+	},
+	"reservations-global": true,
+	"reservations": [
+		{
+			"hostname": "hostname",
+			"hw-address": "2a:2b:2c:2d:2e:2f",
+			"ip-address": "1.0.0.50"
+		},
+		{
+			"hostname": "qqq",
+			"hw-address": "3a:3b:3c:3d:3e:3f",
+			"ip-address": "10.0.0.150"
+		}
+	],
+	"subnet4": [
+		{
+			"id": 4,
+			"subnet": "1.0.0.0/8",
+			"pools": [{"pool": "1.0.0.1-1.0.0.80"}]
+		}
+	],
+	"shared-networks": [
+		{
+			"name": "qqq",
+			"interface": "eth1",
+			"subnet4": [
+				{
+					"id": 1,
+					"subnet": "10.0.0.0/8",
+					"pools": [{"pool": "10.0.0.100-10.0.0.200"}]
+				}
+			]
+		}
+	]
+}
+"#;

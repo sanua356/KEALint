@@ -27,6 +27,7 @@ use crate::{
         queue_control::NoEnableQueueAndMultithreadingTogetherRule,
         reservations::{
             AllReservationsOutOfPoolsRule, DisabledInSubnetReservationsWithEnabledOutOfPool,
+            GlobalReservationsOccupyDynamicPoolsRule,
         },
         shared_networks::{
             InterfaceOrRelaysInsideSubnetsSharedNetworksRule,
@@ -47,7 +48,7 @@ pub struct RulesV4 {
     pub subnets: [Box<dyn Rule<KEAv4Config>>; 3],
     pub client_classes: [Box<dyn Rule<KEAv4Config>>; 3],
     pub shared_networks: [Box<dyn Rule<KEAv4Config>>; 4],
-    pub reservations: [Box<dyn Rule<KEAv4Config>>; 2],
+    pub reservations: [Box<dyn Rule<KEAv4Config>>; 3],
     pub queue_control: [Box<dyn Rule<KEAv4Config>>; 1],
     pub option_data: [Box<dyn Rule<KEAv4Config>>; 2],
     pub dhcp_ddns: [Box<dyn Rule<KEAv4Config>>; 1],
@@ -92,6 +93,7 @@ impl RuleChecker<KEAv4Config> for RulesV4 {
             reservations: [
                 Box::new(AllReservationsOutOfPoolsRule),
                 Box::new(DisabledInSubnetReservationsWithEnabledOutOfPool),
+                Box::new(GlobalReservationsOccupyDynamicPoolsRule),
             ],
             queue_control: [Box::new(NoEnableQueueAndMultithreadingTogetherRule)],
             option_data: [
