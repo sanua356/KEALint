@@ -50,13 +50,11 @@ impl Rule<KEAv4Config> for NoActivatedHostCacheHookForRADIUSHookRule {
 mod tests {
     use serde_json::Value;
 
-    use crate::{
-        common::Rule,
-        configs::v4::KEAv4Config,
-        rules::hooks::v4::{
-            _tests::NO_ACTIVATED_HOST_CACHE_HOOK_FOR_RADIUS_HOOK_RULE_TEST_TEMPLATE,
-            no_activated_host_cache_hook_for_radius_hook::NoActivatedHostCacheHookForRADIUSHookRule,
-        },
+    use crate::{common::Rule, configs::v4::KEAv4Config};
+
+    use super::{
+        super::_tests::NO_ACTIVATED_HOST_CACHE_HOOK_FOR_RADIUS_HOOK_RULE_TEST_TEMPLATE,
+        NoActivatedHostCacheHookForRADIUSHookRule,
     };
 
     #[test]

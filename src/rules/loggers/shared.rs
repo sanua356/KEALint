@@ -7,13 +7,10 @@ use crate::{
     configs::loggers::{KEALogger, KEALoggerSeverityTypes},
 };
 
-pub fn get_debug_loggers_rule(
-    loggers: &Vec<KEALogger>,
-    config_type: &str,
-) -> Option<Vec<RuleResult>> {
+pub fn get_debug_loggers_rule(loggers: &[KEALogger], config_type: &str) -> Option<Vec<RuleResult>> {
     let mut results: Vec<RuleResult> = Vec::new();
 
-    for (idx_logger, logger) in loggers.into_iter().enumerate() {
+    for (idx_logger, logger) in loggers.iter().enumerate() {
         if let Some(severity) = &logger.severity
             && *severity == KEALoggerSeverityTypes::DEBUG
         {
@@ -33,16 +30,16 @@ pub fn get_debug_loggers_rule(
 }
 
 pub fn get_no_percent_m_in_pattern_rule(
-    loggers: &Vec<KEALogger>,
+    loggers: &[KEALogger],
     config_type: &str,
 ) -> Option<Vec<RuleResult>> {
     let mut results: Vec<RuleResult> = Vec::new();
 
     let remove_datetime_regex = Regex::new(r#"\{[^}]*[%Dd][^}]*\}"#).unwrap();
 
-    for (idx_logger, logger) in loggers.into_iter().enumerate() {
+    for (idx_logger, logger) in loggers.iter().enumerate() {
         if let Some(output_options) = &logger.output_options {
-            for (idx_options, options) in output_options.into_iter().enumerate() {
+            for (idx_options, options) in output_options.iter().enumerate() {
                 if let Some(pattern) = &options.pattern {
                     let replaced = String::from_utf8(
                         remove_datetime_regex
@@ -71,14 +68,14 @@ pub fn get_no_percent_m_in_pattern_rule(
 }
 
 pub fn get_no_linebreak_in_pattern_rule(
-    loggers: &Vec<KEALogger>,
+    loggers: &[KEALogger],
     config_type: &str,
 ) -> Option<Vec<RuleResult>> {
     let mut results: Vec<RuleResult> = Vec::new();
 
-    for (idx_logger, logger) in loggers.into_iter().enumerate() {
+    for (idx_logger, logger) in loggers.iter().enumerate() {
         if let Some(output_options) = &logger.output_options {
-            for (idx_options, options) in output_options.into_iter().enumerate() {
+            for (idx_options, options) in output_options.iter().enumerate() {
                 if let Some(pattern) = &options.pattern
                     && !pattern.ends_with("\\n")
                 {

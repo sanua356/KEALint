@@ -41,11 +41,9 @@ impl Rule<KEAv4Config> for UseUsrCheckHookRule {
 mod tests {
     use serde_json::Value;
 
-    use crate::{
-        common::Rule,
-        configs::v4::KEAv4Config,
-        rules::hooks::{UseUsrCheckHookRule, v4::_tests::USE_USER_CHECK_HOOK_RULE_TEST_TEMPLATE},
-    };
+    use crate::{common::Rule, configs::v4::KEAv4Config};
+
+    use super::{super::_tests::USE_USER_CHECK_HOOK_RULE_TEST_TEMPLATE, UseUsrCheckHookRule};
 
     #[test]
     fn check_expected_trigger() {

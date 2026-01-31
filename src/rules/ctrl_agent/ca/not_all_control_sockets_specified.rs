@@ -65,13 +65,11 @@ impl Rule<KEACtrlAgentConfig> for NoAllControlSocketsSpecifiedRule {
 mod tests {
     use serde_json::Value;
 
-    use crate::{
-        common::Rule,
-        configs::KEACtrlAgentConfig,
-        rules::ctrl_agent::{
-            NoAllControlSocketsSpecifiedRule,
-            ca::_tests::NOT_ALL_CONTROL_SOCKETS_SPECIFIED_RULE_TEST_TEMPLATE,
-        },
+    use crate::{common::Rule, configs::KEACtrlAgentConfig};
+
+    use super::{
+        super::_tests::NOT_ALL_CONTROL_SOCKETS_SPECIFIED_RULE_TEST_TEMPLATE,
+        NoAllControlSocketsSpecifiedRule,
     };
 
     #[test]

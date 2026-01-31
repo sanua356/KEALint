@@ -34,13 +34,11 @@ impl Rule<KEAv4Config> for NotChangeStopRetryExitStrategyOnFailRule {
 mod tests {
     use serde_json::Value;
 
-    use crate::{
-        common::Rule,
-        configs::v4::KEAv4Config,
-        rules::lease_database::v4::{
-            _tests::NOT_CHANGE_STOP_RETRY_EXIT_STRATEGY_ON_FAIL_RULE_TEST_TEMPLATE,
-            not_change_stop_rety_exit_strategy_on_fail::NotChangeStopRetryExitStrategyOnFailRule,
-        },
+    use crate::{common::Rule, configs::v4::KEAv4Config};
+
+    use super::{
+        super::_tests::NOT_CHANGE_STOP_RETRY_EXIT_STRATEGY_ON_FAIL_RULE_TEST_TEMPLATE,
+        NotChangeStopRetryExitStrategyOnFailRule,
     };
 
     #[test]

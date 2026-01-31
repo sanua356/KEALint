@@ -51,13 +51,11 @@ impl Rule<KEAv4Config> for NoActivatedHostCMDsHookForDatabaseBackendRule {
 mod tests {
     use serde_json::Value;
 
-    use crate::{
-        common::Rule,
-        configs::v4::KEAv4Config,
-        rules::hooks::{
-            NoActivatedHostCMDsHookForDatabaseBackendRule,
-            v4::_tests::NO_ACTIVATED_HOST_CMDS_HOOK_FOR_DATABASE_BACKEND_RULE_TEST_TEMPLATE,
-        },
+    use crate::{common::Rule, configs::v4::KEAv4Config};
+
+    use super::{
+        super::_tests::NO_ACTIVATED_HOST_CMDS_HOOK_FOR_DATABASE_BACKEND_RULE_TEST_TEMPLATE,
+        NoActivatedHostCMDsHookForDatabaseBackendRule,
     };
 
     #[test]

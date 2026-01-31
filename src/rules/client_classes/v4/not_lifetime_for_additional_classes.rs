@@ -18,7 +18,7 @@ impl Rule<KEAv4Config> for NotLifetimeForAdditionalClassesRule {
     fn check(&self, config: &KEAv4Config) -> Option<Vec<RuleResult>> {
         let mut results: Vec<RuleResult> = Vec::new();
 
-        for (idx, class) in config.client_classes.as_ref()?.into_iter().enumerate() {
+        for (idx, class) in config.client_classes.as_ref()?.iter().enumerate() {
             if class.only_in_additional_list.unwrap_or_default()
                 && (class.min_valid_lifetime.is_some()
                     || class.valid_lifetime.is_some()
@@ -50,13 +50,11 @@ impl Rule<KEAv4Config> for NotLifetimeForAdditionalClassesRule {
 mod tests {
     use serde_json::Value;
 
-    use crate::{
-        common::Rule,
-        configs::v4::KEAv4Config,
-        rules::client_classes::{
-            NotLifetimeForAdditionalClassesRule,
-            v4::_tests::NOT_LIFETIME_FOR_ADDITIONAL_CLASSES_RULE_TEST_TEMPLATE,
-        },
+    use crate::{common::Rule, configs::v4::KEAv4Config};
+
+    use super::{
+        super::_tests::NOT_LIFETIME_FOR_ADDITIONAL_CLASSES_RULE_TEST_TEMPLATE,
+        NotLifetimeForAdditionalClassesRule,
     };
 
     #[test]

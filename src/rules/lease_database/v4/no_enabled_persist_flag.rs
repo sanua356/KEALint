@@ -40,13 +40,11 @@ impl Rule<KEAv4Config> for NoEnabledPersistFlagForMemfileLeasesRule {
 mod tests {
     use serde_json::Value;
 
-    use crate::{
-        common::Rule,
-        configs::v4::KEAv4Config,
-        rules::lease_database::v4::{
-            _tests::NO_ENABLED_PERSIST_FLAG_FOR_MEMFILE_LEASES_RULE_TEST_TEMPLATE,
-            no_enabled_persist_flag::NoEnabledPersistFlagForMemfileLeasesRule,
-        },
+    use crate::{common::Rule, configs::v4::KEAv4Config};
+
+    use super::{
+        super::_tests::NO_ENABLED_PERSIST_FLAG_FOR_MEMFILE_LEASES_RULE_TEST_TEMPLATE,
+        NoEnabledPersistFlagForMemfileLeasesRule,
     };
 
     #[test]

@@ -58,13 +58,11 @@ impl Rule<KEAv4Config> for MultithreadingModesNotEqualInConfigAndHARule {
 mod tests {
     use serde_json::Value;
 
-    use crate::{
-        common::Rule,
-        configs::v4::KEAv4Config,
-        rules::hooks::v4::{
-            _tests::MULTITHREADING_MODES_NOT_EQUAL_IN_CONFIG_AND_HA_RULE_TEST_TEMPLATE,
-            multithread_modes_not_equal::MultithreadingModesNotEqualInConfigAndHARule,
-        },
+    use crate::{common::Rule, configs::v4::KEAv4Config};
+
+    use super::{
+        super::_tests::MULTITHREADING_MODES_NOT_EQUAL_IN_CONFIG_AND_HA_RULE_TEST_TEMPLATE,
+        MultithreadingModesNotEqualInConfigAndHARule,
     };
 
     #[test]

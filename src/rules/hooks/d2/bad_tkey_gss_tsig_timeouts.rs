@@ -82,7 +82,7 @@ impl Rule<KEAD2Config> for BadTKeyGSSTSIGHookTimeoutsRule {
         }
 
         if let Some(servers) = parameters["servers"].as_array() {
-            for (idx, server) in servers.into_iter().enumerate() {
+            for (idx, server) in servers.iter().enumerate() {
                 let server_tkey_lifetime = server["tkey-lifetime"].as_i64();
                 let server_rekey_interval = server["rekey-interval"].as_i64();
                 let server_retry_interval = server["retry-interval"].as_i64();
@@ -120,13 +120,11 @@ impl Rule<KEAD2Config> for BadTKeyGSSTSIGHookTimeoutsRule {
 mod tests {
     use serde_json::Value;
 
-    use crate::{
-        common::Rule,
-        configs::KEAD2Config,
-        rules::hooks::{
-            BadTKeyGSSTSIGHookTimeoutsRule,
-            d2::_tests::BAD_TKEY_GSS_TSIG_HOOK_TIMEOUTS_RULE_TEST_TEMPLATE,
-        },
+    use crate::{common::Rule, configs::KEAD2Config};
+
+    use super::{
+        super::_tests::BAD_TKEY_GSS_TSIG_HOOK_TIMEOUTS_RULE_TEST_TEMPLATE,
+        BadTKeyGSSTSIGHookTimeoutsRule,
     };
 
     #[test]

@@ -50,12 +50,10 @@ impl Rule<KEAv4Config> for MoreOneObjectConfigHARule {
 mod tests {
     use serde_json::Value;
 
-    use crate::{
-        common::Rule,
-        configs::v4::KEAv4Config,
-        rules::hooks::{
-            MoreOneObjectConfigHARule, v4::_tests::MORE_ONE_OBJECT_CONFIG_HA_RULE_TEST_TEMPLATE,
-        },
+    use crate::{common::Rule, configs::v4::KEAv4Config};
+
+    use super::{
+        super::_tests::MORE_ONE_OBJECT_CONFIG_HA_RULE_TEST_TEMPLATE, MoreOneObjectConfigHARule,
     };
 
     #[test]

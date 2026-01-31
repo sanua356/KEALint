@@ -19,7 +19,7 @@ impl Rule<KEAv4Config> for OneSubnetInSharedNetworksRule {
         let mut results: Vec<RuleResult> = Vec::new();
 
         for (idx_shared_network, shared_network) in
-            config.shared_networks.as_ref()?.into_iter().enumerate()
+            config.shared_networks.as_ref()?.iter().enumerate()
         {
             if let Some(subnets) = &shared_network.subnet4
                 && subnets.len() == 1
@@ -44,12 +44,10 @@ impl Rule<KEAv4Config> for OneSubnetInSharedNetworksRule {
 mod tests {
     use serde_json::Value;
 
-    use crate::{
-        common::Rule,
-        configs::v4::KEAv4Config,
-        rules::shared_networks::{
-            OneSubnetInSharedNetworksRule, v4::_tests::ONE_SUBNET_IN_SHARED_NETWORKS_RULE_TEMPLATE,
-        },
+    use crate::{common::Rule, configs::v4::KEAv4Config};
+
+    use super::{
+        super::_tests::ONE_SUBNET_IN_SHARED_NETWORKS_RULE_TEMPLATE, OneSubnetInSharedNetworksRule,
     };
 
     #[test]

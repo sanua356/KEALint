@@ -1,8 +1,9 @@
 use crate::{
     common::{Rule, RuleConfigs, RuleLevels, RuleResult},
     configs::KEAD2Config,
-    rules::loggers::shared::get_no_linebreak_in_pattern_rule,
 };
+
+use super::super::shared::get_no_linebreak_in_pattern_rule;
 
 pub struct NoLinebreakMessagesLoggersD2;
 
@@ -28,13 +29,10 @@ impl Rule<KEAD2Config> for NoLinebreakMessagesLoggersD2 {
 mod tests {
     use serde_json::Value;
 
-    use crate::{
-        common::Rule,
-        configs::KEAD2Config,
-        rules::loggers::{
-            NoLinebreakMessagesLoggersD2,
-            d2::_tests::NO_LINEBREAK_MESSAGES_LOGGERS_D2_RULE_TEMPLATE,
-        },
+    use crate::{common::Rule, configs::KEAD2Config};
+
+    use super::{
+        super::_tests::NO_LINEBREAK_MESSAGES_LOGGERS_D2_RULE_TEMPLATE, NoLinebreakMessagesLoggersD2,
     };
 
     #[test]

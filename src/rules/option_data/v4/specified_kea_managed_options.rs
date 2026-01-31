@@ -6,10 +6,10 @@ use crate::{
 
 pub struct SpecifiedKEAManagedOptionsRule;
 
-fn get_kea_managed_options(options: &Vec<KEAv4OptionData>, placement: String) -> Vec<RuleResult> {
+fn get_kea_managed_options(options: &[KEAv4OptionData], placement: String) -> Vec<RuleResult> {
     let mut results: Vec<RuleResult> = Vec::new();
 
-    for (idx_option, option) in options.into_iter().enumerate() {
+    for (idx_option, option) in options.iter().enumerate() {
         let finded_kea_managed_option =
             KEA_NO_CONFIGURABLE_OPTIONS
                 .iter()
@@ -19,8 +19,7 @@ fn get_kea_managed_options(options: &Vec<KEAv4OptionData>, placement: String) ->
                             == option.name.as_ref().unwrap_or(&"".to_string()))
                 });
 
-        if finded_kea_managed_option.is_some() {
-            let managed_option = finded_kea_managed_option.unwrap();
+        if let Some(managed_option) = finded_kea_managed_option {
             results.push(RuleResult {
                 description: format!(
                 "The option with the name '{}' and the code '{}' is controlled by the KEA engine and is not recommended for manual setting.",
@@ -37,29 +36,23 @@ fn get_kea_managed_options(options: &Vec<KEAv4OptionData>, placement: String) ->
 }
 
 fn get_kea_managed_options_in_subnets(
-    subnets: &Vec<KEAv4Subnet>,
+    subnets: &[KEAv4Subnet],
     placement: String,
 ) -> Vec<RuleResult> {
     let mut results: Vec<RuleResult> = Vec::new();
 
-    for (idx_subnet, subnet) in subnets.into_iter().enumerate() {
-        if subnet.option_data.is_some() {
+    for (idx_subnet, subnet) in subnets.iter().enumerate() {
+        if let Some(option_data) = &subnet.option_data {
             results.extend(get_kea_managed_options(
-                &subnet.option_data.as_ref().unwrap_or(&vec![]),
+                option_data,
                 format!("{}.{}.option-data", placement, idx_subnet),
             ));
         }
 
-        for (idx_pool, pool) in subnet
-            .pools
-            .as_ref()
-            .unwrap_or(&vec![])
-            .into_iter()
-            .enumerate()
-        {
+        for (idx_pool, pool) in subnet.pools.as_ref().unwrap_or(&vec![]).iter().enumerate() {
             if pool.option_data.is_some() {
                 results.extend(get_kea_managed_options(
-                    &pool.option_data.as_ref().unwrap_or(&vec![]),
+                    pool.option_data.as_ref().unwrap_or(&vec![]),
                     format!(
                         "{}.{}.pools.{}.option-data",
                         placement, idx_subnet, idx_pool
@@ -89,9 +82,9 @@ impl Rule<KEAv4Config> for SpecifiedKEAManagedOptionsRule {
             results.extend(get_kea_managed_options(options, "option-data".to_string()));
         }
         if let Some(classes) = &config.client_classes {
-            for (idx_class, class) in classes.into_iter().enumerate() {
+            for (idx_class, class) in classes.iter().enumerate() {
                 results.extend(get_kea_managed_options(
-                    &class.option_data.as_ref().unwrap_or(&vec![]),
+                    class.option_data.as_ref().unwrap_or(&vec![]),
                     format!("client-classes.{}.option-data", idx_class),
                 ));
             }
@@ -104,7 +97,7 @@ impl Rule<KEAv4Config> for SpecifiedKEAManagedOptionsRule {
         }
 
         if let Some(shared_networks) = &config.shared_networks {
-            for (idx_shared_network, shared_network) in shared_networks.into_iter().enumerate() {
+            for (idx_shared_network, shared_network) in shared_networks.iter().enumerate() {
                 if shared_network.option_data.is_some() {
                     results.extend(get_kea_managed_options(
                         shared_network.option_data.as_ref().unwrap_or(&vec![]),
@@ -131,13 +124,11 @@ impl Rule<KEAv4Config> for SpecifiedKEAManagedOptionsRule {
 mod tests {
     use serde_json::Value;
 
-    use crate::{
-        common::Rule,
-        configs::v4::KEAv4Config,
-        rules::option_data::{
-            SpecifiedKEAManagedOptionsRule,
-            v4::_tests::SPECIFIED_KEA_MANAGED_OPTIONS_RULE_TEST_TEMPLATE,
-        },
+    use crate::{common::Rule, configs::v4::KEAv4Config};
+
+    use super::{
+        super::_tests::SPECIFIED_KEA_MANAGED_OPTIONS_RULE_TEST_TEMPLATE,
+        SpecifiedKEAManagedOptionsRule,
     };
 
     #[test]

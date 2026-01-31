@@ -55,13 +55,9 @@ impl Rule<KEAv4Config> for SubnetsOverlappingRule {
 mod tests {
     use serde_json::Value;
 
-    use crate::{
-        common::Rule,
-        configs::v4::KEAv4Config,
-        rules::subnets::{
-            SubnetsOverlappingRule, v4::_tests::SUBNETS_OVERLAPPING_RULE_TEST_TEMPLATE,
-        },
-    };
+    use crate::{common::Rule, configs::v4::KEAv4Config};
+
+    use super::{super::_tests::SUBNETS_OVERLAPPING_RULE_TEST_TEMPLATE, SubnetsOverlappingRule};
 
     #[test]
     fn check_expected_trigger() {

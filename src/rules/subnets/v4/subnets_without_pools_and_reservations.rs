@@ -6,10 +6,10 @@ use crate::{
 
 pub struct SubnetWithoutPoolsAndReservationsRule;
 
-fn get_empty_subnets(subnets: &Vec<KEAv4Subnet>, placement: String) -> Vec<RuleResult> {
+fn get_empty_subnets(subnets: &[KEAv4Subnet], placement: String) -> Vec<RuleResult> {
     let mut results: Vec<RuleResult> = Vec::new();
 
-    for (idx_subnet, subnet) in subnets.into_iter().enumerate() {
+    for (idx_subnet, subnet) in subnets.iter().enumerate() {
         if subnet.reservations.as_ref().unwrap_or(&vec![]).is_empty()
             && subnet.pools.as_ref().unwrap_or(&vec![]).is_empty()
         {
@@ -54,7 +54,7 @@ impl Rule<KEAv4Config> for SubnetWithoutPoolsAndReservationsRule {
         }
 
         if let Some(shared_networks) = &config.shared_networks {
-            for (idx_shared_network, shared_network) in shared_networks.into_iter().enumerate() {
+            for (idx_shared_network, shared_network) in shared_networks.iter().enumerate() {
                 if let Some(shared_subnets) = &shared_network.subnet4 {
                     results.extend(get_empty_subnets(
                         shared_subnets,
@@ -76,13 +76,11 @@ impl Rule<KEAv4Config> for SubnetWithoutPoolsAndReservationsRule {
 mod tests {
     use serde_json::Value;
 
-    use crate::{
-        common::Rule,
-        configs::v4::KEAv4Config,
-        rules::subnets::{
-            SubnetWithoutPoolsAndReservationsRule,
-            v4::_tests::SUBNETS_WITHOUT_POOLS_AND_RESERVATIONS_TEST_TEMPLATE,
-        },
+    use crate::{common::Rule, configs::v4::KEAv4Config};
+
+    use super::{
+        super::_tests::SUBNETS_WITHOUT_POOLS_AND_RESERVATIONS_TEST_TEMPLATE,
+        SubnetWithoutPoolsAndReservationsRule,
     };
 
     #[test]

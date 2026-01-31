@@ -19,7 +19,7 @@ impl Rule<KEAv4Config> for NotRecommendedPrefixAFTER_ClassesRule {
     fn check(&self, config: &KEAv4Config) -> Option<Vec<RuleResult>> {
         let mut results: Vec<RuleResult> = Vec::new();
 
-        for (idx, class) in config.client_classes.as_ref()?.into_iter().enumerate() {
+        for (idx, class) in config.client_classes.as_ref()?.iter().enumerate() {
             if class.name.starts_with("AFTER_") {
                 results.push(RuleResult {
                     description: format!(
@@ -44,13 +44,11 @@ impl Rule<KEAv4Config> for NotRecommendedPrefixAFTER_ClassesRule {
 mod tests {
     use serde_json::Value;
 
-    use crate::{
-        common::Rule,
-        configs::v4::KEAv4Config,
-        rules::client_classes::{
-            NotRecommendedPrefixAFTER_ClassesRule,
-            v4::_tests::NOT_RECOMMENDED_PREFIX_AFTER__CLASSES_RULE_TEST_TEMPLATE,
-        },
+    use crate::{common::Rule, configs::v4::KEAv4Config};
+
+    use super::{
+        super::_tests::NOT_RECOMMENDED_PREFIX_AFTER__CLASSES_RULE_TEST_TEMPLATE,
+        NotRecommendedPrefixAFTER_ClassesRule,
     };
 
     #[test]

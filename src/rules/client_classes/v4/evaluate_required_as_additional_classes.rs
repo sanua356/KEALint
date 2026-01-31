@@ -95,13 +95,11 @@ impl Rule<KEAv4Config> for EvaluateRequiredAsAdditionalClassesRule {
 mod tests {
     use serde_json::Value;
 
-    use crate::{
-        common::Rule,
-        configs::v4::KEAv4Config,
-        rules::client_classes::{
-            EvaluateRequiredAsAdditionalClassesRule,
-            v4::_tests::EVALUATE_REQUIRED_AS_ADDITIONAL_CLASSES_RULE_TEST_TEMPLATE,
-        },
+    use crate::{common::Rule, configs::v4::KEAv4Config};
+
+    use super::{
+        super::_tests::EVALUATE_REQUIRED_AS_ADDITIONAL_CLASSES_RULE_TEST_TEMPLATE,
+        EvaluateRequiredAsAdditionalClassesRule,
     };
 
     #[test]

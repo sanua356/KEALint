@@ -15,6 +15,7 @@ pub struct KEAv4DHCPDDNS {
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "kebab-case")]
+#[allow(clippy::enum_variant_names)]
 pub enum DDNSConflictResolutionModeTypes {
     CheckWithDhcid,
     NoCheckWithDhcid,

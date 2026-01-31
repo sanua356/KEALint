@@ -37,13 +37,11 @@ impl Rule<KEAD2Config> for NotLocalIPAddressInD2ServerConfigRule {
 mod tests {
     use serde_json::Value;
 
-    use crate::{
-        common::Rule,
-        configs::KEAD2Config,
-        rules::ddns_server::{
-            NotLocalIPAddressInD2ServerConfigRule,
-            d2::_tests::NOT_LOCAL_IP_ADDRESS_IN_D2_SERVER_CONFIG_RULE_TEST_TEMPLATE,
-        },
+    use crate::{common::Rule, configs::KEAD2Config};
+
+    use super::{
+        super::_tests::NOT_LOCAL_IP_ADDRESS_IN_D2_SERVER_CONFIG_RULE_TEST_TEMPLATE,
+        NotLocalIPAddressInD2ServerConfigRule,
     };
 
     #[test]

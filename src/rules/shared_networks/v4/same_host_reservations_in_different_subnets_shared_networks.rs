@@ -67,13 +67,11 @@ impl Rule<KEAv4Config> for SameHostReservationsInDifferentSubnetsSharedNetworksR
 mod tests {
     use serde_json::Value;
 
-    use crate::{
-        common::Rule,
-        configs::v4::KEAv4Config,
-        rules::shared_networks::{
-            SameHostReservationsInDifferentSubnetsSharedNetworksRule,
-            v4::_tests::SAME_HOST_RESERVATIONS_IN_DIFFERENT_SUBNETS_SHARED_NETWORKS_RULE_TEMPLATE,
-        },
+    use crate::{common::Rule, configs::v4::KEAv4Config};
+
+    use super::{
+        super::_tests::SAME_HOST_RESERVATIONS_IN_DIFFERENT_SUBNETS_SHARED_NETWORKS_RULE_TEMPLATE,
+        SameHostReservationsInDifferentSubnetsSharedNetworksRule,
     };
 
     #[test]

@@ -52,13 +52,11 @@ impl Rule<KEAD2Config> for NoCredentialsCacheAndClientKeytabTogetherInGSSTSIGRul
 mod tests {
     use serde_json::Value;
 
-    use crate::{
-        common::Rule,
-        configs::KEAD2Config,
-        rules::hooks::{
-            NoCredentialsCacheAndClientKeytabTogetherInGSSTSIGRule,
-            d2::_tests::NO_CREDENTIALS_CACHE_AND_CLIENT_KEYTAB_TOGETHER_IN_GSS_TSIG_RULE_TEST_TEMPLATE,
-        },
+    use crate::{common::Rule, configs::KEAD2Config};
+
+    use super::{
+        super::_tests::NO_CREDENTIALS_CACHE_AND_CLIENT_KEYTAB_TOGETHER_IN_GSS_TSIG_RULE_TEST_TEMPLATE,
+        NoCredentialsCacheAndClientKeytabTogetherInGSSTSIGRule,
     };
 
     #[test]

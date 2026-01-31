@@ -99,13 +99,11 @@ impl Rule<KEAv4Config> for UnnecessaryActivatedDatabaseHooksRule {
 mod tests {
     use serde_json::Value;
 
-    use crate::{
-        common::Rule,
-        configs::v4::KEAv4Config,
-        rules::hooks::{
-            UnnecessaryActivatedDatabaseHooksRule,
-            v4::_tests::UNNECESSARY_ACTIVATED_DATABASE_HOOKS_RULE_TEST_TEMPLATE,
-        },
+    use crate::{common::Rule, configs::v4::KEAv4Config};
+
+    use super::{
+        super::_tests::UNNECESSARY_ACTIVATED_DATABASE_HOOKS_RULE_TEST_TEMPLATE,
+        UnnecessaryActivatedDatabaseHooksRule,
     };
 
     #[test]

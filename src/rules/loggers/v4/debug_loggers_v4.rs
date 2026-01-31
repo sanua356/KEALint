@@ -32,8 +32,9 @@ mod tests {
     use crate::{
         common::Rule,
         configs::{loggers::KEALoggerSeverityTypes, v4::KEAv4Config},
-        rules::loggers::{DebugLoggersV4Rule, v4::_tests::DEBUG_LOGGERS_V4_RULE_TEMPLATE},
     };
+
+    use super::{super::_tests::DEBUG_LOGGERS_V4_RULE_TEMPLATE, DebugLoggersV4Rule};
 
     #[test]
     fn check_expected_trigger() {

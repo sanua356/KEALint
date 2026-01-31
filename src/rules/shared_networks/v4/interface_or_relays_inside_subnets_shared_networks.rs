@@ -19,10 +19,10 @@ impl Rule<KEAv4Config> for InterfaceOrRelaysInsideSubnetsSharedNetworksRule {
         let mut results: Vec<RuleResult> = Vec::new();
 
         for (idx_shared_network, shared_network) in
-            config.shared_networks.as_ref()?.into_iter().enumerate()
+            config.shared_networks.as_ref()?.iter().enumerate()
         {
             if let Some(subnets) = &shared_network.subnet4 {
-                for (idx_subnet, subnet) in subnets.into_iter().enumerate() {
+                for (idx_subnet, subnet) in subnets.iter().enumerate() {
                     if let Some(interface) = &subnet.interface
                         && !interface.is_empty()
                     {
@@ -67,13 +67,11 @@ impl Rule<KEAv4Config> for InterfaceOrRelaysInsideSubnetsSharedNetworksRule {
 mod tests {
     use serde_json::Value;
 
-    use crate::{
-        common::Rule,
-        configs::v4::KEAv4Config,
-        rules::shared_networks::{
-            InterfaceOrRelaysInsideSubnetsSharedNetworksRule,
-            v4::_tests::INTERFACE_OR_RELAYS_INSIDE_SUBNETS_SHARED_NETWORKS_RULE_TEMPLATE,
-        },
+    use crate::{common::Rule, configs::v4::KEAv4Config};
+
+    use super::{
+        super::_tests::INTERFACE_OR_RELAYS_INSIDE_SUBNETS_SHARED_NETWORKS_RULE_TEMPLATE,
+        InterfaceOrRelaysInsideSubnetsSharedNetworksRule,
     };
 
     #[test]

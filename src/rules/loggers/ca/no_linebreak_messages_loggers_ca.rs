@@ -1,8 +1,9 @@
 use crate::{
     common::{Rule, RuleConfigs, RuleLevels, RuleResult},
     configs::KEACtrlAgentConfig,
-    rules::loggers::shared::get_no_linebreak_in_pattern_rule,
 };
+
+use super::super::shared::get_no_linebreak_in_pattern_rule;
 
 pub struct NoLinebreakMessagesLoggersCtrlAgent;
 
@@ -28,13 +29,11 @@ impl Rule<KEACtrlAgentConfig> for NoLinebreakMessagesLoggersCtrlAgent {
 mod tests {
     use serde_json::Value;
 
-    use crate::{
-        common::Rule,
-        configs::KEACtrlAgentConfig,
-        rules::loggers::{
-            NoLinebreakMessagesLoggersCtrlAgent,
-            ca::_tests::NO_LINEBREAK_MESSAGES_LOGGERS_CTRL_AGENT_RULE_TEMPLATE,
-        },
+    use crate::{common::Rule, configs::KEACtrlAgentConfig};
+
+    use super::{
+        super::_tests::NO_LINEBREAK_MESSAGES_LOGGERS_CTRL_AGENT_RULE_TEMPLATE,
+        NoLinebreakMessagesLoggersCtrlAgent,
     };
 
     #[test]

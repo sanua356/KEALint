@@ -18,10 +18,7 @@ impl Rule<KEAv4Config> for NotDDNSQualifyingSuffixWithEnabledDDNSUpdatesRule {
     fn check(&self, config: &KEAv4Config) -> Option<Vec<RuleResult>> {
         let is_enabled_ddns = config.ddns_send_updates?;
 
-        let ddns_qualifying_suffix = config
-            .ddns_qualifying_suffix
-            .clone()
-            .unwrap_or(String::new());
+        let ddns_qualifying_suffix = config.ddns_qualifying_suffix.clone().unwrap_or_default();
 
         if is_enabled_ddns && ddns_qualifying_suffix.is_empty() {
             return Some(vec![RuleResult {
@@ -39,13 +36,11 @@ impl Rule<KEAv4Config> for NotDDNSQualifyingSuffixWithEnabledDDNSUpdatesRule {
 mod tests {
     use serde_json::Value;
 
-    use crate::{
-        common::Rule,
-        configs::v4::KEAv4Config,
-        rules::ddns_server::v4::{
-            _tests::NOT_DDNS_QUALIFYING_SUFFIX_WITH_ENABLED_DDNS_UPDATES_RULE_TEST_TEMPLATE,
-            not_ddns_qualifying_suffix_with_enabled_ddns_updates::NotDDNSQualifyingSuffixWithEnabledDDNSUpdatesRule,
-        },
+    use crate::{common::Rule, configs::v4::KEAv4Config};
+
+    use super::{
+        super::_tests::NOT_DDNS_QUALIFYING_SUFFIX_WITH_ENABLED_DDNS_UPDATES_RULE_TEST_TEMPLATE,
+        NotDDNSQualifyingSuffixWithEnabledDDNSUpdatesRule,
     };
 
     #[test]

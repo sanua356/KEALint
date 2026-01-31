@@ -6,14 +6,14 @@ use crate::{
 pub struct DisabledInSubnetReservationsWithEnabledOutOfPool;
 
 fn get_reservations_out_of_pool_without_in_subnet_flag(
-    subnets: &Vec<KEAv4Subnet>,
+    subnets: &[KEAv4Subnet],
     is_reservations_in_subnet_global: bool,
     shared_network_id: Option<String>,
     placement: String,
 ) -> Vec<RuleResult> {
     let mut results: Vec<RuleResult> = Vec::new();
 
-    for (subnet_idx, subnet) in subnets.into_iter().enumerate() {
+    for (subnet_idx, subnet) in subnets.iter().enumerate() {
         let is_reservations_out_of_pool = subnet.reservations_out_of_pool.unwrap_or_default();
 
         let msg_subtext = match &shared_network_id {
@@ -74,7 +74,7 @@ impl Rule<KEAv4Config> for DisabledInSubnetReservationsWithEnabledOutOfPool {
         }
 
         if let Some(shared_networks) = &config.shared_networks {
-            for (idx_shared_network, shared_network) in shared_networks.into_iter().enumerate() {
+            for (idx_shared_network, shared_network) in shared_networks.iter().enumerate() {
                 let is_reservations_in_subnet_shared_network =
                     shared_network.reservations_in_subnet.unwrap_or(true);
 
@@ -102,13 +102,11 @@ impl Rule<KEAv4Config> for DisabledInSubnetReservationsWithEnabledOutOfPool {
 mod tests {
     use serde_json::Value;
 
-    use crate::{
-        common::Rule,
-        configs::v4::KEAv4Config,
-        rules::reservations::{
-            DisabledInSubnetReservationsWithEnabledOutOfPool,
-            v4::_tests::DISABLED_IN_SUBNET_RESERVATIONS_WITH_ENABLED_OUT_OF_POOL_RULE_TEMPLATE,
-        },
+    use crate::{common::Rule, configs::v4::KEAv4Config};
+
+    use super::{
+        super::_tests::DISABLED_IN_SUBNET_RESERVATIONS_WITH_ENABLED_OUT_OF_POOL_RULE_TEMPLATE,
+        DisabledInSubnetReservationsWithEnabledOutOfPool,
     };
 
     #[test]

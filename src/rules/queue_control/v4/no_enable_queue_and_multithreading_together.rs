@@ -37,13 +37,11 @@ impl Rule<KEAv4Config> for NoEnableQueueAndMultithreadingTogetherRule {
 mod tests {
     use serde_json::Value;
 
-    use crate::{
-        common::Rule,
-        configs::v4::KEAv4Config,
-        rules::queue_control::{
-            NoEnableQueueAndMultithreadingTogetherRule,
-            v4::_tests::NO_ENABLE_QUEUE_AND_MULTITHREADING_TOGETER_RULE_TEMPLATE,
-        },
+    use crate::{common::Rule, configs::v4::KEAv4Config};
+
+    use super::{
+        super::_tests::NO_ENABLE_QUEUE_AND_MULTITHREADING_TOGETER_RULE_TEMPLATE,
+        NoEnableQueueAndMultithreadingTogetherRule,
     };
 
     #[test]

@@ -76,12 +76,10 @@ impl Rule<KEAv4Config> for SubnetsPoolsIntersectionRule {
 mod tests {
     use serde_json::Value;
 
-    use crate::{
-        common::Rule,
-        configs::v4::KEAv4Config,
-        rules::subnets::{
-            SubnetsPoolsIntersectionRule, v4::_tests::SUBNETS_POOLS_INTERSECTION_TEST_TEMPLATE,
-        },
+    use crate::{common::Rule, configs::v4::KEAv4Config};
+
+    use super::{
+        super::_tests::SUBNETS_POOLS_INTERSECTION_TEST_TEMPLATE, SubnetsPoolsIntersectionRule,
     };
 
     #[test]

@@ -32,8 +32,9 @@ mod tests {
     use crate::{
         common::Rule,
         configs::{KEAD2Config, loggers::KEALoggerSeverityTypes},
-        rules::loggers::{DebugLoggersD2Rule, d2::_tests::DEBUG_LOGGERS_D2_RULE_TEMPLATE},
     };
+
+    use super::{super::_tests::DEBUG_LOGGERS_D2_RULE_TEMPLATE, DebugLoggersD2Rule};
 
     #[test]
     fn check_expected_trigger() {

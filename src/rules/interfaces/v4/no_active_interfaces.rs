@@ -34,13 +34,11 @@ impl Rule<KEAv4Config> for NoInterfacesInInterfacesConfigRule {
 mod tests {
     use serde_json::Value;
 
-    use crate::{
-        common::Rule,
-        configs::v4::KEAv4Config,
-        rules::interfaces::v4::{
-            _tests::NO_INTERFACES_IN_INTERFACES_CONFIG_RULE_TEST_TEMPLATE,
-            no_active_interfaces::NoInterfacesInInterfacesConfigRule,
-        },
+    use crate::{common::Rule, configs::v4::KEAv4Config};
+
+    use super::{
+        super::_tests::NO_INTERFACES_IN_INTERFACES_CONFIG_RULE_TEST_TEMPLATE,
+        NoInterfacesInInterfacesConfigRule,
     };
 
     #[test]

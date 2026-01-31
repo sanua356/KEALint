@@ -32,10 +32,9 @@ mod tests {
     use crate::{
         common::Rule,
         configs::{KEACtrlAgentConfig, loggers::KEALoggerSeverityTypes},
-        rules::loggers::{
-            DebugLoggersCtrlAgentRule, ca::_tests::DEBUG_LOGGERS_CTRL_AGENT_RULE_TEMPLATE,
-        },
     };
+
+    use super::{super::_tests::DEBUG_LOGGERS_CTRL_AGENT_RULE_TEMPLATE, DebugLoggersCtrlAgentRule};
 
     #[test]
     fn check_expected_trigger() {

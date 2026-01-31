@@ -128,11 +128,9 @@ impl Rule<KEAv4Config> for BadHooksOrderRule {
 mod tests {
     use serde_json::Value;
 
-    use crate::{
-        common::Rule,
-        configs::v4::KEAv4Config,
-        rules::hooks::{BadHooksOrderRule, v4::_tests::BAD_HOOKS_ORDER_RULE_TEST_TEMPLATE},
-    };
+    use crate::{common::Rule, configs::v4::KEAv4Config};
+
+    use super::{super::_tests::BAD_HOOKS_ORDER_RULE_TEST_TEMPLATE, BadHooksOrderRule};
 
     #[test]
     fn check_expected_trigger() {

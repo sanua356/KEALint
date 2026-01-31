@@ -55,13 +55,11 @@ impl Rule<KEAv4Config> for NoMatchClientIdForFlexIDHookRule {
 mod tests {
     use serde_json::Value;
 
-    use crate::{
-        common::Rule,
-        configs::v4::KEAv4Config,
-        rules::hooks::{
-            NoMatchClientIdForFlexIDHookRule,
-            v4::_tests::NO_MATCH_CLIENT_ID_FOR_FLEX_ID_HOOK_RULE_TEST_TEMPLATE,
-        },
+    use crate::{common::Rule, configs::v4::KEAv4Config};
+
+    use super::{
+        super::_tests::NO_MATCH_CLIENT_ID_FOR_FLEX_ID_HOOK_RULE_TEST_TEMPLATE,
+        NoMatchClientIdForFlexIDHookRule,
     };
 
     #[test]

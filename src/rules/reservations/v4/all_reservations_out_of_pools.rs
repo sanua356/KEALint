@@ -20,12 +20,12 @@ fn is_address_in_pool(address: IpAddr, pool: &KEAv4PoolVariant) -> bool {
 }
 
 fn get_reservations_out_of_pool_in_subnet(
-    subnets: &Vec<KEAv4Subnet>,
+    subnets: &[KEAv4Subnet],
     placement: String,
 ) -> Vec<RuleResult> {
     let mut out_of_pool: Vec<RuleResult> = Vec::new();
 
-    for (idx_subnet, subnet) in subnets.into_iter().enumerate() {
+    for (idx_subnet, subnet) in subnets.iter().enumerate() {
         if subnet.reservations_out_of_pool.unwrap_or_default() {
             continue;
         }
@@ -81,7 +81,7 @@ impl Rule<KEAv4Config> for AllReservationsOutOfPoolsRule {
         }
 
         if let Some(shared_networks) = &config.shared_networks {
-            for (idx_shared_network, shared_network) in shared_networks.into_iter().enumerate() {
+            for (idx_shared_network, shared_network) in shared_networks.iter().enumerate() {
                 if let Some(subnets) = &shared_network.subnet4 {
                     results.extend(get_reservations_out_of_pool_in_subnet(
                         subnets,
@@ -103,12 +103,10 @@ impl Rule<KEAv4Config> for AllReservationsOutOfPoolsRule {
 mod tests {
     use serde_json::Value;
 
-    use crate::{
-        common::Rule,
-        configs::v4::KEAv4Config,
-        rules::reservations::{
-            AllReservationsOutOfPoolsRule, v4::_tests::ALL_RESERVATIONS_OUT_OF_POOLS_RULE_TEMPLATE,
-        },
+    use crate::{common::Rule, configs::v4::KEAv4Config};
+
+    use super::{
+        super::_tests::ALL_RESERVATIONS_OUT_OF_POOLS_RULE_TEMPLATE, AllReservationsOutOfPoolsRule,
     };
 
     #[test]

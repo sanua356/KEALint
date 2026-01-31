@@ -1,8 +1,9 @@
 use crate::{
     common::{Rule, RuleConfigs, RuleLevels, RuleResult},
     configs::KEAD2Config,
-    rules::loggers::shared::get_no_percent_m_in_pattern_rule,
 };
+
+use super::super::shared::get_no_percent_m_in_pattern_rule;
 
 pub struct NoPercentMMessagesLoggersD2Rule;
 
@@ -28,13 +29,11 @@ impl Rule<KEAD2Config> for NoPercentMMessagesLoggersD2Rule {
 mod tests {
     use serde_json::Value;
 
-    use crate::{
-        common::Rule,
-        configs::KEAD2Config,
-        rules::loggers::{
-            NoPercentMMessagesLoggersD2Rule,
-            d2::_tests::NO_PERCENT_M_MESSAGES_LOGGERS_D2_RULE_TEMPLATE,
-        },
+    use crate::{common::Rule, configs::KEAD2Config};
+
+    use super::{
+        super::_tests::NO_PERCENT_M_MESSAGES_LOGGERS_D2_RULE_TEMPLATE,
+        NoPercentMMessagesLoggersD2Rule,
     };
 
     #[test]

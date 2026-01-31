@@ -25,22 +25,20 @@ impl Rule<KEAv4Config> for NoBasicHTTPAuthInHAPeersRule {
                 .enumerate()
                 .find(|(_, hook)| hook.library.contains(HIGH_AVAILABILITY_HOOK_LIBRARY))?;
 
-            if ha_hook.parameters.is_some() {
-                let parameters = ha_hook.parameters.as_ref().unwrap();
-
-                if let Some(builds) = parameters["high-availability"].as_array() {
-                    for (idx_ha, ha) in builds.into_iter().enumerate() {
-                        if let Some(peers) = ha["peers"].as_array() {
-                            for (idx_peer, peer) in peers.into_iter().enumerate() {
-                                if peer.get("basic-auth-user").is_none()
-                                    && peer.get("basic-auth-password").is_none()
-                                {
-                                    results.push(RuleResult {
+            if let Some(parameters) = &ha_hook.parameters
+                && let Some(builds) = parameters["high-availability"].as_array()
+            {
+                for (idx_ha, ha) in builds.iter().enumerate() {
+                    if let Some(peers) = ha["peers"].as_array() {
+                        for (idx_peer, peer) in peers.iter().enumerate() {
+                            if peer.get("basic-auth-user").is_none()
+                                && peer.get("basic-auth-password").is_none()
+                            {
+                                results.push(RuleResult {
                                         description: format!("The peer named '{}' of the high availability hook lacks basic HTTP authentication.", peer["name"].as_str().unwrap()),
                                         places: Some(vec![format!("hooks-libraries.{}.parameters.high-availability.{}.peers.{}", idx_hook, idx_ha, idx_peer)]),
                                         links: Some(vec!["https://kea.readthedocs.io/en/latest/arm/hooks.html#hot-standby-configuration"]),
                                     });
-                                }
                             }
                         }
                     }
@@ -60,13 +58,11 @@ impl Rule<KEAv4Config> for NoBasicHTTPAuthInHAPeersRule {
 mod tests {
     use serde_json::Value;
 
-    use crate::{
-        common::Rule,
-        configs::v4::KEAv4Config,
-        rules::hooks::{
-            NoBasicHTTPAuthInHAPeersRule,
-            v4::_tests::NO_BASIC_HTTP_AUTH_IN_HA_PEERS_RULE_TEST_TEMPLATE,
-        },
+    use crate::{common::Rule, configs::v4::KEAv4Config};
+
+    use super::{
+        super::_tests::NO_BASIC_HTTP_AUTH_IN_HA_PEERS_RULE_TEST_TEMPLATE,
+        NoBasicHTTPAuthInHAPeersRule,
     };
 
     #[test]
