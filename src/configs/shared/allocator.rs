@@ -6,5 +6,6 @@ pub enum KEAAllocatorTypes {
     Iterative,
     Random,
     #[serde(rename = "flq")]
+    #[allow(clippy::upper_case_acronyms)]
     FLQ,
 }

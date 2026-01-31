@@ -7,7 +7,7 @@ pub use relay::KEAv4Relay;
 pub use shared::*;
 pub use subnets::{KEAv4PoolVariant, KEAv4Subnet};
 
-use super::shared::{allocator, dhcp_queue_control, hooks, loggers, reservations};
+use super::shared::{allocator, dhcp_queue_control, hooks, loggers, reservations, sanity_checks};
 
 mod client_classes;
 mod config_control;
@@ -55,6 +55,7 @@ pub struct KEAv4Config {
     pub hosts_database: Option<hosts_database::KEAv4HostsDatabase>,
     pub config_control: Option<config_control::KEAv4ConfigControl>,
     pub dhcp_queue_control: Option<dhcp_queue_control::KEADhcpQueueControl>,
+    pub sanity_checks: Option<sanity_checks::KEASanityChecks>,
 
     pub dhcp_ddns: Option<dhcp_ddns::KEAv4DHCPDDNS>,
     pub ddns_send_updates: Option<bool>,

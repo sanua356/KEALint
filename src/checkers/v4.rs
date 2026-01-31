@@ -22,7 +22,8 @@ use crate::{
         },
         interfaces::NoInterfacesInInterfacesConfigRule,
         lease_database::{
-            NoEnabledPersistFlagForMemfileLeasesRule, NotChangeStopRetryExitStrategyOnFailRule,
+            LeaseSanityChecksEnabledForNotMemfileBackend, NoEnabledPersistFlagForMemfileLeasesRule,
+            NotChangeStopRetryExitStrategyOnFailRule,
         },
         loggers::{
             DebugLoggersV4Rule, NoLinebreakMessagesLoggersV4, NoPercentMMessagesLoggersV4Rule,
@@ -48,7 +49,7 @@ use crate::{
 pub struct RulesV4 {
     pub interfaces: [Box<dyn Rule<KEAv4Config>>; 1],
     pub allocators: [Box<dyn Rule<KEAv4Config>>; 2],
-    pub lease_database: [Box<dyn Rule<KEAv4Config>>; 2],
+    pub lease_database: [Box<dyn Rule<KEAv4Config>>; 3],
     pub hooks: [Box<dyn Rule<KEAv4Config>>; 9],
     pub subnets: [Box<dyn Rule<KEAv4Config>>; 3],
     pub client_classes: [Box<dyn Rule<KEAv4Config>>; 3],
@@ -71,6 +72,7 @@ impl RuleChecker<KEAv4Config> for RulesV4 {
             lease_database: [
                 Box::new(NoEnabledPersistFlagForMemfileLeasesRule),
                 Box::new(NotChangeStopRetryExitStrategyOnFailRule),
+                Box::new(LeaseSanityChecksEnabledForNotMemfileBackend),
             ],
             hooks: [
                 Box::new(MultithreadingModesNotEqualInConfigAndHARule),

@@ -18,12 +18,10 @@ impl Rule<KEAv4Config> for NotSelectIterativeAllocatorForSharedLeaseDatabase {
     fn check(&self, config: &KEAv4Config) -> Option<Vec<RuleResult>> {
         if let Some(allocator) = &config.allocator
             && allocator == &KEAAllocatorTypes::Iterative
-            && &config.lease_database.r#type != &KEALeaseDatabaseTypes::Memfile
+            && config.lease_database.r#type != KEALeaseDatabaseTypes::Memfile
         {
             return Some(vec![RuleResult {
-                description: format!(
-                    "The 'iterative' address allocator is not recommended for use with a shared database of rents on several servers."
-                ),
+                description: "The 'iterative' address allocator is not recommended for use with a shared database of rents on several servers.".to_string(),
                 links: Some(vec![
                     "https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#iterative-allocator",
                 ]),

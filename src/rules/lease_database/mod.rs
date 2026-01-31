@@ -1,4 +1,5 @@
 pub mod v4;
 
+pub use v4::lease_sanity_checks_enabled_for_not_memfile_backend::LeaseSanityChecksEnabledForNotMemfileBackend;
 pub use v4::no_enabled_persist_flag::NoEnabledPersistFlagForMemfileLeasesRule;
 pub use v4::not_change_stop_rety_exit_strategy_on_fail::NotChangeStopRetryExitStrategyOnFailRule;
