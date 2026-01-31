@@ -1,3 +1,5 @@
+use std::collections::BTreeMap;
+
 use serde::Serialize;
 use tabled::{
     Table, Tabled,
@@ -41,6 +43,43 @@ pub fn tabled_print_problems(problems: Vec<Problem>) -> String {
     table.with(Modify::new(Columns::one(5)).with(Width::wrap(20)));
 
     table.to_string()
+}
+
+pub fn get_summary_problems(problems: &Vec<Problem>) -> String {
+    let mut summary = format!("Found {} problem(s).\n\n", problems.len());
+
+    let mut problem_config_types: BTreeMap<String, u32> = BTreeMap::new();
+    let mut problem_importances: BTreeMap<String, u32> = BTreeMap::new();
+
+    for problem in problems {
+        *problem_config_types
+            .entry(problem.config_type.clone())
+            .or_insert(0) += 1;
+
+        *problem_importances
+            .entry(problem.importance.clone())
+            .or_insert(0) += 1;
+    }
+
+    summary = format!("{}\nBy type config:\n", summary);
+
+    for problem_config_type in problem_config_types.iter() {
+        summary = format!(
+            "{}{} = {} problem(s).\n",
+            summary, problem_config_type.0, problem_config_type.1
+        );
+    }
+
+    summary = format!("{}\nBy importance:\n", summary);
+
+    for problem_importance in problem_importances {
+        summary = format!(
+            "{}{} = {} problem(s).\n",
+            summary, problem_importance.0, problem_importance.1
+        );
+    }
+
+    summary
 }
 
 pub fn find_problems<T>(config: &T, values: Vec<&[Box<dyn Rule<T>>]>) -> Vec<Problem> {

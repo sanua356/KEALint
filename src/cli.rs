@@ -8,7 +8,9 @@ use std::{
 };
 
 use crate::{
-    checkers::{Problem, RulesCtrlAgent, RulesD2, RulesV4, tabled_print_problems},
+    checkers::{
+        Problem, RulesCtrlAgent, RulesD2, RulesV4, get_summary_problems, tabled_print_problems,
+    },
     common::RuleChecker,
     configs::{KEACtrlAgentConfig, KEAD2Config, KEAv4Config},
 };
@@ -76,6 +78,12 @@ pub struct CLIArgs {
         help = "Optional. If enabled, processing is performed in multithreaded mode."
     )]
     use_threads: bool,
+
+    #[arg(
+        long,
+        help = "Optional. Adds additional information when displaying the result as a table."
+    )]
+    with_summary: bool,
 }
 
 pub fn run_cli(args: CLIArgs) {
@@ -158,6 +166,12 @@ pub fn run_cli(args: CLIArgs) {
         problems = run_checks(content_v4, content_d2, content_ctrl_agent);
     }
 
+    let summary = if args.with_summary {
+        get_summary_problems(&problems)
+    } else {
+        String::new()
+    };
+
     let printed = match args.format {
         KEALintOutputFormatTypes::table => tabled_print_problems(problems),
         KEALintOutputFormatTypes::json => serde_json::to_string_pretty(&problems).unwrap(),
@@ -185,6 +199,10 @@ pub fn run_cli(args: CLIArgs) {
         }
     } else {
         println!("{}", printed);
+
+        if !summary.is_empty() {
+            println!("{}", summary);
+        }
     }
 }
 fn run_checks(
