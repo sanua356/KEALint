@@ -2,6 +2,8 @@
 
 use std::fmt::Display;
 
+use crate::checkers::Problem;
+
 #[derive(Debug)]
 pub enum RuleConfigs {
     Dhcp4,
@@ -60,5 +62,5 @@ pub trait Rule<T> {
 pub trait RuleChecker<T> {
     fn default() -> Self;
     fn values(&self) -> Vec<&[Box<dyn Rule<T>>]>;
-    fn run(&self, config: &T);
+    fn run(&self, config: &T) -> Vec<Problem>;
 }

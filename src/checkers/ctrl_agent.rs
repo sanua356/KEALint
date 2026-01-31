@@ -1,5 +1,5 @@
 use crate::{
-    checkers::{find_problems, tabled_print_problems},
+    checkers::{Problem, find_problems},
     common::{Rule, RuleChecker},
     configs::KEACtrlAgentConfig,
     rules::{
@@ -35,7 +35,7 @@ impl RuleChecker<KEACtrlAgentConfig> for RulesCtrlAgent {
         vec![&self.global, &self.loggers]
     }
 
-    fn run(&self, config: &KEACtrlAgentConfig) {
-        tabled_print_problems(find_problems(config, self.values()));
+    fn run(&self, config: &KEACtrlAgentConfig) -> Vec<Problem> {
+        find_problems(config, self.values())
     }
 }

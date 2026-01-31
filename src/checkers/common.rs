@@ -1,3 +1,4 @@
+use serde::Serialize;
 use tabled::{
     Table, Tabled,
     settings::{Modify, Style, Width, object::Columns},
@@ -5,7 +6,7 @@ use tabled::{
 
 use crate::common::Rule;
 
-#[derive(Tabled)]
+#[derive(Debug, Serialize, Tabled)]
 #[tabled(display(Option, "tabled::derive::display::option", ""))]
 pub struct Problem {
     pub name: String,
@@ -16,16 +17,15 @@ pub struct Problem {
     pub links: Option<String>,
 }
 
-pub fn tabled_print_problems(problems: Vec<Problem>) {
+pub fn tabled_print_problems(problems: Vec<Problem>) -> String {
     let mut table = Table::new(problems);
     table.with(Style::modern());
     table.with(Modify::new(Columns::one(0)).with(Width::wrap(20)));
     table.with(Modify::new(Columns::one(3)).with(Width::wrap(20)));
     table.with(Modify::new(Columns::one(4)).with(Width::wrap(20)));
     table.with(Modify::new(Columns::one(5)).with(Width::wrap(20)));
-    println!("{}", table);
 
-    println!("{} problem(s) found.", &table.count_rows() - 1);
+    table.to_string()
 }
 
 pub fn find_problems<T>(config: &T, values: Vec<&[Box<dyn Rule<T>>]>) -> Vec<Problem> {

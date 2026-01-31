@@ -1,5 +1,5 @@
 use crate::{
-    checkers::{find_problems, tabled_print_problems},
+    checkers::{Problem, find_problems},
     common::{Rule, RuleChecker},
     configs::v4::KEAv4Config,
     rules::{
@@ -137,7 +137,7 @@ impl RuleChecker<KEAv4Config> for RulesV4 {
         ]
     }
 
-    fn run(&self, config: &KEAv4Config) {
-        tabled_print_problems(find_problems(config, self.values()));
+    fn run(&self, config: &KEAv4Config) -> Vec<Problem> {
+        find_problems(config, self.values())
     }
 }
