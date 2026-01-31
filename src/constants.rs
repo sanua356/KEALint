@@ -22,6 +22,8 @@ lazy_static! {
     pub static ref IPV4_RANGE_REGEXP: Regex = Regex::new(r"^(25[0-5]|2[0-4]\d|1?\d?\d)(?:\.(25[0-5]|2[0-4]\d|1?\d?\d)){3}\s*-\s*(25[0-5]|2[0-4]\d|1?\d?\d)(?:\.(25[0-5]|2[0-4]\d|1?\d?\d)){3}$").unwrap();
     // Validate ip range in format: IPV4-IPV4
     pub static ref CIDR_V4_REGEXP: Regex = Regex::new(r"^(25[0-5]|2[0-4]\d|1?\d?\d)(?:\.(25[0-5]|2[0-4]\d|1?\d?\d)){3}/(3[0-2]|[12]?\d)$").unwrap();
+    // Validate bytes string in option-data value
+    pub static ref OPTION_DATA_BYTES_REGEXP: Regex = Regex::new(r"^((0x)?([0-9A-Fa-f]{2})+|([0-9A-Fa-f]{2})([ :][0-9A-Fa-f]{2})*)$").unwrap();
 }
 
 pub struct KEANoConfigurableOption {

@@ -23,7 +23,7 @@ use crate::{
         loggers::{
             DebugLoggersV4Rule, NoLinebreakMessagesLoggersV4, NoPercentMMessagesLoggersV4Rule,
         },
-        option_data::SpecifiedKEAManagedOptionsRule,
+        option_data::{IncompleteOctetsBytesInOptionValuesRule, SpecifiedKEAManagedOptionsRule},
         queue_control::NoEnableQueueAndMultithreadingTogetherRule,
         reservations::{
             AllReservationsOutOfPoolsRule, DisabledInSubnetReservationsWithEnabledOutOfPool,
@@ -49,7 +49,7 @@ pub struct RulesV4 {
     pub shared_networks: [Box<dyn Rule<KEAv4Config>>; 4],
     pub reservations: [Box<dyn Rule<KEAv4Config>>; 2],
     pub queue_control: [Box<dyn Rule<KEAv4Config>>; 1],
-    pub option_data: [Box<dyn Rule<KEAv4Config>>; 1],
+    pub option_data: [Box<dyn Rule<KEAv4Config>>; 2],
     pub dhcp_ddns: [Box<dyn Rule<KEAv4Config>>; 1],
     pub loggers: [Box<dyn Rule<KEAv4Config>>; 3],
 }
@@ -94,7 +94,10 @@ impl RuleChecker<KEAv4Config> for RulesV4 {
                 Box::new(DisabledInSubnetReservationsWithEnabledOutOfPool),
             ],
             queue_control: [Box::new(NoEnableQueueAndMultithreadingTogetherRule)],
-            option_data: [Box::new(SpecifiedKEAManagedOptionsRule)],
+            option_data: [
+                Box::new(SpecifiedKEAManagedOptionsRule),
+                Box::new(IncompleteOctetsBytesInOptionValuesRule),
+            ],
             dhcp_ddns: [Box::new(NotDDNSQualifyingSuffixWithEnabledDDNSUpdatesRule)],
             loggers: [
                 Box::new(DebugLoggersV4Rule),
