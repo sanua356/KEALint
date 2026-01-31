@@ -7,7 +7,7 @@ pub use relay::KEAv4Relay;
 pub use shared::*;
 pub use subnets::{KEAv4PoolVariant, KEAv4Subnet};
 
-use super::shared::{dhcp_queue_control, hooks, loggers, reservations};
+use super::shared::{allocator, dhcp_queue_control, hooks, loggers, reservations};
 
 mod client_classes;
 mod config_control;
@@ -28,6 +28,7 @@ mod subnets;
 pub struct KEAv4Config {
     pub server_tag: Option<String>,
 
+    pub allocator: Option<allocator::KEAAllocatorTypes>,
     pub valid_lifetime: u32,
     pub renew_timer: u32,
     pub rebind_timer: u32,

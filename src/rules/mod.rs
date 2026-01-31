@@ -1,3 +1,4 @@
+pub mod allocator;
 pub mod client_classes;
 pub mod ctrl_agent;
 pub mod ddns_server;

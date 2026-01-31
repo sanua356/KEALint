@@ -3,6 +3,10 @@ use crate::{
     common::{Rule, RuleChecker},
     configs::v4::KEAv4Config,
     rules::{
+        allocator::{
+            NotSelectFLQAllocatorInGlobalLevelConfig,
+            NotSelectIterativeAllocatorForSharedLeaseDatabase,
+        },
         client_classes::{
             EvaluateRequiredAsAdditionalClassesRule, NotLifetimeForAdditionalClassesRule,
             NotRecommendedPrefixAFTER_ClassesRule,
@@ -43,6 +47,7 @@ use crate::{
 
 pub struct RulesV4 {
     pub interfaces: [Box<dyn Rule<KEAv4Config>>; 1],
+    pub allocators: [Box<dyn Rule<KEAv4Config>>; 2],
     pub lease_database: [Box<dyn Rule<KEAv4Config>>; 2],
     pub hooks: [Box<dyn Rule<KEAv4Config>>; 9],
     pub subnets: [Box<dyn Rule<KEAv4Config>>; 3],
@@ -59,6 +64,10 @@ impl RuleChecker<KEAv4Config> for RulesV4 {
     fn default() -> Self {
         RulesV4 {
             interfaces: [Box::new(NoInterfacesInInterfacesConfigRule)],
+            allocators: [
+                Box::new(NotSelectFLQAllocatorInGlobalLevelConfig),
+                Box::new(NotSelectIterativeAllocatorForSharedLeaseDatabase),
+            ],
             lease_database: [
                 Box::new(NoEnabledPersistFlagForMemfileLeasesRule),
                 Box::new(NotChangeStopRetryExitStrategyOnFailRule),
@@ -112,6 +121,7 @@ impl RuleChecker<KEAv4Config> for RulesV4 {
     fn values(&self) -> Vec<&[Box<dyn Rule<KEAv4Config>>]> {
         vec![
             &self.interfaces,
+            &self.allocators,
             &self.lease_database,
             &self.hooks,
             &self.subnets,
