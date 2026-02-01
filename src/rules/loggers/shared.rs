@@ -77,10 +77,10 @@ pub fn get_no_linebreak_in_pattern_rule(
         if let Some(output_options) = &logger.output_options {
             for (idx_options, options) in output_options.iter().enumerate() {
                 if let Some(pattern) = &options.pattern
-                    && !pattern.ends_with("\\n")
+                    && !pattern.ends_with(r#"\n"#)
                 {
                     results.push(RuleResult {
-	                    description: format!("In the '{}' configuration, the logger named '{}' by the key 'pattern' does not have the literals '\\n'. Log messages will not be transferred to a new line.", config_type, logger.name),
+	                    description: format!(r#"In the '{}' configuration, the logger named '{}' by the key 'pattern' does not have the literals '\n'. Log messages will not be transferred to a new line."#, config_type, logger.name),
                      	places: Some(vec![format!("loggers.{}.output-options.{}.pattern", idx_logger, idx_options)]),
 	                    links: Some(vec!["https://kea.readthedocs.io/en/latest/arm/logging.html#logging-message-format"]),
                     });
