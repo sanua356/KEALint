@@ -307,8 +307,8 @@ It is recommended to arrange the hooks in the order of the following principles:
 - Put the Flex ID hook at the top of the list (clause 16.3.1).
 - Put Forensic Logging last in the list (clause 16.3.1).
 - Lease Commands must be in front of High Availability (clause 16.12.6).
-- Ping Check must be placed before Lease Commands (clause 16.15.12)
-- Host Cache must be placed before RADIUS (clause 16.15.12)
+- Ping Check must be placed before Lease Commands (clause 16.15.12).
+- Host Cache must be placed before RADIUS (clause 16.15.12).
 
 ```js
 {

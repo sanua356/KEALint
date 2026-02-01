@@ -84,7 +84,7 @@ impl Rule<KEAv4Config> for BadHooksOrderRule {
             if let (Some(lease_index), Some(ping_check_index)) =
                 (lease_commands_hook_index, ping_check_hook_index)
             {
-                // Ping Check must be placed before Lease Commands (clause 16.15.12)
+                // Ping Check must be placed before Lease Commands (clause 16.15.12).
                 if ping_check_index > lease_index {
                     results.push(RuleResult {
 			            description: format!("For correct operation, the '{}' hook must be specified before the '{}' hook.", PING_CHECK_HOOK_LIBRARY, LEASE_COMMANDS_HOOK_LIBRARY),
@@ -105,7 +105,7 @@ impl Rule<KEAv4Config> for BadHooksOrderRule {
             if let (Some(host_cache_index), Some(radius_index)) =
                 (host_cache_hook_index, radius_hook_index)
             {
-                // Host Cache must be placed before RADIUS (clause 16.15.12)
+                // Host Cache must be placed before RADIUS (clause 16.15.12).
                 if host_cache_index > radius_index {
                     results.push(RuleResult {
 				            description: format!("For correct operation, the '{}' hook must be specified before the '{}' hook.", HOST_CACHE_HOOK_LIBRARY, RADIUS_HOOK_LIBRARY),
