@@ -74,17 +74,16 @@ mod tests {
                 .unwrap();
 
         let hooks = serde_json::json!([{
-            "library": "/usr/local/lib/kea/hooks/libdhcp_radius.so",
+            "library": "libdhcp_radius.so",
             "parameters": {
-
               "dictionary": "/etc/kea/radius/dictionary",
-
               "bindaddr": "*"
              }
            },
            {
-                 "library": "/usr/local/lib/kea/hooks/libdhcp_host_cache.so"
-        }]);
+                "library": "libdhcp_host_cache.so"
+           }
+        ]);
         json_value["hooks-libraries"] = hooks;
         let data: KEAv4Config = serde_json::from_value(json_value).unwrap();
 

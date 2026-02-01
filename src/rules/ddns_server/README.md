@@ -63,7 +63,7 @@ Set local IP-address in `ip-address` key.
 
 When DDNS updates are enabled, there are situations where the client cannot be uniquely identified in a particular domain. It is recommended to specify a suffix for automatic host generation using the `ddns-qualifying-suffix` key in order to identify clients by a specific attribute.
 
-```json
+```js
 {
 	"Dhcp4": {
 	    "interfaces-config": {
@@ -106,7 +106,7 @@ When DDNS updates are enabled, there are situations where the client cannot be u
 
 Specify a suffix for automatic host generation using the `ddns-qualifying-suffix` key in order to identify clients by a specific attribute.
 
-```json
+```js
 {
 	"Dhcp4": {
 	    "interfaces-config": {

@@ -89,7 +89,7 @@ impl Rule<KEAv4Config> for BadHooksOrderRule {
                     results.push(RuleResult {
 			            description: format!("For correct operation, the '{}' hook must be specified before the '{}' hook.", PING_CHECK_HOOK_LIBRARY, LEASE_COMMANDS_HOOK_LIBRARY),
 			            places: Some(vec![format!("hooks-libraries.{}", lease_index), format!("hooks-libraries.{}", ping_check_index)]),
-			            links: Some(vec!["https://kea.readthedocs.io/en/kea-2.7.7/arm/hooks.html#binding-variables"]),
+			            links: Some(vec!["https://kea.readthedocs.io/en/latest/arm/hooks.html#binding-variables"]),
 		            });
                 }
             }
@@ -152,10 +152,6 @@ mod tests {
             }
         },
         {
-            "library": "libdhcp_pgsql.so",
-            "parameters": {}
-        },
-        {
             "library": "host_cache.so",
             "parameters": {}
         },
@@ -165,10 +161,6 @@ mod tests {
                 "dictionary": "/etc/kea/radius/dictionary",
                 "bindaddr": "*"
             }
-        },
-        {
-            "library": "libdhcp_mysql.so",
-            "parameters": {}
         },
         {
             "library": "libdhcp_ping_check.so",
