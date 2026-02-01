@@ -11,11 +11,11 @@ Implements a flexible **CLI interface** for interaction and output of verificati
 ## Example of work
 
  **Run command:**
- ```
+ ```bash
 kealint --dir-path ./kea-configs
  ```
   **Result:**
- ```
+ ```bash
 ┌──────────────────────┬──────────────┬────────────┬──────────────────────┬──────────────────────┬──────────────────────┐
 │ name                 │ config_type  │ importance │ description          │ places               │ links                │
 ├──────────────────────┼──────────────┼────────────┼──────────────────────┼──────────────────────┼──────────────────────┤
@@ -81,6 +81,14 @@ KEALint implements a set of rules for configurations from the following set:
 |Reservations|[See more](https://github.com/sanua356/KEALint/tree/master/src/rules/reservations)|3|
 |Shared Networks|[See more](https://github.com/sanua356/KEALint/tree/master/src/rules/shared_networks)|4|
 |Subnets|[See more](https://github.com/sanua356/KEALint/tree/master/src/rules/subnets)|3|
+
+## Rule importance
+
+|Importance|Influence|
+|--|--|
+|INFO|A rule that does not directly affect the operation of the server, but can improve its performance.|
+|WARNING|A rule whose incorrect configuration can lead to incorrect behavior or malfunction of the server.|
+|CRITICAL|The rule that is most likely to disrupt the server.|
 
 ## Build
 
