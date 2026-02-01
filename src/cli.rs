@@ -12,7 +12,7 @@ use crate::{
         Problem, RulesCtrlAgent, RulesD2, RulesV4, get_summary_problems, tabled_print_problems,
     },
     common::RuleChecker,
-    configs::{KEACtrlAgentConfig, KEAD2Config, KEAv4Config},
+    configs::{KEACtrlAgentConfigFile, KEAD2ConfigFile, KEAv4ConfigFile},
 };
 
 #[derive(Debug, Clone, Copy, ValueEnum)]
@@ -112,7 +112,7 @@ pub fn run_cli(args: CLIArgs) {
 
     let skip_not_exists = args.skip_not_exists;
 
-    let content_v4: Option<KEAv4Config> = match fs::read_to_string(&v4_filepath) {
+    let content_v4: Option<KEAv4ConfigFile> = match fs::read_to_string(&v4_filepath) {
         Ok(content) => match serde_json::from_str(&content) {
             Ok(config) => Some(config),
             Err(err) => panic!(
@@ -127,7 +127,7 @@ pub fn run_cli(args: CLIArgs) {
         ),
     };
 
-    let content_d2: Option<KEAD2Config> = match fs::read_to_string(&d2_filepath) {
+    let content_d2: Option<KEAD2ConfigFile> = match fs::read_to_string(&d2_filepath) {
         Ok(content) => match serde_json::from_str(&content) {
             Ok(config) => Some(config),
             Err(err) => panic!(
@@ -142,7 +142,7 @@ pub fn run_cli(args: CLIArgs) {
         ),
     };
 
-    let content_ctrl_agent: Option<KEACtrlAgentConfig> =
+    let content_ctrl_agent: Option<KEACtrlAgentConfigFile> =
         match fs::read_to_string(&ctrl_agent_filepath) {
             Ok(content) => match serde_json::from_str(&content) {
                 Ok(config) => Some(config),
@@ -158,13 +158,11 @@ pub fn run_cli(args: CLIArgs) {
             ),
         };
 
-    let problems: Vec<Problem>;
-
-    if args.use_threads {
-        problems = run_checks_parallel(content_v4, content_d2, content_ctrl_agent);
+    let problems: Vec<Problem> = if args.use_threads {
+        run_checks_parallel(content_v4, content_d2, content_ctrl_agent)
     } else {
-        problems = run_checks(content_v4, content_d2, content_ctrl_agent);
-    }
+        run_checks(content_v4, content_d2, content_ctrl_agent)
+    };
 
     let summary = if args.with_summary {
         get_summary_problems(&problems)
@@ -194,7 +192,7 @@ pub fn run_cli(args: CLIArgs) {
             }
             Err(err) => panic!(
                 "An error occurred while verifying the access rights of the output file: {}",
-                err.to_string()
+                err
             ),
         }
     } else {
@@ -206,34 +204,34 @@ pub fn run_cli(args: CLIArgs) {
     }
 }
 fn run_checks(
-    config_v4: Option<KEAv4Config>,
-    config_d2: Option<KEAD2Config>,
-    config_ctrl_agent: Option<KEACtrlAgentConfig>,
+    config_v4: Option<KEAv4ConfigFile>,
+    config_d2: Option<KEAD2ConfigFile>,
+    config_ctrl_agent: Option<KEACtrlAgentConfigFile>,
 ) -> Vec<Problem> {
     let mut results: Vec<Problem> = Vec::new();
 
     if let Some(config) = config_v4 {
         let checker: RulesV4 = RulesV4::default();
-        results.extend(checker.run(&config));
+        results.extend(checker.run(&config.dhcp4));
     }
 
     if let Some(config) = config_d2 {
         let checker: RulesD2 = RulesD2::default();
-        results.extend(checker.run(&config));
+        results.extend(checker.run(&config.dhcp_ddns));
     }
 
     if let Some(config) = config_ctrl_agent {
         let checker: RulesCtrlAgent = RulesCtrlAgent::default();
-        results.extend(checker.run(&config));
+        results.extend(checker.run(&config.ctrl_agent));
     }
 
     results
 }
 
 fn run_checks_parallel(
-    config_v4: Option<KEAv4Config>,
-    config_d2: Option<KEAD2Config>,
-    config_ctrl_agent: Option<KEACtrlAgentConfig>,
+    config_v4: Option<KEAv4ConfigFile>,
+    config_d2: Option<KEAD2ConfigFile>,
+    config_ctrl_agent: Option<KEACtrlAgentConfigFile>,
 ) -> Vec<Problem> {
     let results: Arc<Mutex<Vec<Problem>>> = Arc::new(Mutex::new(Vec::new()));
 
@@ -244,7 +242,7 @@ fn run_checks_parallel(
 
         let handle = thread::spawn(move || {
             let checker: RulesV4 = RulesV4::default();
-            let check_results = checker.run(&config);
+            let check_results = checker.run(&config.dhcp4);
 
             let mut res = cloned_results.lock().expect("It was not possible to block the stream for recording the results of the configuration check.");
             res.extend(check_results);
@@ -258,7 +256,7 @@ fn run_checks_parallel(
 
         let handle = thread::spawn(move || {
             let checker: RulesD2 = RulesD2::default();
-            let check_results = checker.run(&config);
+            let check_results = checker.run(&config.dhcp_ddns);
 
             let mut res = cloned_results.lock().expect("It was not possible to block the stream for recording the results of the configuration check.");
             res.extend(check_results);
@@ -272,7 +270,7 @@ fn run_checks_parallel(
 
         let handle = thread::spawn(move || {
             let checker: RulesCtrlAgent = RulesCtrlAgent::default();
-            let check_results = checker.run(&config);
+            let check_results = checker.run(&config.ctrl_agent);
 
             let mut res = cloned_results.lock().expect("It was not possible to block the stream for recording the results of the configuration check.");
             res.extend(check_results);

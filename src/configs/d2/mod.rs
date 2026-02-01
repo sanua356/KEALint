@@ -17,3 +17,9 @@ pub struct KEAD2Config {
 
     pub loggers: Option<Vec<loggers::KEALogger>>,
 }
+
+#[derive(Debug, Deserialize)]
+pub struct KEAD2ConfigFile {
+    #[serde(rename = "DhcpDdns")]
+    pub dhcp_ddns: KEAD2Config,
+}

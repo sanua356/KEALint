@@ -71,3 +71,9 @@ pub struct KEAv4Config {
 
     pub loggers: Option<Vec<loggers::KEALogger>>,
 }
+
+#[derive(Debug, Deserialize)]
+pub struct KEAv4ConfigFile {
+    #[serde(rename = "Dhcp4")]
+    pub dhcp4: KEAv4Config,
+}

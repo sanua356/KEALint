@@ -21,3 +21,9 @@ pub struct KEACtrlAgentConfig {
 
     pub loggers: Option<Vec<loggers::KEALogger>>,
 }
+
+#[derive(Debug, Deserialize)]
+pub struct KEACtrlAgentConfigFile {
+    #[serde(rename = "Control-agent")]
+    pub ctrl_agent: KEACtrlAgentConfig,
+}
