@@ -52,7 +52,7 @@ pub fn get_no_percent_m_in_pattern_rule(
                         results.push(RuleResult {
 		                    description: format!("In the '{}' configuration, the logger named '{}' by the key 'pattern' does not have the literals '%m' outside datetime. The log message will not be available without it.", config_type, logger.name),
 		                    places: Some(vec![format!("loggers.{}.output-options.{}.pattern", idx_logger, idx_options)]),
-		                    links: None,
+		                    links: Some(vec!["https://kea.readthedocs.io/en/latest/arm/logging.html#logging-message-format"]),
                         });
                     }
                 }

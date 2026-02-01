@@ -29,7 +29,7 @@ pub static ALL_RESERVATIONS_OUT_OF_POOLS_RULE_TEMPLATE: &str = r#"
 				{
 					"hostname": "special-snowflake",
 					"hw-address": "1a:1b:1c:1d:1e:1f",
-					"ip-address": "1.0.0.100"
+					"ip-address": "1.6.0.100"
 				},
 				{
 					"hostname": "out_of_pool_reservation",

@@ -11,7 +11,7 @@ impl Rule<KEAv4Config> for NoEnabledPersistFlagForMemfileLeasesRule {
     }
 
     fn get_level(&self) -> RuleLevels {
-        RuleLevels::Warning
+        RuleLevels::Critical
     }
 
     fn get_config_type(&self) -> RuleConfigs {

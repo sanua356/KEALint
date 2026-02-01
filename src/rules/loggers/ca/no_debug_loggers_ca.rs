@@ -5,11 +5,11 @@ use crate::{
 
 use super::super::shared::get_debug_loggers_rule;
 
-pub struct DebugLoggersCtrlAgentRule;
+pub struct NoDebugLoggersCtrlAgentRule;
 
-impl Rule<KEACtrlAgentConfig> for DebugLoggersCtrlAgentRule {
+impl Rule<KEACtrlAgentConfig> for NoDebugLoggersCtrlAgentRule {
     fn get_name(&self) -> &'static str {
-        "LOGGERS::DebugLoggersRule"
+        "LOGGERS::NoDebugLoggersRule"
     }
     fn get_level(&self) -> RuleLevels {
         RuleLevels::Info
@@ -34,14 +34,16 @@ mod tests {
         configs::{KEACtrlAgentConfig, loggers::KEALoggerSeverityTypes},
     };
 
-    use super::{super::_tests::DEBUG_LOGGERS_CTRL_AGENT_RULE_TEMPLATE, DebugLoggersCtrlAgentRule};
+    use super::{
+        super::_tests::DEBUG_LOGGERS_CTRL_AGENT_RULE_TEMPLATE, NoDebugLoggersCtrlAgentRule,
+    };
 
     #[test]
     fn check_expected_trigger() {
         let data: KEACtrlAgentConfig =
             serde_json::from_str(DEBUG_LOGGERS_CTRL_AGENT_RULE_TEMPLATE).unwrap();
 
-        let rule = DebugLoggersCtrlAgentRule;
+        let rule = NoDebugLoggersCtrlAgentRule;
         assert!(rule.check(&data).is_some());
     }
 
@@ -54,7 +56,7 @@ mod tests {
 
         let data: KEACtrlAgentConfig = serde_json::from_value(json_value).unwrap();
 
-        let rule = DebugLoggersCtrlAgentRule;
+        let rule = NoDebugLoggersCtrlAgentRule;
         assert!(rule.check(&data).is_none());
     }
 }

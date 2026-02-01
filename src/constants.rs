@@ -31,7 +31,6 @@ pub struct KEANoConfigurableOption {
     pub name: &'static str,
 }
 
-#[allow(dead_code)]
 pub static KEA_NO_CONFIGURABLE_OPTIONS: [KEANoConfigurableOption; 22] = [
     KEANoConfigurableOption {
         code: 1,

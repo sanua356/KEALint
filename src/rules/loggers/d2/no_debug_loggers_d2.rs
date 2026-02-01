@@ -5,11 +5,11 @@ use crate::{
 
 use super::super::shared::get_debug_loggers_rule;
 
-pub struct DebugLoggersD2Rule;
+pub struct NoDebugLoggersD2Rule;
 
-impl Rule<KEAD2Config> for DebugLoggersD2Rule {
+impl Rule<KEAD2Config> for NoDebugLoggersD2Rule {
     fn get_name(&self) -> &'static str {
-        "LOGGERS::DebugLoggersRule"
+        "LOGGERS::NoDebugLoggersRule"
     }
     fn get_level(&self) -> RuleLevels {
         RuleLevels::Info
@@ -34,13 +34,13 @@ mod tests {
         configs::{KEAD2Config, loggers::KEALoggerSeverityTypes},
     };
 
-    use super::{super::_tests::DEBUG_LOGGERS_D2_RULE_TEMPLATE, DebugLoggersD2Rule};
+    use super::{super::_tests::DEBUG_LOGGERS_D2_RULE_TEMPLATE, NoDebugLoggersD2Rule};
 
     #[test]
     fn check_expected_trigger() {
         let data: KEAD2Config = serde_json::from_str(DEBUG_LOGGERS_D2_RULE_TEMPLATE).unwrap();
 
-        let rule = DebugLoggersD2Rule;
+        let rule = NoDebugLoggersD2Rule;
         assert!(rule.check(&data).is_some());
     }
 
@@ -52,7 +52,7 @@ mod tests {
 
         let data: KEAD2Config = serde_json::from_value(json_value).unwrap();
 
-        let rule = DebugLoggersD2Rule;
+        let rule = NoDebugLoggersD2Rule;
         assert!(rule.check(&data).is_none());
     }
 }

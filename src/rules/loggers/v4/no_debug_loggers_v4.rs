@@ -5,11 +5,11 @@ use crate::{
 
 use super::super::shared::get_debug_loggers_rule;
 
-pub struct DebugLoggersV4Rule;
+pub struct NoDebugLoggersV4Rule;
 
-impl Rule<KEAv4Config> for DebugLoggersV4Rule {
+impl Rule<KEAv4Config> for NoDebugLoggersV4Rule {
     fn get_name(&self) -> &'static str {
-        "LOGGERS::DebugLoggersRule"
+        "LOGGERS::NoDebugLoggersRule"
     }
     fn get_level(&self) -> RuleLevels {
         RuleLevels::Info
@@ -34,13 +34,13 @@ mod tests {
         configs::{loggers::KEALoggerSeverityTypes, v4::KEAv4Config},
     };
 
-    use super::{super::_tests::DEBUG_LOGGERS_V4_RULE_TEMPLATE, DebugLoggersV4Rule};
+    use super::{super::_tests::DEBUG_LOGGERS_V4_RULE_TEMPLATE, NoDebugLoggersV4Rule};
 
     #[test]
     fn check_expected_trigger() {
         let data: KEAv4Config = serde_json::from_str(DEBUG_LOGGERS_V4_RULE_TEMPLATE).unwrap();
 
-        let rule = DebugLoggersV4Rule;
+        let rule = NoDebugLoggersV4Rule;
         assert!(rule.check(&data).is_some());
     }
 
@@ -52,7 +52,7 @@ mod tests {
 
         let data: KEAv4Config = serde_json::from_value(json_value).unwrap();
 
-        let rule = DebugLoggersV4Rule;
+        let rule = NoDebugLoggersV4Rule;
         assert!(rule.check(&data).is_none());
     }
 }

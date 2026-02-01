@@ -8,7 +8,7 @@ use crate::{
             BadTKeyGSSTSIGHookTimeoutsRule, NoCredentialsCacheAndClientKeytabTogetherInGSSTSIGRule,
         },
         loggers::{
-            DebugLoggersD2Rule, NoLinebreakMessagesLoggersD2, NoPercentMMessagesLoggersD2Rule,
+            NoDebugLoggersD2Rule, NoLinebreakMessagesLoggersD2, NoPercentMMessagesLoggersD2Rule,
         },
     },
 };
@@ -28,7 +28,7 @@ impl RuleChecker<KEAD2Config> for RulesD2 {
                 Box::new(NoCredentialsCacheAndClientKeytabTogetherInGSSTSIGRule),
             ],
             loggers: [
-                Box::new(DebugLoggersD2Rule),
+                Box::new(NoDebugLoggersD2Rule),
                 Box::new(NoLinebreakMessagesLoggersD2),
                 Box::new(NoPercentMMessagesLoggersD2Rule),
             ],

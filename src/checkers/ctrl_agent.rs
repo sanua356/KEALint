@@ -5,7 +5,7 @@ use crate::{
     rules::{
         ctrl_agent::{NoAllControlSocketsSpecifiedRule, NotLocalIPWithoutHTTPSRule},
         loggers::{
-            DebugLoggersCtrlAgentRule, NoLinebreakMessagesLoggersCtrlAgent,
+            NoDebugLoggersCtrlAgentRule, NoLinebreakMessagesLoggersCtrlAgent,
             NoPercentMMessagesLoggersCtrlAgentRule,
         },
     },
@@ -24,7 +24,7 @@ impl RuleChecker<KEACtrlAgentConfig> for RulesCtrlAgent {
                 Box::new(NoAllControlSocketsSpecifiedRule),
             ],
             loggers: [
-                Box::new(DebugLoggersCtrlAgentRule),
+                Box::new(NoDebugLoggersCtrlAgentRule),
                 Box::new(NoLinebreakMessagesLoggersCtrlAgent),
                 Box::new(NoPercentMMessagesLoggersCtrlAgentRule),
             ],
