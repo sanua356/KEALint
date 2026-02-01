@@ -3,7 +3,9 @@
 ## Introduction
 
 KEALint - ⚡ blazingly fast ⚡ static configuration analyzer ISC KEA DHCP for version 3.x.x, **written in Rust!**
+
 **More than 40 validation rules** for DHCPv4, D2, and Control Agent configurations.
+
 Implements a flexible **CLI interface** for interaction and output of verification results.
  
 ## Example of work
