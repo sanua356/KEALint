@@ -50,7 +50,7 @@ mod tests {
         let mut json_value: Value =
             serde_json::from_str(NO_LINEBREAK_MESSAGES_LOGGERS_CTRL_AGENT_RULE_TEMPLATE).unwrap();
         json_value["loggers"][0]["output-options"][0]["pattern"] =
-            Value::from("%d{%Y-%m-%d %H:%M:%S.%q} %-5p [%c/%i.%t] %m \\n");
+            Value::from("%d{%Y-%m-%d %H:%M:%S.%q} %-5p [%c/%i.%t] %m\n");
 
         let data: KEACtrlAgentConfig = serde_json::from_value(json_value).unwrap();
 
