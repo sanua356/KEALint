@@ -11,11 +11,11 @@ Implements a flexible **CLI interface** for interaction and output of verificati
 ## Example of work
 
  **Run command:**
- ```bash
-kealint --dir-path ./kea-configs
+ ```sh
+./kealint --dir-path ./kea-configs
  ```
   **Result:**
- ```bash
+ ```
 ┌──────────────────────┬──────────────┬────────────┬──────────────────────┬──────────────────────┬──────────────────────┐
 │ name                 │ config_type  │ importance │ description          │ places               │ links                │
 ├──────────────────────┼──────────────┼────────────┼──────────────────────┼──────────────────────┼──────────────────────┤
@@ -40,6 +40,8 @@ kealint --dir-path ./kea-configs
 │                      │              │            │ led.                 │                      │                      │
 └──────────────────────┴──────────────┴────────────┴──────────────────────┴──────────────────────┴──────────────────────┘
 ```
+
+See [more examples.](https://github.com/sanua356/KEALint/blob/master/EXAMPLES.md)
 
 ## CLI Parameters
 
