@@ -136,7 +136,7 @@ Output in tabular format to a file, its own path to all types of configurations.
 
  ```
 ./kealint --d2-filepath ./a/kea-dhcp-ddns.conf --ctrl-agent-filepath ./b/kea-ctrl-a  
-gent.conf --v4-filepath ./c/kea-dhcp4.conf --format table --output-filepath ./output.txttxt
+gent.conf --v4-filepath ./c/kea-dhcp4.conf --format table --output-filepath ./output.txt
  ```
  
  **Result:**
