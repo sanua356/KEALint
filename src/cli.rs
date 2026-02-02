@@ -103,11 +103,11 @@ pub fn run_cli(args: CLIArgs) {
     }
 
     if let Some(d2_path_custom) = args.d2_filepath {
-        v4_filepath = Path::new(&d2_path_custom).to_path_buf();
+        d2_filepath = Path::new(&d2_path_custom).to_path_buf();
     }
 
     if let Some(ctrl_agent_path_custom) = args.ctrl_agent_filepath {
-        v4_filepath = Path::new(&ctrl_agent_path_custom).to_path_buf();
+        ctrl_agent_filepath = Path::new(&ctrl_agent_path_custom).to_path_buf();
     }
 
     let skip_not_exists = args.skip_not_exists;
