@@ -28,7 +28,7 @@ fn get_kea_incomplete_bytes_options(
 				option_value
                 ),
                 places: Some(vec![format!("{}.{}", placement, idx_option)]),
-                links: Some(vec!["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#standard-dhcpv4-options"]),
+                links: Some(&["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#standard-dhcpv4-options"]),
             });
         }
     }

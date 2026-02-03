@@ -19,8 +19,8 @@ pub struct Problem {
     #[tabled(display("display_vec"))]
     pub places: Option<Vec<String>>,
 
-    #[tabled(display("display_vec"))]
-    pub links: Option<Vec<&'static str>>,
+    #[tabled(display("display_slice"))]
+    pub links: Option<&'static [&'static str]>,
 }
 
 fn display_vec<T: std::fmt::Display>(v: &Option<Vec<T>>) -> String {
@@ -30,6 +30,13 @@ fn display_vec<T: std::fmt::Display>(v: &Option<Vec<T>>) -> String {
             .map(|x| x.to_string())
             .collect::<Vec<_>>()
             .join("\n\n "),
+        None => String::new(),
+    }
+}
+
+fn display_slice(slice: &Option<&'static [&'static str]>) -> String {
+    match slice {
+        Some(s) => s.join("\n\n "),
         None => String::new(),
     }
 }

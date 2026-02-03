@@ -22,7 +22,7 @@ impl Rule<KEAv4Config> for NoInterfacesInInterfacesConfigRule {
 	            vec![RuleResult {
 	                description: "No network interfaces are specified in the server configuration. Addresses will not be serviced.".to_string(),
 	                places: Some(vec!["interfaces-config.interfaces".to_string()]),
-					links: Some(vec!["https://kea.readthedocs.io/en/latest/arm/dhcp6-srv.html#interface-configuration"])
+					links: Some(&["https://kea.readthedocs.io/en/latest/arm/dhcp6-srv.html#interface-configuration"])
 	            }]
             );
         }

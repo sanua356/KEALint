@@ -21,9 +21,7 @@ impl Rule<KEAv4Config> for NotSelectFLQAllocatorInGlobalLevelConfig {
         {
             return Some(vec![RuleResult {
                 description: "The 'FLQ' address allocator is not recommended for use at the global configuration level.".to_string(),
-                links: Some(vec![
-                    "https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#free-lease-queue-allocator",
-                ]),
+                links: Some(&["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#free-lease-queue-allocator"]),
                 places: Some(vec!["allocator".to_string()]),
             }]);
         }

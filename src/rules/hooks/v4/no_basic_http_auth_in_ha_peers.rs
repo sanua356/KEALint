@@ -37,7 +37,7 @@ impl Rule<KEAv4Config> for NoBasicHTTPAuthInHAPeersRule {
                                 results.push(RuleResult {
                                         description: format!("The peer named '{}' of the high availability hook lacks basic HTTP authentication.", peer["name"].as_str().unwrap()),
                                         places: Some(vec![format!("hooks-libraries.{}.parameters.high-availability.{}.peers.{}", idx_hook, idx_ha, idx_peer)]),
-                                        links: Some(vec!["https://kea.readthedocs.io/en/latest/arm/hooks.html#hot-standby-configuration"]),
+                                        links: Some(&["https://kea.readthedocs.io/en/latest/arm/hooks.html#hot-standby-configuration"]),
                                     });
                             }
                         }

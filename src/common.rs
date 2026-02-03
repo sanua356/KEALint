@@ -44,7 +44,7 @@ impl Display for RuleConfigs {
 pub struct RuleResult {
     pub description: String,
     pub places: Option<Vec<String>>,
-    pub links: Option<Vec<&'static str>>,
+    pub links: Option<&'static [&'static str]>,
 }
 
 pub trait Rule<T> {
@@ -54,9 +54,7 @@ pub trait Rule<T> {
 
     fn get_level(&self) -> RuleLevels;
 
-    fn get_config_type(&self) -> RuleConfigs {
-        RuleConfigs::Dhcp4
-    }
+    fn get_config_type(&self) -> RuleConfigs;
 }
 
 pub trait RuleChecker<T> {

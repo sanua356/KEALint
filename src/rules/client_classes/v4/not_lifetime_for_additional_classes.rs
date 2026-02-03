@@ -31,9 +31,7 @@ impl Rule<KEAv4Config> for NotLifetimeForAdditionalClassesRule {
 	                    class.name
                     ),
                     places: Some(vec![format!("client-classes.{}", idx)]),
-                    links: Some(vec![
-                        "https://kea.readthedocs.io/en/stable/arm/classify.html#class-priority",
-                    ]),
+                    links: Some(&["https://kea.readthedocs.io/en/stable/arm/classify.html#class-priority"]),
                 });
             }
         }

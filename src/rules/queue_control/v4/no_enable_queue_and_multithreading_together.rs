@@ -23,7 +23,7 @@ impl Rule<KEAv4Config> for NoEnableQueueAndMultithreadingTogetherRule {
             return Some(vec![RuleResult {
                 description: "The 'dhcp-queue-control' parameters will not work while multithreading mode is activated for KEA in the global configuration using the 'multi-threading' key.".to_string(),
                 places: Some(vec!["dhcp-queue-control.enable-queue".to_string(), "multi-threading.enable-multi-threading".to_string()]),
-                links: Some(vec![
+                links: Some(&[
                     "https://kea.readthedocs.io/en/latest/arm/congestion-handling.html#configuring-congestion-handling",
                 ]),
             }]);

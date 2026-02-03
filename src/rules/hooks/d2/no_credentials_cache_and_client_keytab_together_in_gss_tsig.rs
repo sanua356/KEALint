@@ -38,7 +38,7 @@ impl Rule<KEAD2Config> for NoCredentialsCacheAndClientKeytabTogetherInGSSTSIGRul
                     GSS_TSIG_HOOK_LIBRARY
                 ),
                 places: Some(vec![format!("hooks-libraries.{}", idx_hook)]),
-                links: Some(vec![
+                links: Some(&[
                     "https://kea.readthedocs.io/en/latest/arm/integrations.html#using-gss-tsig",
                 ]),
             }]);

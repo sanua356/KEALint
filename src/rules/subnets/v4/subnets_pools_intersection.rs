@@ -58,7 +58,7 @@ impl Rule<KEAv4Config> for SubnetsPoolsIntersectionRule {
                             b.subnet
                         ),
                         places: None,
-                        links: Some(vec!["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#configuration-of-ipv4-address-pools"]),
+                        links: Some(&["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#configuration-of-ipv4-address-pools"]),
                     });
                 }
             }

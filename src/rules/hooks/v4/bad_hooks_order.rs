@@ -36,7 +36,7 @@ impl Rule<KEAv4Config> for BadHooksOrderRule {
                     results.push(RuleResult {
 	                    description: format!("It is recommended to move the '{}' hook first in the list, otherwise the correct operation of the '{}' hook may be disrupted.", FLEX_ID_HOOK_LIBRARY, HIGH_AVAILABILITY_HOOK_LIBRARY),
 	                    places: Some(vec![format!("hooks-libraries.{}", index)]),
-	                    links: Some(vec!["https://kea.readthedocs.io/en/latest/arm/hooks.html#order-of-configuration"]),
+	                    links: Some(&["https://kea.readthedocs.io/en/latest/arm/hooks.html#order-of-configuration"]),
                     });
                 }
             }
@@ -51,7 +51,7 @@ impl Rule<KEAv4Config> for BadHooksOrderRule {
                     results.push(RuleResult {
 			            description: format!("It is recommended to move the '{}' hook last in the list to ensure that all higher-level hooks have already contributed to packet processing.", FORENSIC_LOGGING_HOOK_LIBRARY),
 			            places: Some(vec![format!("hooks-libraries.{}", index)]),
-			            links: Some(vec!["https://kea.readthedocs.io/en/latest/arm/hooks.html#order-of-configuration"]),
+			            links: Some(&["https://kea.readthedocs.io/en/latest/arm/hooks.html#order-of-configuration"]),
 		            });
                 }
             }
@@ -72,7 +72,7 @@ impl Rule<KEAv4Config> for BadHooksOrderRule {
                     results.push(RuleResult {
 			            description: format!("For correct operation, the '{}' hook must be specified before the '{}' hook.", LEASE_COMMANDS_HOOK_LIBRARY, HIGH_AVAILABILITY_HOOK_LIBRARY),
 			            places: Some(vec![format!("hooks-libraries.{}", lease_index), format!("hooks-libraries.{}", ha_index)]),
-			            links: Some(vec!["https://kea.readthedocs.io/en/latest/arm/hooks.html#load-balancing-configuration"]),
+			            links: Some(&["https://kea.readthedocs.io/en/latest/arm/hooks.html#load-balancing-configuration"]),
 		            });
                 }
             }
@@ -89,7 +89,7 @@ impl Rule<KEAv4Config> for BadHooksOrderRule {
                     results.push(RuleResult {
 			            description: format!("For correct operation, the '{}' hook must be specified before the '{}' hook.", PING_CHECK_HOOK_LIBRARY, LEASE_COMMANDS_HOOK_LIBRARY),
 			            places: Some(vec![format!("hooks-libraries.{}", lease_index), format!("hooks-libraries.{}", ping_check_index)]),
-			            links: Some(vec!["https://kea.readthedocs.io/en/latest/arm/hooks.html#binding-variables"]),
+			            links: Some(&["https://kea.readthedocs.io/en/latest/arm/hooks.html#binding-variables"]),
 		            });
                 }
             }
@@ -110,7 +110,7 @@ impl Rule<KEAv4Config> for BadHooksOrderRule {
                     results.push(RuleResult {
 				            description: format!("For correct operation, the '{}' hook must be specified before the '{}' hook.", HOST_CACHE_HOOK_LIBRARY, RADIUS_HOOK_LIBRARY),
 				            places: Some(vec![format!("hooks-libraries.{}", host_cache_index), format!("hooks-libraries.{}", radius_index)]),
-				            links: Some(vec!["https://kea.readthedocs.io/en/latest/arm/integrations.html#radius-hook-library-configuration"]),
+				            links: Some(&["https://kea.readthedocs.io/en/latest/arm/integrations.html#radius-hook-library-configuration"]),
 			            });
                 }
             }

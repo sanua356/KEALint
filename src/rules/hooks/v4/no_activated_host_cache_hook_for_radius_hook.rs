@@ -36,7 +36,7 @@ impl Rule<KEAv4Config> for NoActivatedHostCacheHookForRADIUSHookRule {
                     RADIUS_HOOK_LIBRARY, HOST_CACHE_HOOK_LIBRARY
                 ),
                 places: None,
-                links: Some(vec![
+                links: Some(&[
                     "https://kea.readthedocs.io/en/stable/arm/integrations.html#radius-hook-library-configuration",
                 ]),
             }]);

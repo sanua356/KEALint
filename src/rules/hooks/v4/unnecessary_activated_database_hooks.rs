@@ -74,7 +74,7 @@ impl Rule<KEAv4Config> for UnnecessaryActivatedDatabaseHooksRule {
 	            RuleResult {
 	                description: "The MySQL support hook is specified in the configuration of the hooks, but it does not serve any functionality.".to_string(),
 	                places: None,
-	                links: Some(vec!["https://kea.readthedocs.io/en/latest/arm/hooks.html#libdhcp-mysql-so-database-backend-for-mysql"])
+	                links: Some(&["https://kea.readthedocs.io/en/latest/arm/hooks.html#libdhcp-mysql-so-database-backend-for-mysql"])
             });
         }
 
@@ -83,7 +83,7 @@ impl Rule<KEAv4Config> for UnnecessaryActivatedDatabaseHooksRule {
                 RuleResult {
 	                description: "The PostgreSQL support hook is specified in the configuration of the hooks, but it does not serve any functionality.".to_string(),
 	                places: None,
-	                links: Some(vec!["https://kea.readthedocs.io/en/latest/arm/hooks.html#libdhcp-pgsql-so-database-backend-for-postgresql"])
+	                links: Some(&["https://kea.readthedocs.io/en/latest/arm/hooks.html#libdhcp-pgsql-so-database-backend-for-postgresql"])
 			});
         }
 

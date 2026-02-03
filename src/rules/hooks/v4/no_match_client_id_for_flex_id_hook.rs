@@ -41,7 +41,7 @@ impl Rule<KEAv4Config> for NoMatchClientIdForFlexIDHookRule {
                     "match-client-id".to_string(),
                     format!("hooks-libraries.{}.parameters.replace-client-id", idx_hook),
                 ]),
-                links: Some(vec![
+                links: Some(&[
                     "https://kea.readthedocs.io/en/latest/arm/hooks.html#the-replace-client-id-flag",
                 ]),
             }]);

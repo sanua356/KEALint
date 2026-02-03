@@ -30,7 +30,7 @@ impl Rule<KEAv4Config> for UseUsrCheckHookRule {
                 USER_CHK_HOOK_LIBRARY
             ),
             places: Some(vec![format!("hooks-libraries.{}", idx_hook)]),
-            links: Some(vec![
+            links: Some(&[
                 "https://kea.readthedocs.io/en/latest/arm/hooks.html#libdhcp-user-chk-so-user-check",
             ]),
         }])

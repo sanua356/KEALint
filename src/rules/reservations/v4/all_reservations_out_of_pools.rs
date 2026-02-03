@@ -39,7 +39,7 @@ fn get_reservations_out_of_pool_in_subnet(
             out_of_pool.push(RuleResult {
                 description: format!("In the subnet '{}', all reservations are registered outside of dynamic pools. It is possible to set the 'reservations-out-of-pool' flag to 'true' to improve performance.", subnet.subnet),
                 places: Some(vec![format!("{}.{}", placement, idx_subnet)]),
-                links: Some(vec!["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#fine-tuning-dhcpv4-host-reservation"]),
+                links: Some(&["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#fine-tuning-dhcpv4-host-reservation"]),
             });
         }
     }

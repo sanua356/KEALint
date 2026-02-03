@@ -37,7 +37,7 @@ impl Rule<KEAv4Config> for NoActivatedHostCMDsHookForDatabaseBackendRule {
                     HOST_CMDS_HOOK_LIBRARY
                 ),
                 places: None,
-                links: Some(vec![
+                links: Some(&[
                     "https://kea.readthedocs.io/en/latest/arm/hooks.html#libdhcp-host-cmds-so-host-commands",
                 ]),
             }]);

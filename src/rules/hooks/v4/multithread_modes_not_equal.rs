@@ -43,7 +43,7 @@ impl Rule<KEAv4Config> for MultithreadingModesNotEqualInConfigAndHARule {
             return Some(vec![RuleResult {
                 description: "The multithreading control flags in the global server configuration and the high availability hook configuration are not equal.".to_string(),
                 places: Some(vec!["multi-threading".to_string(), format!("hooks-libraries.{}.parameters.high-availability.0.multi-threading", idx_hook)]),
-                links: Some(vec![
+                links: Some(&[
 					"https://kea.readthedocs.io/en/latest/arm/dhcp6-srv.html#multi-threading-settings",
 					"https://kea.readthedocs.io/en/latest/arm/hooks.html#multi-threaded-configuration-ha-mt"
 				])

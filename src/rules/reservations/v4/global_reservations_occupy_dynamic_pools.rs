@@ -30,7 +30,7 @@ fn get_global_resrvations_occupy_dynamic_pool_in_subnets(
                          	pool.pool,
                         ),
                         places: Some(vec![format!("reservation.{}", reservation_idx)]),
-                        links: Some(vec!["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#conflicts-in-dhcpv4-reservations"]),
+                        links: Some(&["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#conflicts-in-dhcpv4-reservations"]),
                     });
                 }
             }

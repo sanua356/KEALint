@@ -32,7 +32,7 @@ impl Rule<KEAv4Config> for MoreOneObjectConfigHARule {
                     "For the hook '{}', the 'high-availability' key cannot contain more than one object in the array.",
                     HIGH_AVAILABILITY_HOOK_LIBRARY
                 ),
-                links: Some(vec![
+                links: Some(&[
                     "https://kea.readthedocs.io/en/latest/arm/hooks.html#load-balancing-configuration",
                 ]),
                 places: Some(vec![format!(

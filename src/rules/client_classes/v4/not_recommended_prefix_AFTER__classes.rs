@@ -27,7 +27,7 @@ impl Rule<KEAv4Config> for NotRecommendedPrefixAFTER_ClassesRule {
 	                    class.name
                     ),
                     places: Some(vec![format!("client-classes.{}", idx)]),
-                    links: Some(vec!["https://kea.readthedocs.io/en/latest/arm/classify.html#built-in-client-classes"]),
+                    links: Some(&["https://kea.readthedocs.io/en/latest/arm/classify.html#built-in-client-classes"]),
                 });
             }
         }

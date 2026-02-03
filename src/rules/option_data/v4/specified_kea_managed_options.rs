@@ -27,7 +27,7 @@ fn get_kea_managed_options(options: &[KEAv4OptionData], placement: String) -> Ve
 				managed_option.code
                 ),
                 places: Some(vec![format!("{}.{}", placement, idx_option)]),
-                links: Some(vec!["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#id6"]),
+                links: Some(&["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#id6"]),
             });
         }
     }

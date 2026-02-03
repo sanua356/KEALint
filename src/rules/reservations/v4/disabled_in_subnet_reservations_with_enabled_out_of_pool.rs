@@ -30,7 +30,7 @@ fn get_reservations_out_of_pool_without_in_subnet_flag(
                         msg_subtext
                     ),
                     places: Some(vec![format!("{}.{}.reservations-out-of-pool", placement, subnet_idx)]),
-                    links: Some(vec!["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#fine-tuning-dhcpv4-host-reservation"]),
+                    links: Some(&["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#fine-tuning-dhcpv4-host-reservation"]),
                 });
             }
         } else if !is_reservations_in_subnet_global && is_reservations_out_of_pool {
@@ -41,7 +41,7 @@ fn get_reservations_out_of_pool_without_in_subnet_flag(
 	                msg_subtext
 	            ),
 	            places: Some(vec![format!("{}.{}.reservations-out-of-pool", placement, subnet_idx)]),
-	            links: Some(vec!["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#fine-tuning-dhcpv4-host-reservation"]),
+	            links: Some(&["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#fine-tuning-dhcpv4-host-reservation"]),
 	        });
         }
     }

@@ -34,7 +34,7 @@ impl Rule<KEAv4Config> for InterfaceOrRelaysInsideSubnetsSharedNetworksRule {
 	                            interface
                             ),
                             places: Some(vec![format!("shared-networks.{}.subnet4.{}.interface", idx_shared_network, idx_subnet)]),
-                            links: Some(vec!["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#local-and-relayed-traffic-in-shared-networks"]),
+                            links: Some(&["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#local-and-relayed-traffic-in-shared-networks"]),
                         });
                     }
 
@@ -48,7 +48,7 @@ impl Rule<KEAv4Config> for InterfaceOrRelaysInsideSubnetsSharedNetworksRule {
 	                            subnet.subnet
                             ),
                             places: Some(vec![format!("shared-networks.{}.subnet4.{}.relay", idx_shared_network, idx_subnet)]),
-                            links: Some(vec!["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#local-and-relayed-traffic-in-shared-networks"]),
+                            links: Some(&["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#local-and-relayed-traffic-in-shared-networks"]),
                         });
                     }
                 }

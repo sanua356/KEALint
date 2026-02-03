@@ -22,9 +22,7 @@ impl Rule<KEAv4Config> for NotSelectIterativeAllocatorForSharedLeaseDatabase {
         {
             return Some(vec![RuleResult {
                 description: "The 'iterative' address allocator is not recommended for use with a shared database of rents on several servers.".to_string(),
-                links: Some(vec![
-                    "https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#iterative-allocator",
-                ]),
+                links: Some(&["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#iterative-allocator"]),
                 places: Some(vec!["allocator".to_string()]),
             }]);
         }

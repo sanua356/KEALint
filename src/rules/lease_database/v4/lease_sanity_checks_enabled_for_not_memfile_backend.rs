@@ -23,7 +23,7 @@ impl Rule<KEAv4Config> for LeaseSanityChecksEnabledForNotMemfileBackend {
             return Some(vec![RuleResult {
                 description: "The Sanity Checks mechanism is not implemented for rent databases other than 'memfile'.".to_string(),
                 places: Some(vec!["lease-database.type".to_string(), "sanity-checks.lease-checks".to_string()]),
-                links: Some(vec!["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#sanity-checks-in-dhcpv4"]),
+                links: Some(&["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#sanity-checks-in-dhcpv4"]),
             }]);
         }
 

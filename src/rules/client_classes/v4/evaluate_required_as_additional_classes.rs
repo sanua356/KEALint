@@ -78,7 +78,7 @@ impl Rule<KEAv4Config> for EvaluateRequiredAsAdditionalClassesRule {
                 results.push(RuleResult {
                 description: format!("The client class named '{}' is specified as the value by the 'evaluate-additional-classes' key in the configuration, but does not have the 'only-if-required' or 'only-in-additional-list' flag set to 'true'.", class_info.name),
                 places: Some(vec![format!("client-classes.{}", idx)]),
-                links: Some(vec!["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#additional-classification"]),
+                links: Some(&["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#additional-classification"]),
             });
             }
         }

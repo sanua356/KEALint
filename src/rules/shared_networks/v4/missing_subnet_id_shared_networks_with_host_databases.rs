@@ -41,7 +41,7 @@ impl Rule<KEAv4Config> for MissingSubnetIdSharedNetworksWithHostDatabases {
 	                            subnet.subnet
                             ),
                             places: Some(vec![format!("shared-networks.{}.subnet4.{}", idx_shared_network, idx_subnet)]),
-                            links: Some(vec!["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#host-reservations-in-shared-networks"]),
+                            links: Some(&["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#host-reservations-in-shared-networks"]),
                         });
                     }
                 }

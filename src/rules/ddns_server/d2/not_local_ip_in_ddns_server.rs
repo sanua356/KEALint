@@ -23,9 +23,7 @@ impl Rule<KEAD2Config> for NotLocalIPAddressInD2ServerConfigRule {
             return Some(vec![RuleResult {
                 description: "Loopback addresses must be used as the server address to avoid attacks with fake requests.".to_string(),
                 places: Some(vec!["ip-address".to_string()]),
-                links: Some(vec![
-                    "https://kea.readthedocs.io/en/latest/arm/ddns.html#global-server-parameters",
-                ]),
+                links: Some(&["https://kea.readthedocs.io/en/latest/arm/ddns.html#global-server-parameters"]),
             }]);
         }
 
