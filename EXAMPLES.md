@@ -9,7 +9,7 @@ Standard output, without additional flags.
 ```
 	- #️⃣ kealint
 	- 📁 kea-configs
-			- 	📄 kea-dhcp4.conf
+			-	📄 kea-dhcp4.conf
 			-	📄 kea-dhcp-ddns.conf
 			-	📄 kea-ctrl-agent.conf
 ```
@@ -128,7 +128,7 @@ Output in tabular format to a file, its own path to all types of configurations.
 	- 📁 b
 			-	📄 kea-ctrl-agent.conf
 	- 📁 c
-			- 	📄 kea-dhcp4.conf
+			-	📄 kea-dhcp4.conf
 ```
 
 
@@ -153,7 +153,7 @@ Tabular output, viewing the final check, multithreading, and skipping missing co
 ```
 	- #️⃣ kealint
 	- 📁 kea-configs
-			- 	📄 kea-dhcp4.conf
+			-	📄 kea-dhcp4.conf
 			-	📄 kea-ctrl-agent.conf
 ```
 
