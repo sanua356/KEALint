@@ -14,7 +14,7 @@
 
 ## Rules
 
-### NoInterfacesInInterfacesConfigRule
+### LeaseSanityChecksEnabledForNotMemfileBackend
 
 - **Codename** - LEASE_DATABASE::LeaseSanityChecksEnabledForNotMemfileBackend.
 - **Importance** - INFO.
