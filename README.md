@@ -57,7 +57,7 @@ Command line interface 'KEALint' implements the following interaction parameters
 
 `--ctrl-agent-filepath` - Optional. Specifies the path to the KEA Control Agent configuration file. If specified together the `dir-path` parameter, the current parameter overrides the path to the Control Agent configuration file.
 
-`--output_filepath` - Optional. Specifies the path to the file to which the verification result will be uploaded. If the file does not exist, it will be created.
+`--output-filepath` - Optional. Specifies the path to the file to which the verification result will be uploaded. If the file does not exist, it will be created.
 
 `--skip-not-exists` - Optional. If specified, the check will run even if not all configuration files exist. By default, the utility waits for all configuration files to run (v4, DDNS, and Control Agent).
 
