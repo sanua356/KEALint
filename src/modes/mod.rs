@@ -209,3 +209,88 @@ pub fn run_checks_parallel(
 
     Arc::try_unwrap(results).unwrap().into_inner().unwrap()
 }
+
+mod _tests;
+
+#[cfg(test)]
+mod test {
+    use serde_json::Value;
+
+    use crate::configs::{KEACtrlAgentConfigFile, KEAD2ConfigFile, KEAv4ConfigFile};
+
+    use super::_tests::{RUN_CHECKS_CA_TEMPLATE, RUN_CHECKS_D2_TEMPLATE, RUN_CHECKS_V4_TEMPLATE};
+    use super::{run_checks, run_checks_parallel};
+
+    fn prepare_configs() -> (KEAv4ConfigFile, KEAD2ConfigFile, KEACtrlAgentConfigFile) {
+        let v4: KEAv4ConfigFile = serde_json::from_str(RUN_CHECKS_V4_TEMPLATE).unwrap();
+        let d2: KEAD2ConfigFile = serde_json::from_str(RUN_CHECKS_D2_TEMPLATE).unwrap();
+        let ca: KEACtrlAgentConfigFile = serde_json::from_str(RUN_CHECKS_CA_TEMPLATE).unwrap();
+
+        (v4, d2, ca)
+    }
+
+    fn prepare_configs_with_problems() -> (KEAv4ConfigFile, KEAD2ConfigFile, KEACtrlAgentConfigFile)
+    {
+        let mut v4_value: Value = serde_json::from_str(RUN_CHECKS_V4_TEMPLATE).unwrap();
+        v4_value["Dhcp4"]["loggers"][0]["severity"] = Value::from("DEBUG");
+        let v4: KEAv4ConfigFile = serde_json::from_value(v4_value).unwrap();
+
+        let mut d2_value: Value = serde_json::from_str(RUN_CHECKS_D2_TEMPLATE).unwrap();
+        d2_value["DhcpDdns"]["loggers"][0]["severity"] = Value::from("DEBUG");
+        let d2: KEAD2ConfigFile = serde_json::from_value(d2_value).unwrap();
+
+        let mut ca_value: Value = serde_json::from_str(RUN_CHECKS_CA_TEMPLATE).unwrap();
+        ca_value["Control-agent"]["loggers"][0]["severity"] = Value::from("DEBUG");
+        let ca: KEACtrlAgentConfigFile = serde_json::from_value(ca_value).unwrap();
+
+        (v4, d2, ca)
+    }
+
+    #[test]
+    fn test_checks() {
+        // No problems
+        let mut mock_configs = prepare_configs();
+        assert_eq!(
+            run_checks(
+                Some(mock_configs.0),
+                Some(mock_configs.1),
+                Some(mock_configs.2)
+            )
+            .len(),
+            0
+        );
+
+        mock_configs = prepare_configs();
+        assert_eq!(
+            run_checks(
+                Some(mock_configs.0),
+                Some(mock_configs.1),
+                Some(mock_configs.2)
+            )
+            .len(),
+            0
+        );
+
+        let mut mock_broken_configs = prepare_configs_with_problems();
+        assert_eq!(
+            run_checks(
+                Some(mock_broken_configs.0),
+                Some(mock_broken_configs.1),
+                Some(mock_broken_configs.2)
+            )
+            .len(),
+            3
+        );
+
+        mock_broken_configs = prepare_configs_with_problems();
+        assert_eq!(
+            run_checks_parallel(
+                Some(mock_broken_configs.0),
+                Some(mock_broken_configs.1),
+                Some(mock_broken_configs.2)
+            )
+            .len(),
+            3
+        );
+    }
+}

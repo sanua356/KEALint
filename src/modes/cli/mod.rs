@@ -116,3 +116,69 @@ pub fn run_cli(args: CLIArgs) {
         }
     }
 }
+
+mod _tests;
+
+#[cfg(test)]
+mod test {
+    use std::io::Write;
+    use std::path::Path;
+    use tempfile::NamedTempFile;
+
+    use crate::configs::{KEACtrlAgentConfigFile, KEAD2ConfigFile, KEAv4ConfigFile};
+
+    use super::_tests::{
+        PROCESS_CONFIG_FILE_CA_TEMPLATE, PROCESS_CONFIG_FILE_D2_TEMPLATE,
+        PROCESS_CONFIG_FILE_V4_TEMPLATE,
+    };
+    use super::process_config_file;
+
+    #[test]
+    #[should_panic]
+    fn process_config_test() {
+        let mut pseudofile = NamedTempFile::new().unwrap();
+
+        pseudofile
+            .write_all(PROCESS_CONFIG_FILE_V4_TEMPLATE.as_bytes())
+            .unwrap();
+        let v4: Option<KEAv4ConfigFile> =
+            process_config_file(pseudofile.path().to_path_buf(), false, "DHCPv4");
+        assert!(v4.is_some());
+
+        pseudofile = NamedTempFile::new().unwrap();
+        pseudofile
+            .write_all(PROCESS_CONFIG_FILE_D2_TEMPLATE.as_bytes())
+            .unwrap();
+        let d2: Option<KEAD2ConfigFile> =
+            process_config_file(pseudofile.path().to_path_buf(), false, "DHCP DDNS");
+        assert!(d2.is_some());
+
+        pseudofile = NamedTempFile::new().unwrap();
+        pseudofile
+            .write_all(PROCESS_CONFIG_FILE_CA_TEMPLATE.as_bytes())
+            .unwrap();
+        let ca: Option<KEACtrlAgentConfigFile> =
+            process_config_file(pseudofile.path().to_path_buf(), false, "Control Agent");
+        assert!(ca.is_some());
+
+        pseudofile = NamedTempFile::new().unwrap();
+        pseudofile.write_all("BAD DATA".as_bytes()).unwrap();
+
+        // none
+        assert!(
+            process_config_file::<KEAv4ConfigFile>(
+                Path::new("BAD PATH").to_path_buf(),
+                true,
+                "DHCPv4",
+            )
+            .is_none()
+        );
+
+        // panic
+        process_config_file::<KEAv4ConfigFile>(
+            pseudofile.path().to_path_buf(),
+            false,
+            "Control Agent",
+        );
+    }
+}
