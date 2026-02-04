@@ -1,15 +1,22 @@
-use crate::cli::CLIArgs;
+use crate::modes::{CLIArgs, KEALintModeTypes, run_cli, run_standalone};
 use clap::Parser;
 
 mod checkers;
-mod cli;
 mod common;
 mod configs;
 mod constants;
+mod modes;
 mod rules;
 mod utils;
 
 fn main() {
     let args: CLIArgs = CLIArgs::parse();
-    cli::run_cli(args);
+    match args.mode {
+        KEALintModeTypes::cli => {
+            run_cli(args);
+        }
+        KEALintModeTypes::standalone => {
+            run_standalone(args);
+        }
+    }
 }
