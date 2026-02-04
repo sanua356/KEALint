@@ -2,10 +2,7 @@ use rusqlite::{Connection, Result};
 
 use crate::checkers::Problem;
 
-pub fn load_problems(config: String, problems: Vec<Problem>, database_path: String) -> Result<()> {
-    let connection = Connection::open(database_path)
-        .expect("An error occurred when connecting to an SQLite database.");
-
+pub fn load_problems(config: String, problems: Vec<Problem>, connection: Connection) -> Result<()> {
     if problems.is_empty() {
         return Ok(());
     }

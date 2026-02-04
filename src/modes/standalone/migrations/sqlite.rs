@@ -6,10 +6,7 @@ fn get_schema_version(connection: &Connection) -> Result<Option<u32>> {
         .optional()
 }
 
-pub fn run_migrations(database_path: String) -> Result<()> {
-    let connection = Connection::open(database_path)
-        .expect("An error occurred when connecting to an SQLite database.");
-
+pub fn run_migrations(connection: Connection) -> Result<()> {
     connection.execute(
         "CREATE TABLE IF NOT EXISTS schema_version (version INTEGER NOT NULL)",
         (),
@@ -63,4 +60,20 @@ pub fn run_migrations(database_path: String) -> Result<()> {
     }
 
     Ok(())
+}
+
+#[cfg(test)]
+mod test {
+    use rusqlite::Connection;
+
+    use super::run_migrations;
+
+    #[test]
+    fn apply_migrations_test() {
+        let connection = Connection::open_in_memory().unwrap();
+
+        let migrations = run_migrations(connection);
+
+        assert_eq!(migrations, Ok(()));
+    }
 }

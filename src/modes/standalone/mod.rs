@@ -1,4 +1,5 @@
 use chrono;
+use rusqlite::Connection;
 use serde::de::DeserializeOwned;
 use serde_json::Value;
 use std::{
@@ -47,7 +48,10 @@ fn handle_query(stream: UnixStream, database_path: String) {
 
     let problems = run_checks(v4_config, d2_config, ctrl_agent_config);
 
-    match load_problems(config, problems, database_path) {
+    let connection = Connection::open(database_path)
+        .expect("An error occurred when connecting to an SQLite database.");
+
+    match load_problems(config, problems, connection) {
         Ok(_) => {
             println!(
                 "Check results saved to database successfully! {}",
@@ -75,8 +79,10 @@ pub fn run_standalone(args: CLIArgs) {
     }
 
     let database_path = args.database_path.unwrap();
+    let connection = Connection::open(database_path.clone())
+        .expect("An error occurred when connecting to an SQLite database.");
 
-    match run_migrations(database_path.clone()) {
+    match run_migrations(connection) {
         Ok(_) => {
             println!("Database migrations applied successfully!");
         }
