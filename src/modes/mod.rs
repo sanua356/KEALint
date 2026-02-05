@@ -1,19 +1,32 @@
 use clap::{Parser, ValueEnum};
 use std::{
-    fs::{self, OpenOptions},
-    io::Write,
-    path::{Path, PathBuf},
     sync::{Arc, Mutex},
     thread::{self, JoinHandle},
 };
 
 use crate::{
-    checkers::{
-        Problem, RulesCtrlAgent, RulesD2, RulesV4, get_summary_problems, tabled_print_problems,
-    },
+    checkers::{Problem, RulesCtrlAgent, RulesD2, RulesV4},
     common::RuleChecker,
     configs::{KEACtrlAgentConfigFile, KEAD2ConfigFile, KEAv4ConfigFile},
 };
+
+pub mod cli;
+pub mod standalone;
+pub use {cli::run_cli, standalone::run_standalone};
+
+#[derive(Debug, Clone, Copy, ValueEnum)]
+pub enum KEALintModeTypes {
+    #[allow(non_camel_case_types)]
+    cli,
+    #[allow(non_camel_case_types)]
+    standalone,
+}
+
+#[derive(Debug, Clone, Copy, ValueEnum)]
+pub enum KEALintDatabaseTypes {
+    #[allow(non_camel_case_types)]
+    sqlite,
+}
 
 #[derive(Debug, Clone, Copy, ValueEnum)]
 enum KEALintOutputFormatTypes {
@@ -31,7 +44,15 @@ enum KEALintOutputFormatTypes {
 pub struct CLIArgs {
     #[arg(
         long,
-        help = "Optional. Defines the format for the output of the verification result. You can specify the value 'table' or 'json'.",
+        help = "Optional. Defines the mode of operation of the utility. If 'standalone' is specified, it instructs the server to operate in UNIX socket listener mode and write checks to the database.",
+        value_enum,
+        default_value_t = KEALintModeTypes::cli
+    )]
+    pub mode: KEALintModeTypes,
+
+    #[arg(
+        long,
+        help = "Optional. Defines the format for the output of the verification result.",
         value_enum,
         default_value_t = KEALintOutputFormatTypes::table
     )]
@@ -69,6 +90,26 @@ pub struct CLIArgs {
 
     #[arg(
         long,
+        help = "Optional. (Only in the 'standalone' mode). Defines the path to the UNIX socket that needs to be listened to in order to receive configurations."
+    )]
+    unix_socket_path: Option<String>,
+
+    #[arg(
+        long,
+        help = "Optional. (Only in the 'standalone' mode). Defines the type of database to connect to.",
+        value_enum,
+        default_value_t = KEALintDatabaseTypes::sqlite
+    )]
+    database_type: KEALintDatabaseTypes,
+
+    #[arg(
+        long,
+        help = "Optional. (Only in the 'standalone' mode). Defines the path to the database to which the results of the checks will need to be recorded."
+    )]
+    database_path: Option<String>,
+
+    #[arg(
+        long,
         help = "Optional. If specified, the check will run even if not all configuration files exist."
     )]
     skip_not_exists: bool,
@@ -86,124 +127,7 @@ pub struct CLIArgs {
     with_summary: bool,
 }
 
-pub fn run_cli(args: CLIArgs) {
-    let mut v4_filepath: PathBuf = PathBuf::new();
-    let mut d2_filepath: PathBuf = PathBuf::new();
-    let mut ctrl_agent_filepath: PathBuf = PathBuf::new();
-
-    if let Some(dir_path) = args.dir_path {
-        let dir = Path::new(&dir_path);
-        v4_filepath = dir.join("kea-dhcp4.conf");
-        d2_filepath = dir.join("kea-dhcp-ddns.conf");
-        ctrl_agent_filepath = dir.join("kea-ctrl-agent.conf");
-    }
-
-    if let Some(v4_path_custom) = args.v4_filepath {
-        v4_filepath = Path::new(&v4_path_custom).to_path_buf();
-    }
-
-    if let Some(d2_path_custom) = args.d2_filepath {
-        d2_filepath = Path::new(&d2_path_custom).to_path_buf();
-    }
-
-    if let Some(ctrl_agent_path_custom) = args.ctrl_agent_filepath {
-        ctrl_agent_filepath = Path::new(&ctrl_agent_path_custom).to_path_buf();
-    }
-
-    let skip_not_exists = args.skip_not_exists;
-
-    let content_v4: Option<KEAv4ConfigFile> = match fs::read_to_string(&v4_filepath) {
-        Ok(content) => match serde_json::from_str(&content) {
-            Ok(config) => Some(config),
-            Err(err) => panic!(
-                "An error occurred while parsing the DHCPv4 configuration: {}",
-                err
-            ),
-        },
-        Err(err) if skip_not_exists => None,
-        Err(err) => panic!(
-            "An error occurred while reading the DHCPv4 configuration: {}",
-            err
-        ),
-    };
-
-    let content_d2: Option<KEAD2ConfigFile> = match fs::read_to_string(&d2_filepath) {
-        Ok(content) => match serde_json::from_str(&content) {
-            Ok(config) => Some(config),
-            Err(err) => panic!(
-                "An error occurred while parsing the DHCP DDNS configuration: {}",
-                err
-            ),
-        },
-        Err(err) if skip_not_exists => None,
-        Err(err) => panic!(
-            "An error occurred while reading the DHCP DDNS configuration: {}",
-            err
-        ),
-    };
-
-    let content_ctrl_agent: Option<KEACtrlAgentConfigFile> =
-        match fs::read_to_string(&ctrl_agent_filepath) {
-            Ok(content) => match serde_json::from_str(&content) {
-                Ok(config) => Some(config),
-                Err(err) => panic!(
-                    "An error occurred while parsing the Control Agent configuration: {}",
-                    err
-                ),
-            },
-            Err(err) if skip_not_exists => None,
-            Err(err) => panic!(
-                "An error occurred while reading the Control Agent configuration: {}",
-                err
-            ),
-        };
-
-    let problems: Vec<Problem> = if args.use_threads {
-        run_checks_parallel(content_v4, content_d2, content_ctrl_agent)
-    } else {
-        run_checks(content_v4, content_d2, content_ctrl_agent)
-    };
-
-    let summary = if args.with_summary {
-        get_summary_problems(&problems)
-    } else {
-        String::new()
-    };
-
-    let printed = match args.format {
-        KEALintOutputFormatTypes::table => tabled_print_problems(problems),
-        KEALintOutputFormatTypes::json => serde_json::to_string_pretty(&problems).unwrap(),
-    };
-
-    if let Some(out_filepath) = &args.output_filepath {
-        let path = Path::new(out_filepath).to_path_buf();
-
-        let file = OpenOptions::new()
-            .write(true)
-            .create(true)
-            .truncate(true)
-            .open(path);
-
-        match file {
-            Ok(mut f) => {
-                f.write_all(printed.as_bytes())
-                    .expect("An error occurred when writing the test results to a file.");
-                println!("Check results successfully written in file!");
-            }
-            Err(err) => panic!(
-                "An error occurred while verifying the access rights of the output file: {}",
-                err
-            ),
-        }
-    } else {
-        println!("{}", printed);
-
-        if !summary.is_empty() {
-            println!("{}", summary);
-        }
-    }
-}
-fn run_checks(
+pub fn run_checks(
     config_v4: Option<KEAv4ConfigFile>,
     config_d2: Option<KEAD2ConfigFile>,
     config_ctrl_agent: Option<KEACtrlAgentConfigFile>,
@@ -228,7 +152,7 @@ fn run_checks(
     results
 }
 
-fn run_checks_parallel(
+pub fn run_checks_parallel(
     config_v4: Option<KEAv4ConfigFile>,
     config_d2: Option<KEAD2ConfigFile>,
     config_ctrl_agent: Option<KEACtrlAgentConfigFile>,
@@ -284,4 +208,89 @@ fn run_checks_parallel(
     }
 
     Arc::try_unwrap(results).unwrap().into_inner().unwrap()
+}
+
+mod _tests;
+
+#[cfg(test)]
+mod test {
+    use serde_json::Value;
+
+    use crate::configs::{KEACtrlAgentConfigFile, KEAD2ConfigFile, KEAv4ConfigFile};
+
+    use super::_tests::{RUN_CHECKS_CA_TEMPLATE, RUN_CHECKS_D2_TEMPLATE, RUN_CHECKS_V4_TEMPLATE};
+    use super::{run_checks, run_checks_parallel};
+
+    fn prepare_configs() -> (KEAv4ConfigFile, KEAD2ConfigFile, KEACtrlAgentConfigFile) {
+        let v4: KEAv4ConfigFile = serde_json::from_str(RUN_CHECKS_V4_TEMPLATE).unwrap();
+        let d2: KEAD2ConfigFile = serde_json::from_str(RUN_CHECKS_D2_TEMPLATE).unwrap();
+        let ca: KEACtrlAgentConfigFile = serde_json::from_str(RUN_CHECKS_CA_TEMPLATE).unwrap();
+
+        (v4, d2, ca)
+    }
+
+    fn prepare_configs_with_problems() -> (KEAv4ConfigFile, KEAD2ConfigFile, KEACtrlAgentConfigFile)
+    {
+        let mut v4_value: Value = serde_json::from_str(RUN_CHECKS_V4_TEMPLATE).unwrap();
+        v4_value["Dhcp4"]["loggers"][0]["severity"] = Value::from("DEBUG");
+        let v4: KEAv4ConfigFile = serde_json::from_value(v4_value).unwrap();
+
+        let mut d2_value: Value = serde_json::from_str(RUN_CHECKS_D2_TEMPLATE).unwrap();
+        d2_value["DhcpDdns"]["loggers"][0]["severity"] = Value::from("DEBUG");
+        let d2: KEAD2ConfigFile = serde_json::from_value(d2_value).unwrap();
+
+        let mut ca_value: Value = serde_json::from_str(RUN_CHECKS_CA_TEMPLATE).unwrap();
+        ca_value["Control-agent"]["loggers"][0]["severity"] = Value::from("DEBUG");
+        let ca: KEACtrlAgentConfigFile = serde_json::from_value(ca_value).unwrap();
+
+        (v4, d2, ca)
+    }
+
+    #[test]
+    fn test_checks() {
+        // No problems
+        let mut mock_configs = prepare_configs();
+        assert_eq!(
+            run_checks(
+                Some(mock_configs.0),
+                Some(mock_configs.1),
+                Some(mock_configs.2)
+            )
+            .len(),
+            0
+        );
+
+        mock_configs = prepare_configs();
+        assert_eq!(
+            run_checks(
+                Some(mock_configs.0),
+                Some(mock_configs.1),
+                Some(mock_configs.2)
+            )
+            .len(),
+            0
+        );
+
+        let mut mock_broken_configs = prepare_configs_with_problems();
+        assert_eq!(
+            run_checks(
+                Some(mock_broken_configs.0),
+                Some(mock_broken_configs.1),
+                Some(mock_broken_configs.2)
+            )
+            .len(),
+            3
+        );
+
+        mock_broken_configs = prepare_configs_with_problems();
+        assert_eq!(
+            run_checks_parallel(
+                Some(mock_broken_configs.0),
+                Some(mock_broken_configs.1),
+                Some(mock_broken_configs.2)
+            )
+            .len(),
+            3
+        );
+    }
 }
