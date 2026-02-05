@@ -9,7 +9,7 @@ KEALint - ⚡ blazingly fast ⚡ static configuration analyzer ISC KEA DHCP for 
 
 Implements a flexible **CLI interface** for interaction and output of verification results.
 
-Support for working in **'standalone' mode to automatically run checks** when configuration is changed using its own ['kealint-unix-hook'](https://github.com/sanua356/kealint-unix-hook).
+Support for working in **'standalone' mode to automatically run checks** when configuration is changed using its own [kealint-unix-hook](https://github.com/sanua356/kealint-unix-hook). More information about the 'standalone' mode can be found [here](https://github.com/sanua356/KEALint/tree/master/src/modes/standalone).
  
 ## Example of work
 

@@ -4,3 +4,5 @@ kea-dhcp4.conf
 kea-dhcp-ddns.conf
 kea-dhcp6.conf
 kea-ctrl-agent.conf
+
+testdb.sq3
