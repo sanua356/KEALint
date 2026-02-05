@@ -44,7 +44,7 @@ enum KEALintOutputFormatTypes {
 pub struct CLIArgs {
     #[arg(
         long,
-        help = "Optional. Defines the mode of operation of the utility. If not specified, the default value is 'cli'. If 'standalone' is specified, it instructs the server to operate in UNIX socket listener mode and write checks to the database.",
+        help = "Optional. Defines the mode of operation of the utility. If 'standalone' is specified, it instructs the server to operate in UNIX socket listener mode and write checks to the database.",
         value_enum,
         default_value_t = KEALintModeTypes::cli
     )]
@@ -52,7 +52,7 @@ pub struct CLIArgs {
 
     #[arg(
         long,
-        help = "Optional. Defines the format for the output of the verification result. You can specify the value 'table' or 'json'.",
+        help = "Optional. Defines the format for the output of the verification result.",
         value_enum,
         default_value_t = KEALintOutputFormatTypes::table
     )]
@@ -96,7 +96,7 @@ pub struct CLIArgs {
 
     #[arg(
         long,
-        help = "Optional. (Only in the 'standalone' mode). Defines the type of database to connect to. So far, only one value of 'sqlite' is supported.",
+        help = "Optional. (Only in the 'standalone' mode). Defines the type of database to connect to.",
         value_enum,
         default_value_t = KEALintDatabaseTypes::sqlite
     )]

@@ -1,3 +1,4 @@
+
 # KEALint
 
 ## Introduction
@@ -7,6 +8,8 @@ KEALint - ⚡ blazingly fast ⚡ static configuration analyzer ISC KEA DHCP for 
 **More than 40 validation rules** for DHCPv4, D2, and Control Agent configurations.
 
 Implements a flexible **CLI interface** for interaction and output of verification results.
+
+Support for working in **'standalone' mode to automatically run checks** when configuration is changed using its own ['kealint-unix-hook'](https://github.com/sanua356/kealint-unix-hook).
  
 ## Example of work
 
@@ -47,6 +50,12 @@ See [more examples.](https://github.com/sanua356/KEALint/blob/master/EXAMPLES.md
 
 Command line interface 'KEALint' implements the following interaction parameters:
 
+### Shared parameters
+
+`--mode` - Optional. Defines the mode of operation of the utility. If 'standalone' is specified, it instructs the server to operate in UNIX socket listener mode and write checks to the database. Default mode is 'cli'.
+
+### CLI mode parameters
+
 `--dir-path` - Optional. Specifies the path to the directory where the KEA configuration files are stored. If this parameter is specified, files named 'kea-dhcp4.conf', 'kea-dhcp-ddns.conf' and 'kea-ctrl-agent.conf' are searched inside the specified directory.
 
 `--format` - Optional. Defines the format for the output of the verification result. You can specify the value 'table' or 'json'.
@@ -64,6 +73,14 @@ Command line interface 'KEALint' implements the following interaction parameters
 `--use-threads` - Optional. If enabled, processing is performed in multithreaded mode.
 
 `--with-summary` - Optional. Adds additional information when displaying the result as a table.
+
+### Standalone mode parameters
+
+`--unix-socket-path` - Optional. Defines the path to the UNIX socket that needs to be listened to in order to receive configurations.
+
+`--database-type` - Optional. Defines the path to the database to which the results of the checks will need to be recorded.
+
+`--database-path` - Optional. Defines the type of database to connect to. Currently, only the value 'sqlite' is supported.
 
 ## Rules
 

@@ -1,3 +1,4 @@
+
 ## KEALint Examples
 
 ### Basic example
@@ -214,3 +215,29 @@ Info = 23 problem(s).
 Warning = 29 problem(s).
 
 ```
+
+
+### Example with standalone mode
+
+Writing checks to the SQLite3 database when receiving them from a UNIX socket.
+
+ **File structure:**
+
+```
+	- #️⃣ kealint
+	- 💾 database.sq3
+```
+
+
+ **Run command:**
+
+ ```
+./kealint --mode standalone --unix-socket-path /tmp/kealint_unix.sock --database-path testdb.sq3
+ ```
+ 
+  **Result:**
+
+ ```
+Database migrations applied successfully!
+Server runned in standalone mode!
+ ```
