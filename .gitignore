@@ -6,3 +6,5 @@ kea-dhcp6.conf
 kea-ctrl-agent.conf
 
 testdb.sq3
+
+config.json

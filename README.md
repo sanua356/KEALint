@@ -50,9 +50,15 @@ See [more examples.](https://github.com/sanua356/KEALint/blob/master/EXAMPLES.md
 
 Command line interface 'KEALint' implements the following interaction parameters:
 
+
+> [!NOTE] 
+> All command line parameters can be specified in a separate JSON file (without the "--" prefix). If the parameters are specified in the file, specify the `--config-filepath` flag at startup.
+
 ### Shared parameters
 
 `--mode` - Optional. Defines the mode of operation of the utility. If 'standalone' is specified, it instructs the server to operate in UNIX socket listener mode and write checks to the database. Default mode is 'cli'.
+
+`--config-filepath` - Optional. Defines the path to the JSON configuration file. If specified, all flags when calling the utility except directly `--config-filepath` will be ignored and read from the file.
 
 ### CLI mode parameters
 

@@ -1,5 +1,6 @@
-use clap::{Parser, ValueEnum};
 use std::{
+    fs,
+    path::Path,
     sync::{Arc, Mutex},
     thread::{self, JoinHandle},
 };
@@ -10,122 +11,11 @@ use crate::{
     configs::{KEACtrlAgentConfigFile, KEAD2ConfigFile, KEAv4ConfigFile},
 };
 
+pub mod args;
 pub mod cli;
 pub mod standalone;
+pub use args::*;
 pub use {cli::run_cli, standalone::run_standalone};
-
-#[derive(Debug, Clone, Copy, ValueEnum)]
-pub enum KEALintModeTypes {
-    #[allow(non_camel_case_types)]
-    cli,
-    #[allow(non_camel_case_types)]
-    standalone,
-}
-
-#[derive(Debug, Clone, Copy, ValueEnum)]
-pub enum KEALintDatabaseTypes {
-    #[allow(non_camel_case_types)]
-    sqlite,
-}
-
-#[derive(Debug, Clone, Copy, ValueEnum)]
-enum KEALintOutputFormatTypes {
-    #[allow(non_camel_case_types)]
-    json,
-    #[allow(non_camel_case_types)]
-    table,
-}
-
-#[derive(Debug, Parser)]
-#[command(
-    version,
-    about = "A command-line utility for linting configuration of ISC KEA DHCP 3.0.0 or higher."
-)]
-pub struct CLIArgs {
-    #[arg(
-        long,
-        help = "Optional. Defines the mode of operation of the utility. If 'standalone' is specified, it instructs the server to operate in UNIX socket listener mode and write checks to the database.",
-        value_enum,
-        default_value_t = KEALintModeTypes::cli
-    )]
-    pub mode: KEALintModeTypes,
-
-    #[arg(
-        long,
-        help = "Optional. Defines the format for the output of the verification result.",
-        value_enum,
-        default_value_t = KEALintOutputFormatTypes::table
-    )]
-    format: KEALintOutputFormatTypes,
-
-    #[arg(
-        long,
-        help = "Optional. Specifies the path to the directory where the KEA configuration files are stored."
-    )]
-    dir_path: Option<String>,
-
-    #[arg(
-        long,
-        help = "Optional. Specifies the path to the KEA DHCPv4 configuration file."
-    )]
-    v4_filepath: Option<String>,
-
-    #[arg(
-        long,
-        help = "Optional. Specifies the path to the KEA DHCP DDNS configuration file."
-    )]
-    d2_filepath: Option<String>,
-
-    #[arg(
-        long,
-        help = "Optional. Specifies the path to the KEA Control Agent configuration file."
-    )]
-    ctrl_agent_filepath: Option<String>,
-
-    #[arg(
-        long,
-        help = "Optional. Specifies the path to the file to which the verification result will be uploaded. If the file does not exist, it will be created."
-    )]
-    output_filepath: Option<String>,
-
-    #[arg(
-        long,
-        help = "Optional. (Only in the 'standalone' mode). Defines the path to the UNIX socket that needs to be listened to in order to receive configurations."
-    )]
-    unix_socket_path: Option<String>,
-
-    #[arg(
-        long,
-        help = "Optional. (Only in the 'standalone' mode). Defines the type of database to connect to.",
-        value_enum,
-        default_value_t = KEALintDatabaseTypes::sqlite
-    )]
-    database_type: KEALintDatabaseTypes,
-
-    #[arg(
-        long,
-        help = "Optional. (Only in the 'standalone' mode). Defines the path to the database to which the results of the checks will need to be recorded."
-    )]
-    database_path: Option<String>,
-
-    #[arg(
-        long,
-        help = "Optional. If specified, the check will run even if not all configuration files exist."
-    )]
-    skip_not_exists: bool,
-
-    #[arg(
-        long,
-        help = "Optional. If enabled, processing is performed in multithreaded mode."
-    )]
-    use_threads: bool,
-
-    #[arg(
-        long,
-        help = "Optional. Adds additional information when displaying the result as a table."
-    )]
-    with_summary: bool,
-}
 
 pub fn run_checks(
     config_v4: Option<KEAv4ConfigFile>,
@@ -150,6 +40,25 @@ pub fn run_checks(
     }
 
     results
+}
+
+pub fn get_args(args: CLIArgs) -> CLIArgs {
+    if let Some(config_path) = &args.config_filepath {
+        let file_args: Option<CLIArgs> =
+            match fs::read_to_string(Path::new(config_path).to_path_buf()) {
+                Ok(content) => match serde_json::from_str(&content) {
+                    Ok(config) => Some(config),
+                    Err(err) => panic!("An error occurred while parsing config file: {}", err),
+                },
+                Err(err) => panic!("An error occurred while reading the config file: {}", err),
+            };
+
+        if let Some(f_args) = file_args {
+            return f_args;
+        }
+    }
+
+    args
 }
 
 pub fn run_checks_parallel(
@@ -214,12 +123,19 @@ mod _tests;
 
 #[cfg(test)]
 mod test {
+    use std::io::Write;
+
     use serde_json::Value;
+    use tempfile::NamedTempFile;
 
     use crate::configs::{KEACtrlAgentConfigFile, KEAD2ConfigFile, KEAv4ConfigFile};
+    use crate::modes::CLIArgs;
 
-    use super::_tests::{RUN_CHECKS_CA_TEMPLATE, RUN_CHECKS_D2_TEMPLATE, RUN_CHECKS_V4_TEMPLATE};
-    use super::{run_checks, run_checks_parallel};
+    use super::_tests::{
+        GET_FILE_ARGS_TEMPLATE, RUN_CHECKS_CA_TEMPLATE, RUN_CHECKS_D2_TEMPLATE,
+        RUN_CHECKS_V4_TEMPLATE,
+    };
+    use super::{get_args, run_checks, run_checks_parallel};
 
     fn prepare_configs() -> (KEAv4ConfigFile, KEAD2ConfigFile, KEACtrlAgentConfigFile) {
         let v4: KEAv4ConfigFile = serde_json::from_str(RUN_CHECKS_V4_TEMPLATE).unwrap();
@@ -292,5 +208,39 @@ mod test {
             .len(),
             3
         );
+    }
+
+    #[test]
+    fn get_args_from_file_test() {
+        let mut tempfile = NamedTempFile::new().unwrap();
+        tempfile
+            .write_all(GET_FILE_ARGS_TEMPLATE.as_bytes())
+            .unwrap();
+
+        let mock_args = CLIArgs {
+            config_filepath: Some(String::from(tempfile.path().to_str().unwrap_or_default())),
+            skip_not_exists: true,
+            use_threads: false,
+            with_summary: false,
+            ctrl_agent_filepath: None,
+            d2_filepath: None,
+            database_filepath: None,
+            database_type: super::KEALintDatabaseTypes::sqlite,
+            dir_path: None,
+            format: super::KEALintOutputFormatTypes::json,
+            mode: super::KEALintModeTypes::cli,
+            output_filepath: None,
+            unix_socket_filepath: None,
+            v4_filepath: Some("BAD PATH".to_string()),
+        };
+
+        let args = get_args(mock_args);
+
+        assert_eq!(args.with_summary, true);
+        assert_eq!(args.dir_path, Some("./".to_string()));
+        assert_eq!(args.use_threads, true);
+        // Not exists params
+        assert_eq!(args.v4_filepath, None);
+        assert_eq!(args.skip_not_exists, false);
     }
 }

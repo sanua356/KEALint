@@ -98,3 +98,11 @@ pub static RUN_CHECKS_V4_TEMPLATE: &str = r#"
 	}
 }
 "#;
+
+pub static GET_FILE_ARGS_TEMPLATE: &str = r#"
+{
+	"with-summary": true,
+	"dir-path": "./",
+	"use-threads": true
+}
+"#;
