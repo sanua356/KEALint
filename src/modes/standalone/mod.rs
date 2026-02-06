@@ -68,17 +68,17 @@ fn handle_query(stream: UnixStream, database_path: String) {
 }
 
 pub fn run_standalone(args: CLIArgs) {
-    if args.unix_socket_path.is_none() {
+    if args.unix_socket_filepath.is_none() {
         panic!("The path for the UNIX listening socket is not specified!");
     }
 
-    let unix_socket_path = args.unix_socket_path.unwrap();
+    let unix_socket_path = args.unix_socket_filepath.unwrap();
 
-    if args.database_path.is_none() {
+    if args.database_filepath.is_none() {
         panic!("The path for the database is not specified!");
     }
 
-    let database_path = args.database_path.unwrap();
+    let database_path = args.database_filepath.unwrap();
     let connection = Connection::open(database_path.clone())
         .expect("An error occurred when connecting to an SQLite database.");
 

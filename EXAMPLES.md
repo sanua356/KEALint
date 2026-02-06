@@ -213,7 +213,6 @@ By importance:
 Critical = 2 problem(s).  
 Info = 23 problem(s).  
 Warning = 29 problem(s).
-
 ```
 
 
@@ -232,7 +231,7 @@ Writing checks to the SQLite3 database when receiving them from a UNIX socket.
  **Run command:**
 
  ```
-./kealint --mode standalone --unix-socket-path /tmp/kealint_unix.sock --database-path testdb.sq3
+./kealint --mode standalone --unix-socket-filepath /tmp/kealint_unix.sock --database-filepath testdb.sq3
  ```
  
   **Result:**
@@ -241,3 +240,85 @@ Writing checks to the SQLite3 database when receiving them from a UNIX socket.
 Database migrations applied successfully!
 Server runned in standalone mode!
  ```
+
+
+
+### Example with CLI mode and config file
+
+Printing check results to the console. 
+Using config file for storing flags.
+
+ **File structure:**
+
+```
+	- #️⃣ kealint
+	- 📄 config.json
+	- 💾 database.sq3
+```
+
+ **Config file content:**
+
+```json
+	{
+		"with-summary": true,
+		"dir-path": "./",
+		"use-threads": true,
+		"mode": "cli"
+	}
+```
+
+ **Run command:**
+
+ ```
+ ./kealint --config-filepath ./config.json
+ ```
+ 
+  **Result:**
+
+ ```
+┌──────────────────────┬──────────────┬────────────┬──────────────────────┬──────────────────────┬──────────────────────┐
+│ name                 │ config_type  │ importance │ description          │ places               │ links                │
+├──────────────────────┼──────────────┼────────────┼──────────────────────┼──────────────────────┼──────────────────────┤
+│ INTERFACES::NoInterf │ Dhcp4        │ Info       │ No network interface │ interfaces-config.in │ https://kea.readthed │
+│ acesInInterfacesConf │              │            │ s are specified in t │ terfaces             │ ocs.io/en/latest/arm │
+│ igRule               │              │            │ he server configurat │                      │ /dhcp6-srv.html#inte │
+│                      │              │            │ ion. Addresses will  │                      │ rface-configuration  │
+│                      │              │            │ not be serviced.     │                      │                      │
+├──────────────────────┼──────────────┼────────────┼──────────────────────┼──────────────────────┼──────────────────────┤
+│ ALLOCATOR::NotSelect │ Dhcp4        │ Info       │ The 'iterative' addr │ allocator            │ https://kea.readthed │
+│ IterativeAllocatorFo │              │            │ ess allocator is not │                      │ ocs.io/en/latest/arm │
+│ rSharedLeaseDatabase │              │            │  recommended for use │                      │ /dhcp4-srv.html#iter │
+│                      │              │            │  with a shared datab │                      │ ative-allocator      │
+│                      │              │            │ ase of rents on seve │                      │                      │
+│                      │              │            │ ral servers.         │                      │                      │
+├──────────────────────┼──────────────┼────────────┼──────────────────────┼──────────────────────┼──────────────────────┤
+│ LEASE_DATABASE::NotC │ Dhcp4        │ Warning    │ It is recommended to │ lease-database.on-fa │ https://kea.readthed │
+│ hangeStopRetryExitSt │              │            │  set the 'on-fail' p │ il                   │ ocs.io/en/latest/arm │
+│ rategyOnFailRule     │              │            │ arameter in the 'lea │                      │ /dhcp6-srv.html#leas │
+│                      │              │            │ se-database' configu │                      │ e-database-configura │
+│                      │              │            │ ration to 'stop-retr │                      │ tion                 │
+│                      │              │            │ y-exit' for the corr │                      │                      │
+│                      │              │            │ ect processing of le │                      │                      │
+│                      │              │            │ ases in the producti │                      │                      │
+│                      │              │            │ on environment.      │                      │                      │
+├──────────────────────┼──────────────┼────────────┼──────────────────────┼──────────────────────┼──────────────────────┤
+│ LEASE_DATABASE::Leas │ Dhcp4        │ Info       │ The Sanity Checks me │ lease-database.type  │ https://kea.readthed │
+│ eSanityChecksEnabled │              │            │ chanism is not imple │                      │ ocs.io/en/latest/arm │
+│ ForNotMemfileBackend │              │            │ mented for rent data │  sanity-checks.lease │ /dhcp4-srv.html#sani │
+│                      │              │            │ bases other than 'me │ -checks              │ ty-checks-in-dhcpv4  │
+│                      │              │            │ mfile'.              │                      │                      │
+├──────────────────────┼──────────────┼────────────┼──────────────────────┼──────────────────────┼──────────────────────┤
+... more rules
+
+Found 54 problem(s).  
+  
+  
+By type config:  
+ControlAgent = 5 problem(s).  
+Dhcp4 = 49 problem(s).  
+  
+By importance:  
+Critical = 2 problem(s).  
+Info = 23 problem(s).  
+Warning = 29 problem(s).
+```
