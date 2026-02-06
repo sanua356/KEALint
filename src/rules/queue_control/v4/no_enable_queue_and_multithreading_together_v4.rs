@@ -3,9 +3,11 @@ use crate::{
     configs::KEAv4Config,
 };
 
-pub struct NoEnableQueueAndMultithreadingTogetherRule;
+use super::super::shared::get_no_enable_queue_and_multithreading_together_rule;
 
-impl Rule<KEAv4Config> for NoEnableQueueAndMultithreadingTogetherRule {
+pub struct NoEnableQueueAndMultithreadingTogetherV4Rule;
+
+impl Rule<KEAv4Config> for NoEnableQueueAndMultithreadingTogetherV4Rule {
     fn get_name(&self) -> &'static str {
         "QUEUE_CONTROL::NoEnableQueueAndMultithreadingTogetherRule"
     }
@@ -16,20 +18,10 @@ impl Rule<KEAv4Config> for NoEnableQueueAndMultithreadingTogetherRule {
         RuleConfigs::Dhcp4
     }
     fn check(&self, config: &KEAv4Config) -> Option<Vec<RuleResult>> {
-        let is_enabled_multithreading = config.multi_threading.as_ref()?.enable_multi_threading?;
-        let is_enabled_queue_control = config.dhcp_queue_control.as_ref()?.enable_queue?;
-
-        if is_enabled_multithreading && is_enabled_queue_control {
-            return Some(vec![RuleResult {
-                description: "The 'dhcp-queue-control' parameters will not work while multithreading mode is activated for KEA in the global configuration using the 'multi-threading' key.".to_string(),
-                places: Some(vec!["dhcp-queue-control.enable-queue".to_string(), "multi-threading.enable-multi-threading".to_string()]),
-                links: Some(&[
-                    "https://kea.readthedocs.io/en/latest/arm/congestion-handling.html#configuring-congestion-handling",
-                ]),
-            }]);
-        }
-
-        None
+        get_no_enable_queue_and_multithreading_together_rule(
+            &config.multi_threading,
+            &config.dhcp_queue_control,
+        )
     }
 }
 
@@ -41,7 +33,7 @@ mod tests {
 
     use super::{
         super::_tests::NO_ENABLE_QUEUE_AND_MULTITHREADING_TOGETER_RULE_TEMPLATE,
-        NoEnableQueueAndMultithreadingTogetherRule,
+        NoEnableQueueAndMultithreadingTogetherV4Rule,
     };
 
     #[test]
@@ -49,7 +41,7 @@ mod tests {
         let data: KEAv4Config =
             serde_json::from_str(NO_ENABLE_QUEUE_AND_MULTITHREADING_TOGETER_RULE_TEMPLATE).unwrap();
 
-        let rule = NoEnableQueueAndMultithreadingTogetherRule;
+        let rule = NoEnableQueueAndMultithreadingTogetherV4Rule;
         assert!(rule.check(&data).is_some());
     }
 
@@ -60,7 +52,7 @@ mod tests {
         json_value["multi-threading"]["enable-multi-threading"] = Value::from(false);
         let data: KEAv4Config = serde_json::from_value(json_value).unwrap();
 
-        let rule = NoEnableQueueAndMultithreadingTogetherRule;
+        let rule = NoEnableQueueAndMultithreadingTogetherV4Rule;
         assert!(rule.check(&data).is_none());
     }
 }

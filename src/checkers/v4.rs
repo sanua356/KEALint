@@ -29,7 +29,7 @@ use crate::{
             NoDebugLoggersV4Rule, NoLinebreakMessagesLoggersV4Rule, NoPercentMMessagesLoggersV4Rule,
         },
         option_data::{IncompleteOctetsBytesInOptionValuesRule, SpecifiedKEAManagedOptionsRule},
-        queue_control::NoEnableQueueAndMultithreadingTogetherRule,
+        queue_control::NoEnableQueueAndMultithreadingTogetherV4Rule,
         reservations::{
             AllReservationsOutOfPoolsRule, DisabledInSubnetReservationsWithEnabledOutOfPool,
             GlobalReservationsOccupyDynamicPoolsRule,
@@ -106,7 +106,7 @@ impl RuleChecker<KEAv4Config> for RulesV4 {
                 Box::new(DisabledInSubnetReservationsWithEnabledOutOfPool),
                 Box::new(GlobalReservationsOccupyDynamicPoolsRule),
             ],
-            queue_control: [Box::new(NoEnableQueueAndMultithreadingTogetherRule)],
+            queue_control: [Box::new(NoEnableQueueAndMultithreadingTogetherV4Rule)],
             option_data: [
                 Box::new(SpecifiedKEAManagedOptionsRule),
                 Box::new(IncompleteOctetsBytesInOptionValuesRule),

@@ -1,3 +1,4 @@
+
 # Rules "Queue Control"
 
 ## Implemented For
@@ -6,9 +7,9 @@
 - ❌ - NOT implemented for specified config.
 - 🚫 - Cannot be implemented for the specified config.
 
-|Rule name|DHCPv4|DDNS|Control Agent|
-|--|--|--|--|
-|[NoEnableQueueAndMultithreadingTogetherRule](#NoEnableQueueAndMultithreadingTogetherRule)|✅|🚫|🚫|
+|Rule name|DHCPv4|DHCPv6|DDNS|Control Agent|
+|--|--|--|--|--|
+|[NoEnableQueueAndMultithreadingTogetherRule](#NoEnableQueueAndMultithreadingTogetherRule)|✅|✅|🚫|🚫|
 
 
 ## Rules

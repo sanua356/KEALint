@@ -19,6 +19,7 @@ use crate::{
         loggers::{
             NoDebugLoggersV6Rule, NoLinebreakMessagesLoggersV6Rule, NoPercentMMessagesLoggersV6Rule,
         },
+        queue_control::NoEnableQueueAndMultithreadingTogetherV6Rule,
     },
 };
 
@@ -29,6 +30,7 @@ pub struct RulesV6 {
     pub dhcp_ddns: [Box<dyn Rule<KEAv6Config>>; 1],
     pub interfaces: [Box<dyn Rule<KEAv6Config>>; 1],
     pub lease_database: [Box<dyn Rule<KEAv6Config>>; 3],
+    pub queue_control: [Box<dyn Rule<KEAv6Config>>; 1],
 }
 
 impl RuleChecker<KEAv6Config> for RulesV6 {
@@ -56,6 +58,7 @@ impl RuleChecker<KEAv6Config> for RulesV6 {
                 NotDDNSQualifyingSuffixWithEnabledDDNSUpdatesV6Rule,
             )],
             interfaces: [Box::new(NoInterfacesInInterfacesConfigV6Rule)],
+            queue_control: [Box::new(NoEnableQueueAndMultithreadingTogetherV6Rule)],
         }
     }
 
@@ -67,6 +70,7 @@ impl RuleChecker<KEAv6Config> for RulesV6 {
             &self.dhcp_ddns,
             &self.interfaces,
             &self.lease_database,
+            &self.queue_control,
         ]
     }
 
