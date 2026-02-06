@@ -1,3 +1,4 @@
+
 # Rules "Loggers"
 
 ## Implemented For
@@ -6,11 +7,11 @@
 - ❌ - NOT implemented for specified config.
 - 🚫 - Cannot be implemented for the specified config.
 
-|Rule name|DHCPv4|DDNS|Control Agent|
-|--|--|--|--|
-|[NoDebugLoggersRule](#NoDebugLoggersRule)|✅|✅|✅|
-|[NoLinebreakMessagesLoggersRule](#NoLinebreakMessagesLoggersRule)|✅|✅|✅|
-|[NoPercentMMessagesLoggersCtrlAgentRule](#NoPercentMMessagesLoggersCtrlAgentRule)|✅|✅|✅|
+|Rule name|DHCPv4|DHCPv6|DDNS|Control Agent|
+|--|--|--|--|--|
+|[NoDebugLoggersRule](#NoDebugLoggersRule)|✅|✅|✅|✅|
+|[NoLinebreakMessagesLoggersRule](#NoLinebreakMessagesLoggersRule)|✅|✅|✅|✅|
+|[NoPercentMMessagesLoggersCtrlAgentRule](#NoPercentMMessagesLoggersCtrlAgentRule)|✅|✅|✅|✅|
 
 > The examples in the rules below are for the "Dhcp4" configuration, but they are also relevant for "D2" and "Control Agent".
 

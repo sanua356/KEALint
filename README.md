@@ -1,11 +1,12 @@
 
+
 # KEALint
 
 ## Introduction
 
 KEALint - ⚡ blazingly fast ⚡ static configuration analyzer ISC KEA DHCP for version 3.x.x, **written in Rust!**
 
-**More than 40 validation rules** for DHCPv4, D2, and Control Agent configurations.
+**More than 40 validation rules** for DHCPv4, DHCPv6 (partially), D2, and Control Agent configurations.
 
 Implements a flexible **CLI interface** for interaction and output of verification results.
 
@@ -67,6 +68,8 @@ Command line interface 'KEALint' implements the following interaction parameters
 `--format` - Optional. Defines the format for the output of the verification result. You can specify the value 'table' or 'json'.
 
 `--v4-filepath` - Optional. Specifies the path to the KEA DHCPv4 configuration file. If specified together the `dir-path` parameter, the current parameter overrides the path to the v4 configuration file.
+
+`--v6-filepath` - Optional. Specifies the path to the KEA DHCPv6 configuration file. If specified together the `dir-path` parameter, the current parameter overrides the path to the v4 configuration file.
 
 `--d2-filepath` - Optional. Specifies the path to the KEA DHCP DDNS configuration file. If specified together the `dir-path` parameter, the current parameter overrides the path to the DDNS configuration file.
 

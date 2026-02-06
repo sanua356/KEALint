@@ -3,9 +3,11 @@ use crate::{
     configs::KEAv4Config,
 };
 
-pub struct NotDDNSQualifyingSuffixWithEnabledDDNSUpdatesRule;
+use super::super::shared::get_not_ddns_qualifying_suffix_with_enabled_ddns_updates_rule;
 
-impl Rule<KEAv4Config> for NotDDNSQualifyingSuffixWithEnabledDDNSUpdatesRule {
+pub struct NotDDNSQualifyingSuffixWithEnabledDDNSUpdatesV4Rule;
+
+impl Rule<KEAv4Config> for NotDDNSQualifyingSuffixWithEnabledDDNSUpdatesV4Rule {
     fn get_name(&self) -> &'static str {
         "DDNS_SERVER::NotDDNSQualifyingSuffixWithEnabledDDNSUpdatesRule"
     }
@@ -20,15 +22,10 @@ impl Rule<KEAv4Config> for NotDDNSQualifyingSuffixWithEnabledDDNSUpdatesRule {
 
         let ddns_qualifying_suffix = config.ddns_qualifying_suffix.clone().unwrap_or_default();
 
-        if is_enabled_ddns && ddns_qualifying_suffix.is_empty() {
-            return Some(vec![RuleResult {
-                description: "It is recommended to specify the value for the 'ddns-qualifying-suffix' field when enabling DDNS updates.".to_string(),
-                links: Some(&["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#kea-dhcp4-name-generation-for-ddns-update-requests"]),
-                places: Some(vec!["ddns-send-updates".to_string(), "ddns-qualifying-suffix".to_string()]),
-            }]);
-        }
-
-        None
+        get_not_ddns_qualifying_suffix_with_enabled_ddns_updates_rule(
+            is_enabled_ddns,
+            ddns_qualifying_suffix,
+        )
     }
 }
 
@@ -40,7 +37,7 @@ mod tests {
 
     use super::{
         super::_tests::NOT_DDNS_QUALIFYING_SUFFIX_WITH_ENABLED_DDNS_UPDATES_RULE_TEST_TEMPLATE,
-        NotDDNSQualifyingSuffixWithEnabledDDNSUpdatesRule,
+        NotDDNSQualifyingSuffixWithEnabledDDNSUpdatesV4Rule,
     };
 
     #[test]
@@ -50,7 +47,7 @@ mod tests {
         )
         .unwrap();
 
-        let rule = NotDDNSQualifyingSuffixWithEnabledDDNSUpdatesRule;
+        let rule = NotDDNSQualifyingSuffixWithEnabledDDNSUpdatesV4Rule;
         assert!(rule.check(&data).is_some());
     }
 
@@ -63,7 +60,7 @@ mod tests {
         json_value["ddns-qualifying-suffix"] = Value::from("aa.bb.cc");
         let data: KEAv4Config = serde_json::from_value(json_value).unwrap();
 
-        let rule = NotDDNSQualifyingSuffixWithEnabledDDNSUpdatesRule;
+        let rule = NotDDNSQualifyingSuffixWithEnabledDDNSUpdatesV4Rule;
         assert!(rule.check(&data).is_none());
     }
 }

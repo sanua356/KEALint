@@ -1,3 +1,4 @@
+
 # Rules "Allocator"
 
 ## Implemented For
@@ -6,10 +7,10 @@
 - ❌ - NOT implemented for specified config.
 - 🚫 - Cannot be implemented for the specified config.
 
-|Rule name|DHCPv4|DDNS|Control Agent|
-|--|--|--|--|
-|[NotSelectFLQAllocatorInGlobalLevelConfig](#NotSelectFLQAllocatorInGlobalLevelConfig)|✅|🚫|🚫|
-|[NotSelectIterativeAllocatorForSharedLeaseDatabase](#NotSelectIterativeAllocatorForSharedLeaseDatabase)|✅|🚫|🚫|
+|Rule name|DHCPv4|DHCPv6|DDNS|Control Agent|
+|--|--|--|--|--|
+|[NotSelectFLQAllocatorInGlobalLevelConfig](#NotSelectFLQAllocatorInGlobalLevelConfig)|✅|✅|🚫|🚫|
+|[NotSelectIterativeAllocatorForSharedLeaseDatabase](#NotSelectIterativeAllocatorForSharedLeaseDatabase)|✅|✅|🚫|🚫|
 
 ## Rules
 
@@ -17,7 +18,7 @@
 
 - **Codename** - ALLOCATOR::NotSelectFLQAllocatorInGlobalLevelConfig.
 - **Importance** - INFO.
-- **Config type** - DHCPv4.
+- **Config type** - DHCPv4, DHCPv6.
 - **Articles** - https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#free-lease-queue-allocator
 
 #### Problem
@@ -53,7 +54,7 @@ Specify a "random" or "iteratve" address allocator in global level configuration
 
 - **Codename** - ALLOCATOR::NotSelectIterativeAllocatorForSharedLeaseDatabase.
 - **Importance** - INFO.
-- **Config type** - DHCPv4.
+- **Config type** - DHCPv4, DHCPv6.
 - **Articles** - https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#iterative-allocator
 
 #### Problem 

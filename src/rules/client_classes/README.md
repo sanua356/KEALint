@@ -6,17 +6,17 @@
 - ❌ - NOT implemented for specified config.
 - 🚫 - Cannot be implemented for the specified config.
 
-|Rule name|DHCPv4|DDNS|Control Agent|
-|--|--|--|--|
-|[EvaluateRequiredAsAdditionalClassesRule](#EvaluateRequiredAsAdditionalClassesRule)|✅|🚫|🚫|
-|[NotValidLifetimeForAdditionalClassesRule](#NotValidLifetimeForAdditionalClassesRule)|✅|🚫|🚫|
-|[NotRecommendedPrefixAFTER_ClassesRule](#NotRecommendedPrefixAFTER_ClassesRule)|✅|🚫|🚫|
+|Rule name|DHCPv4|DHCPv6|DDNS|Control Agent|
+|--|--|--|--|--|
+|[EvaluateRequiredAsAdditionalClassesRule](#EvaluateRequiredAsAdditionalClassesRule)|✅|❌|🚫|🚫|
+|[NotValidLifetimeForAdditionalClassesRule](#NotValidLifetimeForAdditionalClassesRule)|✅|✅|🚫|🚫|
+|[NotRecommendedPrefixAFTER_ClassesRule](#NotRecommendedPrefixAFTER_ClassesRule)|✅|✅|🚫|🚫|
 
 ## Rules
 
 ### EvaluateRequiredAsAdditionalClassesRule
 
-- **Codename** - CLIENT_CLASSES::NotRecommendedPrefixAFTER_ClassesRule.
+- **Codename** - CLIENT_CLASSES::EvaluateRequiredAsAdditionalClassesRule.
 - **Importance** - WARNING.
 - **Config type** - DHCPv4.
 - **Articles** - https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#additional-classification
@@ -132,7 +132,7 @@ Set the `only-in-additional-list` flag to "true" for the required client classes
 
 - **Codename** - CLIENT_CLASSES::NotValidLifetimeForAdditionalClassesRule.
 - **Importance** - WARNING.
-- **Config type** - DHCPv4.
+- **Config type** - DHCPv4, DHCPv6.
 - **Articles** - https://kea.readthedocs.io/en/stable/arm/classify.html#class-priority
 
 #### Problem
@@ -177,7 +177,7 @@ Set the `only-in-additional-list` flag to "false" for client classes or remove l
     	    {
 				"name": "test_not_required_class",
 				"test": "",
-				"only-in-additional-list": false,
+				"only-in-additional-list": false, // Disable flag
 				"valid-lifetime": 4000, // Or remove it
 				"min-valid-lifetime": 5000, // Or remove it
 				"max-valid-lifetime": 6000, // Or remove it
@@ -194,7 +194,7 @@ Set the `only-in-additional-list` flag to "false" for client classes or remove l
 
 - **Codename** - CLIENT_CLASSES::NotRecommendedPrefixAFTER_ClassesRule.
 - **Importance** - INFO.
-- **Config type** - DHCPv4.
+- **Config type** - DHCPv4, DHCPv6.
 - **Articles** - https://kea.readthedocs.io/en/latest/arm/classify.html#built-in-client-classes
 
 #### Problem

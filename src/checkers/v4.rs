@@ -8,10 +8,10 @@ use crate::{
             NotSelectIterativeAllocatorForSharedLeaseDatabaseV4Rule,
         },
         client_classes::{
-            EvaluateRequiredAsAdditionalClassesRule, NotLifetimeForAdditionalClassesRule,
-            NotRecommendedPrefixAFTER_ClassesRule,
+            EvaluateRequiredAsAdditionalClassesRule, NotLifetimeForAdditionalClassesV4Rule,
+            NotRecommendedPrefixAFTER_ClassesV4Rule,
         },
-        ddns_server::NotDDNSQualifyingSuffixWithEnabledDDNSUpdatesRule,
+        ddns_server::NotDDNSQualifyingSuffixWithEnabledDDNSUpdatesV4Rule,
         hooks::{
             BadHooksOrderRule, MoreOneObjectConfigHARule,
             MultithreadingModesNotEqualInConfigAndHARule,
@@ -92,8 +92,8 @@ impl RuleChecker<KEAv4Config> for RulesV4 {
             ],
             client_classes: [
                 Box::new(EvaluateRequiredAsAdditionalClassesRule),
-                Box::new(NotLifetimeForAdditionalClassesRule),
-                Box::new(NotRecommendedPrefixAFTER_ClassesRule),
+                Box::new(NotLifetimeForAdditionalClassesV4Rule),
+                Box::new(NotRecommendedPrefixAFTER_ClassesV4Rule),
             ],
             shared_networks: [
                 Box::new(OneSubnetInSharedNetworksRule),
@@ -111,7 +111,9 @@ impl RuleChecker<KEAv4Config> for RulesV4 {
                 Box::new(SpecifiedKEAManagedOptionsRule),
                 Box::new(IncompleteOctetsBytesInOptionValuesRule),
             ],
-            dhcp_ddns: [Box::new(NotDDNSQualifyingSuffixWithEnabledDDNSUpdatesRule)],
+            dhcp_ddns: [Box::new(
+                NotDDNSQualifyingSuffixWithEnabledDDNSUpdatesV4Rule,
+            )],
             loggers: [
                 Box::new(NoDebugLoggersV4Rule),
                 Box::new(NoLinebreakMessagesLoggersV4Rule),
