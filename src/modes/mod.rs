@@ -44,14 +44,13 @@ pub fn run_checks(
 
 pub fn get_args(args: CLIArgs) -> CLIArgs {
     if let Some(config_path) = &args.config_filepath {
-        let file_args: Option<CLIArgs> =
-            match fs::read_to_string(Path::new(config_path).to_path_buf()) {
-                Ok(content) => match serde_json::from_str(&content) {
-                    Ok(config) => Some(config),
-                    Err(err) => panic!("An error occurred while parsing config file: {}", err),
-                },
-                Err(err) => panic!("An error occurred while reading the config file: {}", err),
-            };
+        let file_args: Option<CLIArgs> = match fs::read_to_string(Path::new(config_path)) {
+            Ok(content) => match serde_json::from_str(&content) {
+                Ok(config) => Some(config),
+                Err(err) => panic!("An error occurred while parsing config file: {}", err),
+            },
+            Err(err) => panic!("An error occurred while reading the config file: {}", err),
+        };
 
         if let Some(f_args) = file_args {
             return f_args;

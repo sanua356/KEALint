@@ -1,44 +1,29 @@
 use clap::{Parser, ValueEnum};
 use serde::Deserialize;
 
-#[derive(Debug, Clone, Copy, ValueEnum, Deserialize)]
+#[derive(Debug, Default, Clone, Copy, ValueEnum, Deserialize)]
 pub enum KEALintModeTypes {
     #[allow(non_camel_case_types)]
+    #[default]
     cli,
     #[allow(non_camel_case_types)]
     standalone,
 }
 
-impl Default for KEALintModeTypes {
-    fn default() -> Self {
-        KEALintModeTypes::cli
-    }
-}
-
-#[derive(Debug, Clone, Copy, ValueEnum, Deserialize)]
+#[derive(Debug, Default, Clone, Copy, ValueEnum, Deserialize)]
 pub enum KEALintDatabaseTypes {
     #[allow(non_camel_case_types)]
+    #[default]
     sqlite,
 }
 
-impl Default for KEALintDatabaseTypes {
-    fn default() -> Self {
-        KEALintDatabaseTypes::sqlite
-    }
-}
-
-#[derive(Debug, Clone, Copy, ValueEnum, Deserialize)]
+#[derive(Debug, Default, Clone, Copy, ValueEnum, Deserialize)]
 pub enum KEALintOutputFormatTypes {
     #[allow(non_camel_case_types)]
     json,
     #[allow(non_camel_case_types)]
+    #[default]
     table,
-}
-
-impl Default for KEALintOutputFormatTypes {
-    fn default() -> Self {
-        KEALintOutputFormatTypes::table
-    }
 }
 
 #[derive(Debug, Parser, Deserialize)]
