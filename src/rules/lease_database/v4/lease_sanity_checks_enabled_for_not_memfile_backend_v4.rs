@@ -1,11 +1,13 @@
 use crate::{
     common::{Rule, RuleConfigs, RuleLevels, RuleResult},
-    configs::{KEALeaseDatabaseTypes, KEAv4Config},
+    configs::KEAv4Config,
 };
 
-pub struct LeaseSanityChecksEnabledForNotMemfileBackend;
+use super::super::shared::get_lease_sanity_checks_enabled_for_not_memfile_backend_rule;
 
-impl Rule<KEAv4Config> for LeaseSanityChecksEnabledForNotMemfileBackend {
+pub struct LeaseSanityChecksEnabledForNotMemfileBackendV4Rule;
+
+impl Rule<KEAv4Config> for LeaseSanityChecksEnabledForNotMemfileBackendV4Rule {
     fn get_name(&self) -> &'static str {
         "LEASE_DATABASE::LeaseSanityChecksEnabledForNotMemfileBackend"
     }
@@ -16,18 +18,10 @@ impl Rule<KEAv4Config> for LeaseSanityChecksEnabledForNotMemfileBackend {
         RuleConfigs::Dhcp4
     }
     fn check(&self, config: &KEAv4Config) -> Option<Vec<RuleResult>> {
-        if let Some(sanity_checks) = &config.sanity_checks
-            && sanity_checks.lease_checks.is_some()
-            && config.lease_database.r#type != KEALeaseDatabaseTypes::Memfile
-        {
-            return Some(vec![RuleResult {
-                description: "The Sanity Checks mechanism is not implemented for rent databases other than 'memfile'.".to_string(),
-                places: Some(vec!["lease-database.type".to_string(), "sanity-checks.lease-checks".to_string()]),
-                links: Some(&["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#sanity-checks-in-dhcpv4"]),
-            }]);
-        }
-
-        None
+        get_lease_sanity_checks_enabled_for_not_memfile_backend_rule(
+            &config.sanity_checks,
+            &config.lease_database,
+        )
     }
 }
 
@@ -39,7 +33,7 @@ mod tests {
 
     use super::{
         super::_tests::LEASE_SANITY_CHECKS_ENABLED_FOR_NOT_MEMFILE_BACKEND_RULE_TEST_TEMPLATE,
-        LeaseSanityChecksEnabledForNotMemfileBackend,
+        LeaseSanityChecksEnabledForNotMemfileBackendV4Rule,
     };
 
     #[test]
@@ -49,7 +43,7 @@ mod tests {
         )
         .unwrap();
 
-        let rule = LeaseSanityChecksEnabledForNotMemfileBackend;
+        let rule = LeaseSanityChecksEnabledForNotMemfileBackendV4Rule;
         assert!(rule.check(&data).is_some());
     }
 
@@ -62,7 +56,7 @@ mod tests {
         json_value["lease-database"]["type"] = Value::from("memfile");
         let data: KEAv4Config = serde_json::from_value(json_value).unwrap();
 
-        let rule = LeaseSanityChecksEnabledForNotMemfileBackend;
+        let rule = LeaseSanityChecksEnabledForNotMemfileBackendV4Rule;
         assert!(rule.check(&data).is_none());
     }
 }

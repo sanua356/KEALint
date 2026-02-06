@@ -11,6 +11,11 @@ use crate::{
             NotLifetimeForAdditionalClassesV6Rule, NotRecommendedPrefixAFTER_ClassesV6Rule,
         },
         ddns_server::NotDDNSQualifyingSuffixWithEnabledDDNSUpdatesV6Rule,
+        interfaces::NoInterfacesInInterfacesConfigV6Rule,
+        lease_database::{
+            LeaseSanityChecksEnabledForNotMemfileBackendV6Rule,
+            NoEnabledPersistFlagForMemfileLeasesV6Rule, NotChangeStopRetryExitStrategyOnFailV6Rule,
+        },
         loggers::{
             NoDebugLoggersV6Rule, NoLinebreakMessagesLoggersV6Rule, NoPercentMMessagesLoggersV6Rule,
         },
@@ -22,6 +27,8 @@ pub struct RulesV6 {
     pub allocators: [Box<dyn Rule<KEAv6Config>>; 2],
     pub client_classes: [Box<dyn Rule<KEAv6Config>>; 2],
     pub dhcp_ddns: [Box<dyn Rule<KEAv6Config>>; 1],
+    pub interfaces: [Box<dyn Rule<KEAv6Config>>; 1],
+    pub lease_database: [Box<dyn Rule<KEAv6Config>>; 3],
 }
 
 impl RuleChecker<KEAv6Config> for RulesV6 {
@@ -31,6 +38,11 @@ impl RuleChecker<KEAv6Config> for RulesV6 {
                 Box::new(NoDebugLoggersV6Rule),
                 Box::new(NoLinebreakMessagesLoggersV6Rule),
                 Box::new(NoPercentMMessagesLoggersV6Rule),
+            ],
+            lease_database: [
+                Box::new(NoEnabledPersistFlagForMemfileLeasesV6Rule),
+                Box::new(NotChangeStopRetryExitStrategyOnFailV6Rule),
+                Box::new(LeaseSanityChecksEnabledForNotMemfileBackendV6Rule),
             ],
             allocators: [
                 Box::new(NotSelectFLQAllocatorInGlobalLevelConfigV6Rule),
@@ -43,6 +55,7 @@ impl RuleChecker<KEAv6Config> for RulesV6 {
             dhcp_ddns: [Box::new(
                 NotDDNSQualifyingSuffixWithEnabledDDNSUpdatesV6Rule,
             )],
+            interfaces: [Box::new(NoInterfacesInInterfacesConfigV6Rule)],
         }
     }
 
@@ -52,6 +65,8 @@ impl RuleChecker<KEAv6Config> for RulesV6 {
             &self.allocators,
             &self.client_classes,
             &self.dhcp_ddns,
+            &self.interfaces,
+            &self.lease_database,
         ]
     }
 

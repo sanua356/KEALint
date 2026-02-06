@@ -21,7 +21,7 @@
 
 - **Codename** - LOGGERS::NoDebugLoggersRule.
 - **Importance** - INFO.
-- **Config type** - DHCPv4, D2, Control Agent.
+- **Config type** - DHCPv4, DHCPv6, D2, Control Agent.
 - **Articles** - No article.
 
 #### Problem
@@ -86,7 +86,7 @@ Change the logging level (for example, to "INFO").
 
 - **Codename** - LOGGERS::NoLinebreakMessagesLoggersRule.
 - **Importance** - INFO.
-- **Config type** - DHCPv4, D2, Control Agent.
+- **Config type** - DHCPv4, DHCPv6, D2, Control Agent.
 - **Articles** - https://kea.readthedocs.io/en/latest/arm/logging.html#logging-message-format
 
 #### Problem
@@ -150,7 +150,7 @@ Add '\n' to the end of the string values for the `pattern` key of the loggers co
 
 - **Codename** - LOGGERS::NoPercentMMessagesLoggersCtrlAgentRule.
 - **Importance** - INFO.
-- **Config type** - DHCPv4, D2, Control Agent.
+- **Config type** - DHCPv4, DHCPv6, D2, Control Agent.
 - **Articles** - https://kea.readthedocs.io/en/latest/arm/logging.html#logging-message-format
 
 #### Problem

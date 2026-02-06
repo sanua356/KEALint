@@ -1,9 +1,11 @@
 use crate::common::{Rule, RuleConfigs, RuleLevels, RuleResult};
 use crate::configs::KEAv4Config;
 
-pub struct NoInterfacesInInterfacesConfigRule;
+use super::super::shared::get_no_active_interfaces;
 
-impl Rule<KEAv4Config> for NoInterfacesInInterfacesConfigRule {
+pub struct NoInterfacesInInterfacesConfigV4Rule;
+
+impl Rule<KEAv4Config> for NoInterfacesInInterfacesConfigV4Rule {
     fn get_level(&self) -> RuleLevels {
         RuleLevels::Info
     }
@@ -17,16 +19,7 @@ impl Rule<KEAv4Config> for NoInterfacesInInterfacesConfigRule {
     }
 
     fn check(&self, config: &KEAv4Config) -> Option<Vec<RuleResult>> {
-        if config.interfaces_config.interfaces.iter().len() == 0 {
-            return Some(
-	            vec![RuleResult {
-	                description: "No network interfaces are specified in the server configuration. Addresses will not be serviced.".to_string(),
-	                places: Some(vec!["interfaces-config.interfaces".to_string()]),
-					links: Some(&["https://kea.readthedocs.io/en/latest/arm/dhcp6-srv.html#interface-configuration"])
-	            }]
-            );
-        }
-        None
+        get_no_active_interfaces(&config.interfaces_config)
     }
 }
 
@@ -38,7 +31,7 @@ mod tests {
 
     use super::{
         super::_tests::NO_INTERFACES_IN_INTERFACES_CONFIG_RULE_TEST_TEMPLATE,
-        NoInterfacesInInterfacesConfigRule,
+        NoInterfacesInInterfacesConfigV4Rule,
     };
 
     #[test]
@@ -46,7 +39,7 @@ mod tests {
         let data: KEAv4Config =
             serde_json::from_str(NO_INTERFACES_IN_INTERFACES_CONFIG_RULE_TEST_TEMPLATE).unwrap();
 
-        let rule = NoInterfacesInInterfacesConfigRule;
+        let rule = NoInterfacesInInterfacesConfigV4Rule;
         assert!(rule.check(&data).is_some());
     }
 
@@ -60,7 +53,7 @@ mod tests {
             .insert("interfaces".to_string(), Value::from(["eth0"]));
         let data: KEAv4Config = serde_json::from_value(json_value).unwrap();
 
-        let rule = NoInterfacesInInterfacesConfigRule;
+        let rule = NoInterfacesInInterfacesConfigV4Rule;
         assert!(rule.check(&data).is_none());
     }
 }

@@ -1,3 +1,4 @@
+
 # Rules "Lease Database"
 
 ## Implemented For
@@ -6,11 +7,11 @@
 - ❌ - NOT implemented for specified config.
 - 🚫 - Cannot be implemented for the specified config.
 
-|Rule name|DHCPv4|DDNS|Control Agent|
-|--|--|--|--|
-|[LeaseSanityChecksEnabledForNotMemfileBackend](#LeaseSanityChecksEnabledForNotMemfileBackend)|✅|🚫|🚫|
-|[NoEnabledPersistFlagForMemfileLeases](#NoEnabledPersistFlagForMemfileLeases)|✅|🚫|🚫|
-|[NotChangeStopRetryExitStrategyOnFailRule](#NotChangeStopRetryExitStrategyOnFailRule)|✅|🚫|🚫|
+|Rule name|DHCPv4|DHCPv6|DDNS|Control Agent|
+|--|--|--|--|--|
+|[LeaseSanityChecksEnabledForNotMemfileBackend](#LeaseSanityChecksEnabledForNotMemfileBackend)|✅|✅|🚫|🚫|
+|[NoEnabledPersistFlagForMemfileLeases](#NoEnabledPersistFlagForMemfileLeases)|✅|✅|🚫|🚫|
+|[NotChangeStopRetryExitStrategyOnFailRule](#NotChangeStopRetryExitStrategyOnFailRule)|✅|✅|🚫|🚫|
 
 ## Rules
 
@@ -18,7 +19,7 @@
 
 - **Codename** - LEASE_DATABASE::LeaseSanityChecksEnabledForNotMemfileBackend.
 - **Importance** - INFO.
-- **Config type** - DHCPv4.
+- **Config type** - DHCPv4, DHCPv6.
 - **Articles** - https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#sanity-checks-in-dhcpv4
 
 #### Problem
@@ -72,7 +73,7 @@ Remove `sanity-checks` from the configuration or replace the lease storage with 
 
 - **Codename** - LEASE_DATABASE::NoEnabledPersistFlagForMemfileLeases.
 - **Importance** - CRITICAL.
-- **Config type** - DHCPv4.
+- **Config type** - DHCPv4, DHCPv6.
 - **Articles** - https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#memfile-basic-storage-for-leases
 
 #### Problem
@@ -116,7 +117,7 @@ Enable `persist` flag in the `lease-database` configuration.
 
 - **Codename** - LEASE_DATABASE::NotChangeStopRetryExitStrategyOnFailRule.
 - **Importance** - WARNING.
-- **Config type** - DHCPv4.
+- **Config type** - DHCPv4, DHCPv6.
 - **Articles** - https://kea.readthedocs.io/en/latest/arm/dhcp6-srv.html#lease-database-configuration
 
 #### Problem

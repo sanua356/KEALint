@@ -20,10 +20,10 @@ use crate::{
             NoMatchClientIdForFlexIDHookRule, UnnecessaryActivatedDatabaseHooksRule,
             UseUsrCheckHookRule,
         },
-        interfaces::NoInterfacesInInterfacesConfigRule,
+        interfaces::NoInterfacesInInterfacesConfigV4Rule,
         lease_database::{
-            LeaseSanityChecksEnabledForNotMemfileBackend, NoEnabledPersistFlagForMemfileLeasesRule,
-            NotChangeStopRetryExitStrategyOnFailRule,
+            LeaseSanityChecksEnabledForNotMemfileBackendV4Rule,
+            NoEnabledPersistFlagForMemfileLeasesV4Rule, NotChangeStopRetryExitStrategyOnFailV4Rule,
         },
         loggers::{
             NoDebugLoggersV4Rule, NoLinebreakMessagesLoggersV4Rule, NoPercentMMessagesLoggersV4Rule,
@@ -64,15 +64,15 @@ pub struct RulesV4 {
 impl RuleChecker<KEAv4Config> for RulesV4 {
     fn default() -> Self {
         RulesV4 {
-            interfaces: [Box::new(NoInterfacesInInterfacesConfigRule)],
+            interfaces: [Box::new(NoInterfacesInInterfacesConfigV4Rule)],
             allocators: [
                 Box::new(NotSelectFLQAllocatorInGlobalLevelConfigV4Rule),
                 Box::new(NotSelectIterativeAllocatorForSharedLeaseDatabaseV4Rule),
             ],
             lease_database: [
-                Box::new(NoEnabledPersistFlagForMemfileLeasesRule),
-                Box::new(NotChangeStopRetryExitStrategyOnFailRule),
-                Box::new(LeaseSanityChecksEnabledForNotMemfileBackend),
+                Box::new(NoEnabledPersistFlagForMemfileLeasesV4Rule),
+                Box::new(NotChangeStopRetryExitStrategyOnFailV4Rule),
+                Box::new(LeaseSanityChecksEnabledForNotMemfileBackendV4Rule),
             ],
             hooks: [
                 Box::new(MultithreadingModesNotEqualInConfigAndHARule),
