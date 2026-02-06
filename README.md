@@ -82,11 +82,11 @@ Command line interface 'KEALint' implements the following interaction parameters
 
 ### Standalone mode parameters
 
-`--unix-socket-path` - Optional. Defines the path to the UNIX socket that needs to be listened to in order to receive configurations.
+`--unix-socket-filepath` - Optional. Defines the path to the UNIX socket that needs to be listened to in order to receive configurations.
 
 `--database-type` - Optional. Defines the path to the database to which the results of the checks will need to be recorded.
 
-`--database-path` - Optional. Defines the type of database to connect to. Currently, only the value 'sqlite' is supported.
+`--database-filepath` - Optional. Defines the type of database to connect to. Currently, only the value 'sqlite' is supported.
 
 ## Rules
 
