@@ -211,6 +211,36 @@ mod test {
     }
 
     #[test]
+    fn get_args_from_cli_test() {
+        let mock_args = CLIArgs {
+            config_filepath: None,
+            skip_not_exists: true,
+            use_threads: false,
+            with_summary: false,
+            ctrl_agent_filepath: None,
+            d2_filepath: None,
+            database_filepath: None,
+            database_type: super::KEALintDatabaseTypes::sqlite,
+            dir_path: Some("./qqq-path".to_string()),
+            format: super::KEALintOutputFormatTypes::json,
+            mode: super::KEALintModeTypes::cli,
+            output_filepath: None,
+            unix_socket_filepath: None,
+            v4_filepath: Some("./test-path".to_string()),
+        };
+
+        let args = get_args(mock_args);
+
+        assert_eq!(args.with_summary, false);
+        assert_eq!(args.dir_path, Some("./qqq-path".to_string()));
+        assert_eq!(args.use_threads, false);
+        assert_eq!(args.v4_filepath, Some("./test-path".to_string()));
+        // Not exists params
+        assert_eq!(args.ctrl_agent_filepath, None);
+        assert_eq!(args.output_filepath, None);
+    }
+
+    #[test]
     fn get_args_from_file_test() {
         let mut tempfile = NamedTempFile::new().unwrap();
         tempfile
