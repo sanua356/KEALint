@@ -1,13 +1,15 @@
 use crate::{
     common::{Rule, RuleConfigs, RuleLevels, RuleResult},
-    configs::{KEAv4Config, allocator::KEAAllocatorTypes},
+    configs::KEAv4Config,
 };
 
-pub struct NotSelectFLQAllocatorInGlobalLevelConfig;
+use super::super::shared::get_not_select_flq_allocator_in_global_level_config_rule;
 
-impl Rule<KEAv4Config> for NotSelectFLQAllocatorInGlobalLevelConfig {
+pub struct NotSelectFLQAllocatorInGlobalLevelConfigV4Rule;
+
+impl Rule<KEAv4Config> for NotSelectFLQAllocatorInGlobalLevelConfigV4Rule {
     fn get_name(&self) -> &'static str {
-        "ALLOCATOR::NotSelectFLQAllocatorInGlobalLevelConfig"
+        "ALLOCATOR::NotSelectFLQAllocatorInGlobalLevelConfigRule"
     }
     fn get_level(&self) -> RuleLevels {
         RuleLevels::Info
@@ -16,17 +18,7 @@ impl Rule<KEAv4Config> for NotSelectFLQAllocatorInGlobalLevelConfig {
         RuleConfigs::Dhcp4
     }
     fn check(&self, config: &KEAv4Config) -> Option<Vec<RuleResult>> {
-        if let Some(allocator) = &config.allocator
-            && allocator == &KEAAllocatorTypes::FLQ
-        {
-            return Some(vec![RuleResult {
-                description: "The 'FLQ' address allocator is not recommended for use at the global configuration level.".to_string(),
-                links: Some(&["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#free-lease-queue-allocator"]),
-                places: Some(vec!["allocator".to_string()]),
-            }]);
-        }
-
-        None
+        get_not_select_flq_allocator_in_global_level_config_rule(&config.allocator)
     }
 }
 
@@ -38,7 +30,7 @@ mod tests {
 
     use super::{
         super::_tests::NOT_SELECT_FLQ_ALLOCATOR_IN_GLOBAL_LEVEL_CONFIG_RULE_TEST_TEMPLATE,
-        NotSelectFLQAllocatorInGlobalLevelConfig,
+        NotSelectFLQAllocatorInGlobalLevelConfigV4Rule,
     };
 
     #[test]
@@ -48,7 +40,7 @@ mod tests {
         )
         .unwrap();
 
-        let rule = NotSelectFLQAllocatorInGlobalLevelConfig;
+        let rule = NotSelectFLQAllocatorInGlobalLevelConfigV4Rule;
         assert!(rule.check(&data).is_some());
     }
 
@@ -61,7 +53,7 @@ mod tests {
         json_value["allocator"] = Value::from("random");
         let data: KEAv4Config = serde_json::from_value(json_value).unwrap();
 
-        let rule = NotSelectFLQAllocatorInGlobalLevelConfig;
+        let rule = NotSelectFLQAllocatorInGlobalLevelConfigV4Rule;
         assert!(rule.check(&data).is_none());
     }
 }

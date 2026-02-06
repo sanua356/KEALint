@@ -1,13 +1,15 @@
 use crate::{
     common::{Rule, RuleConfigs, RuleLevels, RuleResult},
-    configs::{KEALeaseDatabaseTypes, KEAv4Config, allocator::KEAAllocatorTypes},
+    configs::KEAv4Config,
 };
 
-pub struct NotSelectIterativeAllocatorForSharedLeaseDatabase;
+use super::super::shared::get_not_select_iterative_allocator_for_shared_lease_database;
 
-impl Rule<KEAv4Config> for NotSelectIterativeAllocatorForSharedLeaseDatabase {
+pub struct NotSelectIterativeAllocatorForSharedLeaseDatabaseV4Rule;
+
+impl Rule<KEAv4Config> for NotSelectIterativeAllocatorForSharedLeaseDatabaseV4Rule {
     fn get_name(&self) -> &'static str {
-        "ALLOCATOR::NotSelectIterativeAllocatorForSharedLeaseDatabase"
+        "ALLOCATOR::NotSelectIterativeAllocatorForSharedLeaseDatabaseRule"
     }
     fn get_level(&self) -> RuleLevels {
         RuleLevels::Info
@@ -16,18 +18,10 @@ impl Rule<KEAv4Config> for NotSelectIterativeAllocatorForSharedLeaseDatabase {
         RuleConfigs::Dhcp4
     }
     fn check(&self, config: &KEAv4Config) -> Option<Vec<RuleResult>> {
-        if let Some(allocator) = &config.allocator
-            && allocator == &KEAAllocatorTypes::Iterative
-            && config.lease_database.r#type != KEALeaseDatabaseTypes::Memfile
-        {
-            return Some(vec![RuleResult {
-                description: "The 'iterative' address allocator is not recommended for use with a shared database of rents on several servers.".to_string(),
-                links: Some(&["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#iterative-allocator"]),
-                places: Some(vec!["allocator".to_string()]),
-            }]);
-        }
-
-        None
+        get_not_select_iterative_allocator_for_shared_lease_database(
+            &config.allocator,
+            &config.lease_database,
+        )
     }
 }
 
@@ -39,7 +33,7 @@ mod tests {
 
     use super::{
         super::_tests::NOT_SELECT_ITERATIVE_ALLOCATOR_FOR_SHARED_LEASE_DATABASE_RULE_TEST_TEMPLATE,
-        NotSelectIterativeAllocatorForSharedLeaseDatabase,
+        NotSelectIterativeAllocatorForSharedLeaseDatabaseV4Rule,
     };
 
     #[test]
@@ -49,7 +43,7 @@ mod tests {
         )
         .unwrap();
 
-        let rule = NotSelectIterativeAllocatorForSharedLeaseDatabase;
+        let rule = NotSelectIterativeAllocatorForSharedLeaseDatabaseV4Rule;
         assert!(rule.check(&data).is_some());
     }
 
@@ -62,7 +56,7 @@ mod tests {
         json_value["allocator"] = Value::from("random");
         let data: KEAv4Config = serde_json::from_value(json_value).unwrap();
 
-        let rule = NotSelectIterativeAllocatorForSharedLeaseDatabase;
+        let rule = NotSelectIterativeAllocatorForSharedLeaseDatabaseV4Rule;
         assert!(rule.check(&data).is_none());
     }
 }

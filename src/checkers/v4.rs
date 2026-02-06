@@ -4,8 +4,8 @@ use crate::{
     configs::v4::KEAv4Config,
     rules::{
         allocator::{
-            NotSelectFLQAllocatorInGlobalLevelConfig,
-            NotSelectIterativeAllocatorForSharedLeaseDatabase,
+            NotSelectFLQAllocatorInGlobalLevelConfigV4Rule,
+            NotSelectIterativeAllocatorForSharedLeaseDatabaseV4Rule,
         },
         client_classes::{
             EvaluateRequiredAsAdditionalClassesRule, NotLifetimeForAdditionalClassesRule,
@@ -66,8 +66,8 @@ impl RuleChecker<KEAv4Config> for RulesV4 {
         RulesV4 {
             interfaces: [Box::new(NoInterfacesInInterfacesConfigRule)],
             allocators: [
-                Box::new(NotSelectFLQAllocatorInGlobalLevelConfig),
-                Box::new(NotSelectIterativeAllocatorForSharedLeaseDatabase),
+                Box::new(NotSelectFLQAllocatorInGlobalLevelConfigV4Rule),
+                Box::new(NotSelectIterativeAllocatorForSharedLeaseDatabaseV4Rule),
             ],
             lease_database: [
                 Box::new(NoEnabledPersistFlagForMemfileLeasesRule),

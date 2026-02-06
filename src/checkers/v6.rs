@@ -2,13 +2,20 @@ use crate::{
     checkers::{Problem, find_problems},
     common::{Rule, RuleChecker},
     configs::v6::KEAv6Config,
-    rules::loggers::{
-        NoDebugLoggersV6Rule, NoLinebreakMessagesLoggersV6Rule, NoPercentMMessagesLoggersV6Rule,
+    rules::{
+        allocator::{
+            NotSelectFLQAllocatorInGlobalLevelConfigV6Rule,
+            NotSelectIterativeAllocatorForSharedLeaseDatabaseV6Rule,
+        },
+        loggers::{
+            NoDebugLoggersV6Rule, NoLinebreakMessagesLoggersV6Rule, NoPercentMMessagesLoggersV6Rule,
+        },
     },
 };
 
 pub struct RulesV6 {
     pub loggers: [Box<dyn Rule<KEAv6Config>>; 3],
+    pub allocators: [Box<dyn Rule<KEAv6Config>>; 2],
 }
 
 impl RuleChecker<KEAv6Config> for RulesV6 {
@@ -19,11 +26,15 @@ impl RuleChecker<KEAv6Config> for RulesV6 {
                 Box::new(NoLinebreakMessagesLoggersV6Rule),
                 Box::new(NoPercentMMessagesLoggersV6Rule),
             ],
+            allocators: [
+                Box::new(NotSelectFLQAllocatorInGlobalLevelConfigV6Rule),
+                Box::new(NotSelectIterativeAllocatorForSharedLeaseDatabaseV6Rule),
+            ],
         }
     }
 
     fn values(&self) -> Vec<&[Box<dyn Rule<KEAv6Config>>]> {
-        vec![&self.loggers]
+        vec![&self.loggers, &self.allocators]
     }
 
     fn run(&self, config: &KEAv6Config) -> Vec<Problem> {

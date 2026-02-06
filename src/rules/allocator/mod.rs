@@ -1,4 +1,9 @@
+pub mod shared;
 pub mod v4;
+pub mod v6;
 
-pub use v4::not_select_flq_allocator_in_global_level_config::NotSelectFLQAllocatorInGlobalLevelConfig;
-pub use v4::not_select_iterative_allocator_for_shared_lease_database::NotSelectIterativeAllocatorForSharedLeaseDatabase;
+pub use v4::not_select_flq_allocator_in_global_level_config_v4::NotSelectFLQAllocatorInGlobalLevelConfigV4Rule;
+pub use v4::not_select_iterative_allocator_for_shared_lease_database_v4::NotSelectIterativeAllocatorForSharedLeaseDatabaseV4Rule;
+
+pub use v6::not_select_flq_allocator_in_global_level_config_v6::NotSelectFLQAllocatorInGlobalLevelConfigV6Rule;
+pub use v6::not_select_iterative_allocator_for_shared_lease_database_v6::NotSelectIterativeAllocatorForSharedLeaseDatabaseV6Rule;
