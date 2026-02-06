@@ -1,6 +1,6 @@
 use serde::Deserialize;
 
-use super::{KEAv4OptionData, KEAv4Relay, KEAv4Subnet};
+use super::{KEAv4Relay, KEAv4Subnet, option_data::KEAOptionData};
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "kebab-case")]
@@ -20,5 +20,5 @@ pub struct KEAv4SharedNetwork {
 
     pub subnet4: Option<Vec<KEAv4Subnet>>,
 
-    pub option_data: Option<Vec<KEAv4OptionData>>,
+    pub option_data: Option<Vec<KEAOptionData>>,
 }

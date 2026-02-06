@@ -73,6 +73,13 @@ pub struct CLIArgs {
 
     #[arg(
         long,
+        help = "Optional. Specifies the path to the KEA DHCPv6 configuration file."
+    )]
+    #[serde(rename = "v6-filepath")]
+    pub v6_filepath: Option<String>,
+
+    #[arg(
+        long,
         help = "Optional. Specifies the path to the KEA DHCP DDNS configuration file."
     )]
     #[serde(rename = "d2-filepath")]

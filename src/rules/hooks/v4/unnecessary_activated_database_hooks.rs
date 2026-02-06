@@ -2,7 +2,7 @@ use std::collections::HashSet;
 
 use crate::{
     common::{Rule, RuleConfigs, RuleLevels, RuleResult},
-    configs::v4::{KEALeaseDatabaseTypes, KEAv4Config, KEAv4HostsDatabasesTypes},
+    configs::{KEAHostsDatabasesTypes, KEALeaseDatabaseTypes, v4::KEAv4Config},
     constants::{MYSQL_HOOK_LIBRARY, PGSQL_HOOK_LIBRARY},
 };
 
@@ -31,14 +31,14 @@ impl Rule<KEAv4Config> for UnnecessaryActivatedDatabaseHooksRule {
             .iter()
             .find(|item| item.library.contains(PGSQL_HOOK_LIBRARY));
 
-        let mut config_types: HashSet<KEAv4HostsDatabasesTypes> = HashSet::new();
+        let mut config_types: HashSet<KEAHostsDatabasesTypes> = HashSet::new();
 
         match config.lease_database.r#type {
             KEALeaseDatabaseTypes::MySQL => {
-                config_types.insert(KEAv4HostsDatabasesTypes::MySQL);
+                config_types.insert(KEAHostsDatabasesTypes::MySQL);
             }
             KEALeaseDatabaseTypes::PostgreSQL => {
-                config_types.insert(KEAv4HostsDatabasesTypes::PostgreSQL);
+                config_types.insert(KEAHostsDatabasesTypes::PostgreSQL);
             }
             _ => {}
         }
@@ -69,7 +69,7 @@ impl Rule<KEAv4Config> for UnnecessaryActivatedDatabaseHooksRule {
 
         let mut results: Vec<RuleResult> = Vec::new();
 
-        if mysql_hook.is_some() && !config_types.contains(&KEAv4HostsDatabasesTypes::MySQL) {
+        if mysql_hook.is_some() && !config_types.contains(&KEAHostsDatabasesTypes::MySQL) {
             results.push(
 	            RuleResult {
 	                description: "The MySQL support hook is specified in the configuration of the hooks, but it does not serve any functionality.".to_string(),
@@ -78,7 +78,7 @@ impl Rule<KEAv4Config> for UnnecessaryActivatedDatabaseHooksRule {
             });
         }
 
-        if pgsql_hook.is_some() && !config_types.contains(&KEAv4HostsDatabasesTypes::PostgreSQL) {
+        if pgsql_hook.is_some() && !config_types.contains(&KEAHostsDatabasesTypes::PostgreSQL) {
             results.push(
                 RuleResult {
 	                description: "The PostgreSQL support hook is specified in the configuration of the hooks, but it does not serve any functionality.".to_string(),

@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 use super::KEAOptionTypes;
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct KEAv4OptionDefinition {
+pub struct KEAOptionDefinition {
     pub name: Option<String>,
     pub code: Option<u8>,
     pub r#type: KEAOptionTypes,

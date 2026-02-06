@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct KEAv4InterfacesConfig {
+pub struct KEAInterfacesConfig {
     pub interfaces: Vec<String>,
 }

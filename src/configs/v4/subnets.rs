@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use std::{fmt::Display, net::Ipv4Addr, str::FromStr};
 
-use super::{KEAv4OptionData, KEAv4Relay};
+use super::{KEAv4Relay, option_data::KEAOptionData};
 
 use crate::{
     configs::reservations::KEAReservation,
@@ -26,7 +26,7 @@ pub struct KEAv4Subnet {
     pub reservations_in_subnet: Option<bool>,
     pub reservations_out_of_pool: Option<bool>,
 
-    pub option_data: Option<Vec<KEAv4OptionData>>,
+    pub option_data: Option<Vec<KEAOptionData>>,
 
     pub reservations: Option<Vec<KEAReservation>>,
 }
@@ -95,5 +95,5 @@ pub struct KEAv4Pool {
     pub pool: KEAv4PoolVariant,
     pub evaluate_additional_classes: Option<Vec<String>>,
 
-    pub option_data: Option<Vec<KEAv4OptionData>>,
+    pub option_data: Option<Vec<KEAOptionData>>,
 }

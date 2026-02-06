@@ -5,9 +5,9 @@ use crate::{
 
 use super::super::shared::get_no_linebreak_in_pattern_rule;
 
-pub struct NoLinebreakMessagesLoggersV4;
+pub struct NoLinebreakMessagesLoggersV4Rule;
 
-impl Rule<KEAv4Config> for NoLinebreakMessagesLoggersV4 {
+impl Rule<KEAv4Config> for NoLinebreakMessagesLoggersV4Rule {
     fn get_name(&self) -> &'static str {
         "LOGGERS::NoLinebreakMessagesLoggersRule"
     }
@@ -18,7 +18,10 @@ impl Rule<KEAv4Config> for NoLinebreakMessagesLoggersV4 {
         RuleConfigs::Dhcp4
     }
     fn check(&self, config: &KEAv4Config) -> Option<Vec<RuleResult>> {
-        get_no_linebreak_in_pattern_rule(config.loggers.as_ref()?, &RuleConfigs::Dhcp4.to_string())
+        get_no_linebreak_in_pattern_rule(
+            config.loggers.as_ref()?,
+            &self.get_config_type().to_string(),
+        )
     }
 }
 
@@ -29,7 +32,8 @@ mod tests {
     use crate::{common::Rule, configs::KEAv4Config};
 
     use super::{
-        super::_tests::NO_LINEBREAK_MESSAGES_LOGGERS_V4_RULE_TEMPLATE, NoLinebreakMessagesLoggersV4,
+        super::_tests::NO_LINEBREAK_MESSAGES_LOGGERS_V4_RULE_TEMPLATE,
+        NoLinebreakMessagesLoggersV4Rule,
     };
 
     #[test]
@@ -37,7 +41,7 @@ mod tests {
         let data: KEAv4Config =
             serde_json::from_str(NO_LINEBREAK_MESSAGES_LOGGERS_V4_RULE_TEMPLATE).unwrap();
 
-        let rule = NoLinebreakMessagesLoggersV4;
+        let rule = NoLinebreakMessagesLoggersV4Rule;
         assert!(rule.check(&data).is_some());
     }
 
@@ -50,7 +54,7 @@ mod tests {
 
         let data: KEAv4Config = serde_json::from_value(json_value).unwrap();
 
-        let rule = NoLinebreakMessagesLoggersV4;
+        let rule = NoLinebreakMessagesLoggersV4Rule;
         assert!(rule.check(&data).is_none());
     }
 }

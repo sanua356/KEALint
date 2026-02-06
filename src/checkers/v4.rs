@@ -26,7 +26,7 @@ use crate::{
             NotChangeStopRetryExitStrategyOnFailRule,
         },
         loggers::{
-            NoDebugLoggersV4Rule, NoLinebreakMessagesLoggersV4, NoPercentMMessagesLoggersV4Rule,
+            NoDebugLoggersV4Rule, NoLinebreakMessagesLoggersV4Rule, NoPercentMMessagesLoggersV4Rule,
         },
         option_data::{IncompleteOctetsBytesInOptionValuesRule, SpecifiedKEAManagedOptionsRule},
         queue_control::NoEnableQueueAndMultithreadingTogetherRule,
@@ -114,7 +114,7 @@ impl RuleChecker<KEAv4Config> for RulesV4 {
             dhcp_ddns: [Box::new(NotDDNSQualifyingSuffixWithEnabledDDNSUpdatesRule)],
             loggers: [
                 Box::new(NoDebugLoggersV4Rule),
-                Box::new(NoLinebreakMessagesLoggersV4),
+                Box::new(NoLinebreakMessagesLoggersV4Rule),
                 Box::new(NoPercentMMessagesLoggersV4Rule),
             ],
         }

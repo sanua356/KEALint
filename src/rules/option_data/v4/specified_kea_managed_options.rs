@@ -1,12 +1,12 @@
 use crate::{
     common::{Rule, RuleConfigs, RuleLevels, RuleResult},
-    configs::{KEAv4Config, KEAv4OptionData, KEAv4Subnet},
+    configs::{KEAv4Config, KEAv4Subnet, shared::option_data::KEAOptionData},
     constants::KEA_NO_CONFIGURABLE_OPTIONS,
 };
 
 pub struct SpecifiedKEAManagedOptionsRule;
 
-fn get_kea_managed_options(options: &[KEAv4OptionData], placement: String) -> Vec<RuleResult> {
+fn get_kea_managed_options(options: &[KEAOptionData], placement: String) -> Vec<RuleResult> {
     let mut results: Vec<RuleResult> = Vec::new();
 
     for (idx_option, option) in options.iter().enumerate() {

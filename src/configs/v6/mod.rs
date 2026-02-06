@@ -2,29 +2,21 @@
 
 use serde::Deserialize;
 
-pub use relay::KEAv4Relay;
-pub use subnets::{KEAv4PoolVariant, KEAv4Subnet};
-
 use super::shared::{
     allocator, client_classes, config_control, dhcp_ddns, dhcp_queue_control, hooks,
     hosts_database, interfaces, lease_database, loggers, multithreading, option_data, option_def,
     reservations, sanity_checks,
 };
 
-mod relay;
-mod shared_networks;
-mod subnets;
-
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "kebab-case")]
-pub struct KEAv4Config {
+pub struct KEAv6Config {
     pub server_tag: Option<String>,
 
     pub allocator: Option<allocator::KEAAllocatorTypes>,
     pub valid_lifetime: u32,
     pub renew_timer: u32,
     pub rebind_timer: u32,
-    pub match_client_id: Option<bool>,
 
     pub interfaces_config: interfaces::KEAInterfacesConfig,
     pub lease_database: lease_database::KEALeaseDatabase,
@@ -39,9 +31,6 @@ pub struct KEAv4Config {
     pub reservations_in_subnet: Option<bool>,
     pub reservations_out_of_pool: Option<bool>,
     pub reservations: Option<Vec<reservations::KEAReservation>>,
-
-    pub subnet4: Option<Vec<subnets::KEAv4Subnet>>,
-    pub shared_networks: Option<Vec<shared_networks::KEAv4SharedNetwork>>,
 
     pub hosts_databases: Option<Vec<hosts_database::KEAHostsDatabase>>,
     pub hosts_database: Option<hosts_database::KEAHostsDatabase>,
@@ -65,7 +54,7 @@ pub struct KEAv4Config {
 }
 
 #[derive(Debug, Deserialize)]
-pub struct KEAv4ConfigFile {
-    #[serde(rename = "Dhcp4")]
-    pub dhcp4: KEAv4Config,
+pub struct KEAv6ConfigFile {
+    #[serde(rename = "Dhcp6")]
+    pub dhcp6: KEAv6Config,
 }

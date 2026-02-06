@@ -99,6 +99,39 @@ pub static RUN_CHECKS_V4_TEMPLATE: &str = r#"
 }
 "#;
 
+pub static RUN_CHECKS_V6_TEMPLATE: &str = r#"
+{
+	"Dhcp6": {
+		"valid-lifetime": 4000,
+		"renew-timer": 1000,
+		"rebind-timer": 2000,
+		"interfaces-config": {
+			"interfaces": ["eth0"]
+		},
+		"lease-database": {
+			"type": "memfile",
+			"persist": true,
+			"name": "/var/lib/kea/dhcp6.leases"
+		},
+		"loggers": [
+			{
+				"name": "kea-dhcp6",
+				"output-options": [
+					{
+						"output": "kea-dhcp6.log",
+						"maxsize": 52428800,
+						"maxver": 100,
+						"pattern": "%d{%Y-%m-%d %H:%M:%S.%q} %-5p [%c/%i.%t] %m\n"
+					}
+				],
+				"severity": "INFO",
+				"debuglevel": 0
+			}
+		]
+	}
+}
+"#;
+
 pub static GET_FILE_ARGS_TEMPLATE: &str = r#"
 {
 	"with-summary": true,

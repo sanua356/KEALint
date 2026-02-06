@@ -1,6 +1,6 @@
 use crate::{
     common::{Rule, RuleConfigs, RuleLevels, RuleResult},
-    configs::{KEAv4Config, KEAv4HostsDatabasesFailStrategers},
+    configs::{KEAHostsDatabasesFailStrategers, KEAv4Config},
 };
 
 pub struct NotChangeStopRetryExitStrategyOnFailRule;
@@ -18,7 +18,7 @@ impl Rule<KEAv4Config> for NotChangeStopRetryExitStrategyOnFailRule {
     fn check(&self, config: &KEAv4Config) -> Option<Vec<RuleResult>> {
         let lease_database_strategy = config.lease_database.on_fail.as_ref()?;
 
-        if lease_database_strategy != &KEAv4HostsDatabasesFailStrategers::StopRetryExit {
+        if lease_database_strategy != &KEAHostsDatabasesFailStrategers::StopRetryExit {
             return Some(vec![RuleResult {
                 description: "It is recommended to set the 'on-fail' parameter in the 'lease-database' configuration to 'stop-retry-exit' for the correct processing of leases in the production environment.".to_string(),
                 links: Some(&["https://kea.readthedocs.io/en/latest/arm/dhcp6-srv.html#lease-database-configuration"]),
