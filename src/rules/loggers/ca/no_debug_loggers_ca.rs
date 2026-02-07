@@ -18,10 +18,7 @@ impl Rule<KEACtrlAgentConfig> for NoDebugLoggersCtrlAgentRule {
         RuleConfigs::ControlAgent
     }
     fn check(&self, config: &KEACtrlAgentConfig) -> Option<Vec<RuleResult>> {
-        get_debug_loggers_rule(
-            &config.loggers,
-            RuleConfigs::ControlAgent.to_string().as_str(),
-        )
+        get_debug_loggers_rule(&config.loggers)
     }
 }
 

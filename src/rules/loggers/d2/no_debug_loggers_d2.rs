@@ -18,7 +18,7 @@ impl Rule<KEAD2Config> for NoDebugLoggersD2Rule {
         RuleConfigs::D2
     }
     fn check(&self, config: &KEAD2Config) -> Option<Vec<RuleResult>> {
-        get_debug_loggers_rule(&config.loggers, RuleConfigs::D2.to_string().as_str())
+        get_debug_loggers_rule(&config.loggers)
     }
 }
 

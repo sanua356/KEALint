@@ -18,7 +18,7 @@ impl Rule<KEAD2Config> for NoPercentMMessagesLoggersD2Rule {
         RuleConfigs::D2
     }
     fn check(&self, config: &KEAD2Config) -> Option<Vec<RuleResult>> {
-        get_no_percent_m_in_pattern_rule(&config.loggers, &self.get_config_type().to_string())
+        get_no_percent_m_in_pattern_rule(&config.loggers)
     }
 }
 

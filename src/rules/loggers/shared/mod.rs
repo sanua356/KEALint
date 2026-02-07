@@ -7,10 +7,7 @@ use crate::{
     configs::loggers::{KEALogger, KEALoggerSeverityTypes},
 };
 
-pub fn get_debug_loggers_rule(
-    loggers: &Option<Vec<KEALogger>>,
-    config_type: &str,
-) -> Option<Vec<RuleResult>> {
+pub fn get_debug_loggers_rule(loggers: &Option<Vec<KEALogger>>) -> Option<Vec<RuleResult>> {
     if let Some(loggers) = loggers {
         let mut results: Vec<RuleResult> = Vec::new();
 
@@ -19,7 +16,10 @@ pub fn get_debug_loggers_rule(
                 && *severity == KEALoggerSeverityTypes::DEBUG
             {
                 results.push(RuleResult {
-                description: format!("In the configuration '{}', the logger named '{}' has severity 'DEBUG'. Change severity if you are using a production server.", config_type, logger.name),
+                description: format!(
+	                "The logger named '{}' has severity 'DEBUG'. Change severity if you are using a production server.",
+	                logger.name
+                ),
                 places: Some(vec![format!("loggers.{}.severity", idx_logger)]),
                 links: None,
             });
@@ -36,7 +36,6 @@ pub fn get_debug_loggers_rule(
 
 pub fn get_no_percent_m_in_pattern_rule(
     loggers: &Option<Vec<KEALogger>>,
-    config_type: &str,
 ) -> Option<Vec<RuleResult>> {
     if let Some(loggers) = loggers {
         let mut results: Vec<RuleResult> = Vec::new();
@@ -56,9 +55,12 @@ pub fn get_no_percent_m_in_pattern_rule(
 
                         if !replaced.contains("%m") {
                             results.push(RuleResult {
-                    description: format!("In the '{}' configuration, the logger named '{}' by the key 'pattern' does not have the literals '%m' outside datetime. The log message will not be available without it.", config_type, logger.name),
-                    places: Some(vec![format!("loggers.{}.output-options.{}.pattern", idx_logger, idx_options)]),
-                    links: Some(&["https://kea.readthedocs.io/en/latest/arm/logging.html#logging-message-format"]),
+			                    description: format!(
+									"The logger named '{}' by the key 'pattern' does not have the literals '%m' outside datetime. The log message will not be available without it.",
+									logger.name
+								),
+			                    places: Some(vec![format!("loggers.{}.output-options.{}.pattern", idx_logger, idx_options)]),
+			                    links: Some(&["https://kea.readthedocs.io/en/latest/arm/logging.html#logging-message-format"]),
                         });
                         }
                     }
@@ -76,7 +78,6 @@ pub fn get_no_percent_m_in_pattern_rule(
 
 pub fn get_no_linebreak_in_pattern_rule(
     loggers: &Option<Vec<KEALogger>>,
-    config_type: &str,
 ) -> Option<Vec<RuleResult>> {
     if let Some(loggers) = loggers {
         let mut results: Vec<RuleResult> = Vec::new();
@@ -88,10 +89,13 @@ pub fn get_no_linebreak_in_pattern_rule(
                         && !pattern.ends_with('\n')
                     {
                         results.push(RuleResult {
-                   description: format!(r#"In the '{}' configuration, the logger named '{}' by the key 'pattern' does not have the literals '\n'. Log messages will not be transferred to a new line."#, config_type, logger.name),
-                     	places: Some(vec![format!("loggers.{}.output-options.{}.pattern", idx_logger, idx_options)]),
-                   links: Some(&["https://kea.readthedocs.io/en/latest/arm/logging.html#logging-message-format"]),
-                    });
+	                        description: format!(
+								r#"The logger named '{}' by the key 'pattern' does not have the literals '\n'. Log messages will not be transferred to a new line."#,
+								logger.name
+							),
+	                     	places: Some(vec![format!("loggers.{}.output-options.{}.pattern", idx_logger, idx_options)]),
+	                      	links: Some(&["https://kea.readthedocs.io/en/latest/arm/logging.html#logging-message-format"]),
+                        });
                     }
                 }
             }
@@ -126,7 +130,7 @@ mod tests {
     fn check_expected_debug_loggers_trigger() {
         let data: KEAD2Config = serde_json::from_str(DEBUG_LOGGERS_D2_RULE_TEMPLATE).unwrap();
 
-        let rule = get_debug_loggers_rule(&data.loggers, "D2");
+        let rule = get_debug_loggers_rule(&data.loggers);
         assert!(rule.is_some());
     }
 
@@ -138,7 +142,7 @@ mod tests {
 
         let data: KEAD2Config = serde_json::from_value(json_value).unwrap();
 
-        let rule = get_debug_loggers_rule(&data.loggers, "D2");
+        let rule = get_debug_loggers_rule(&data.loggers);
         assert!(rule.is_none());
     }
 
@@ -147,7 +151,7 @@ mod tests {
         let data: KEAD2Config =
             serde_json::from_str(NO_LINEBREAK_MESSAGES_LOGGERS_D2_RULE_TEMPLATE).unwrap();
 
-        let rule = get_no_linebreak_in_pattern_rule(&data.loggers, "D2");
+        let rule = get_no_linebreak_in_pattern_rule(&data.loggers);
         assert!(rule.is_some());
     }
 
@@ -160,7 +164,7 @@ mod tests {
 
         let data: KEAD2Config = serde_json::from_value(json_value).unwrap();
 
-        let rule = get_no_linebreak_in_pattern_rule(&data.loggers, "D2");
+        let rule = get_no_linebreak_in_pattern_rule(&data.loggers);
         assert!(rule.is_none());
     }
 
@@ -169,7 +173,7 @@ mod tests {
         let data: KEAD2Config =
             serde_json::from_str(NO_PERCENT_M_MESSAGES_LOGGERS_D2_RULE_TEMPLATE).unwrap();
 
-        let rule = get_no_percent_m_in_pattern_rule(&data.loggers, "D2");
+        let rule = get_no_percent_m_in_pattern_rule(&data.loggers);
         assert!(rule.is_some());
     }
 
@@ -182,7 +186,7 @@ mod tests {
 
         let data: KEAD2Config = serde_json::from_value(json_value).unwrap();
 
-        let rule = get_no_percent_m_in_pattern_rule(&data.loggers, "D2");
+        let rule = get_no_percent_m_in_pattern_rule(&data.loggers);
         assert!(rule.is_none());
     }
 }
