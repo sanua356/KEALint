@@ -18,7 +18,7 @@ impl Rule<KEAv6Config> for NoPercentMMessagesLoggersV6Rule {
         RuleConfigs::Dhcp6
     }
     fn check(&self, config: &KEAv6Config) -> Option<Vec<RuleResult>> {
-        get_no_percent_m_in_pattern_rule(&config.loggers, &self.get_config_type().to_string())
+        get_no_percent_m_in_pattern_rule(&config.loggers)
     }
 }
 

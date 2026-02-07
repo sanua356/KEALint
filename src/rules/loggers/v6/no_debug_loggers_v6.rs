@@ -18,7 +18,7 @@ impl Rule<KEAv6Config> for NoDebugLoggersV6Rule {
         RuleConfigs::Dhcp6
     }
     fn check(&self, config: &KEAv6Config) -> Option<Vec<RuleResult>> {
-        get_debug_loggers_rule(&config.loggers, &self.get_config_type().to_string())
+        get_debug_loggers_rule(&config.loggers)
     }
 }
 

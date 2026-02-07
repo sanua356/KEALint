@@ -18,7 +18,7 @@ impl Rule<KEACtrlAgentConfig> for NoLinebreakMessagesLoggersCtrlAgent {
         RuleConfigs::ControlAgent
     }
     fn check(&self, config: &KEACtrlAgentConfig) -> Option<Vec<RuleResult>> {
-        get_no_linebreak_in_pattern_rule(&config.loggers, &self.get_config_type().to_string())
+        get_no_linebreak_in_pattern_rule(&config.loggers)
     }
 }
 
