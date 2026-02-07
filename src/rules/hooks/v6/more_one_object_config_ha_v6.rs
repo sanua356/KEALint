@@ -3,7 +3,7 @@ use crate::{
     configs::KEAv6Config,
 };
 
-use super::super::shared::get_more_one_object_config_HA::get_more_one_object_config_HA_rule;
+use super::super::shared::get_more_one_object_config_HA_rule;
 
 pub struct MoreOneObjectConfigHAV6Rule;
 

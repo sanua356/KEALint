@@ -120,7 +120,7 @@ mod tests {
     use super::{super::_tests::BAD_HOOKS_ORDER_RULE_TEST_TEMPLATE, get_bad_hooks_order_rule};
 
     #[test]
-    fn check_expected_bad_hooks_order_trigger() {
+    fn check_expected_trigger() {
         let data: KEAv4Config = serde_json::from_str(BAD_HOOKS_ORDER_RULE_TEST_TEMPLATE).unwrap();
 
         let rule = get_bad_hooks_order_rule(&data.hooks_libraries);
@@ -128,7 +128,7 @@ mod tests {
     }
 
     #[test]
-    fn check_absense_bad_hooks_order_trigger() {
+    fn check_absense_trigger() {
         let mut json_value: Value =
             serde_json::from_str(BAD_HOOKS_ORDER_RULE_TEST_TEMPLATE).unwrap();
         json_value["hooks-libraries"] = serde_json::json!([

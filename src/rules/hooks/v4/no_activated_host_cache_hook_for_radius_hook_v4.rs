@@ -3,25 +3,22 @@ use crate::{
     configs::KEAv4Config,
 };
 
-use super::super::shared::get_multithread_modes_not_equal_rule;
+use super::super::shared::get_no_activated_host_cache_hook_for_radius_hook;
 
-pub struct MultithreadingModesNotEqualInConfigAndHAV4Rule;
+pub struct NoActivatedHostCacheHookForRADIUSHookV4Rule;
 
-impl Rule<KEAv4Config> for MultithreadingModesNotEqualInConfigAndHAV4Rule {
+impl Rule<KEAv4Config> for NoActivatedHostCacheHookForRADIUSHookV4Rule {
     fn get_name(&self) -> &'static str {
-        "HOOKS::MultithreadingModesNotEqualInConfigAndHARule"
+        "HOOKS::NoActivatedHostCacheHookForRADIUSHookRule"
     }
-
     fn get_level(&self) -> RuleLevels {
-        RuleLevels::Warning
+        RuleLevels::Info
     }
-
     fn get_config_type(&self) -> RuleConfigs {
         RuleConfigs::Dhcp4
     }
-
     fn check(&self, config: &KEAv4Config) -> Option<Vec<RuleResult>> {
-        get_multithread_modes_not_equal_rule(&config.multi_threading, &config.hooks_libraries)
+        get_no_activated_host_cache_hook_for_radius_hook(&config.hooks_libraries)
     }
 }
 

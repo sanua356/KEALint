@@ -3,7 +3,7 @@ use crate::{
     configs::KEAv6Config,
 };
 
-use super::super::shared::get_bad_hooks_order::get_bad_hooks_order_rule;
+use super::super::shared::get_bad_hooks_order_rule;
 
 pub struct BadHooksOrderV6Rule;
 
