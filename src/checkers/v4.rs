@@ -13,7 +13,7 @@ use crate::{
         },
         ddns_server::NotDDNSQualifyingSuffixWithEnabledDDNSUpdatesV4Rule,
         hooks::{
-            BadHooksOrderV4Rule, MoreOneObjectConfigHARule,
+            BadHooksOrderV4Rule, MoreOneObjectConfigHAV4Rule,
             MultithreadingModesNotEqualInConfigAndHARule,
             NoActivatedHostCMDsHookForDatabaseBackendRule,
             NoActivatedHostCacheHookForRADIUSHookRule, NoBasicHTTPAuthInHAPeersRule,
@@ -82,7 +82,7 @@ impl RuleChecker<KEAv4Config> for RulesV4 {
                 Box::new(NoBasicHTTPAuthInHAPeersRule),
                 Box::new(NoActivatedHostCacheHookForRADIUSHookRule),
                 Box::new(UseUsrCheckHookRule),
-                Box::new(MoreOneObjectConfigHARule),
+                Box::new(MoreOneObjectConfigHAV4Rule),
                 Box::new(NoMatchClientIdForFlexIDHookRule),
             ],
             subnets: [

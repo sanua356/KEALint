@@ -1,59 +1,45 @@
 use crate::{
-    common::{Rule, RuleConfigs, RuleLevels, RuleResult},
-    configs::KEAv4Config,
-    constants::HIGH_AVAILABILITY_HOOK_LIBRARY,
+    common::RuleResult, configs::hooks::KEAHookLibrary, constants::HIGH_AVAILABILITY_HOOK_LIBRARY,
 };
 
-pub struct MoreOneObjectConfigHARule;
+pub fn get_more_one_object_config_HA(
+    hooks_libraries: &Option<Vec<KEAHookLibrary>>,
+) -> Option<Vec<RuleResult>> {
+    let (idx_hook, hook) = hooks_libraries
+        .as_ref()?
+        .iter()
+        .enumerate()
+        .find(|(_, hook)| hook.library.contains(HIGH_AVAILABILITY_HOOK_LIBRARY))?;
 
-impl Rule<KEAv4Config> for MoreOneObjectConfigHARule {
-    fn get_name(&self) -> &'static str {
-        "HOOKS::MoreOneObjectConfigHARule"
-    }
-    fn get_level(&self) -> RuleLevels {
-        RuleLevels::Warning
-    }
-    fn get_config_type(&self) -> RuleConfigs {
-        RuleConfigs::Dhcp4
-    }
-    fn check(&self, config: &KEAv4Config) -> Option<Vec<RuleResult>> {
-        let (idx_hook, hook) = config
-            .hooks_libraries
-            .as_ref()?
-            .iter()
-            .enumerate()
-            .find(|(_, hook)| hook.library.contains(HIGH_AVAILABILITY_HOOK_LIBRARY))?;
+    let parameters = hook.parameters.as_ref()?.as_object()?;
 
-        let parameters = hook.parameters.as_ref()?.as_object()?;
-
-        if parameters["high-availability"].as_array()?.len() > 1 {
-            return Some(vec![RuleResult {
-                description: format!(
-                    "For the hook '{}', the 'high-availability' key cannot contain more than one object in the array.",
-                    HIGH_AVAILABILITY_HOOK_LIBRARY
-                ),
-                links: Some(&[
-                    "https://kea.readthedocs.io/en/latest/arm/hooks.html#load-balancing-configuration",
-                ]),
-                places: Some(vec![format!(
-                    "hooks-libraries.{}.parameters.high-availability",
-                    idx_hook
-                )]),
-            }]);
-        }
-
-        None
+    if parameters["high-availability"].as_array()?.len() > 1 {
+        return Some(vec![RuleResult {
+            description: format!(
+                "For the hook '{}', the 'high-availability' key cannot contain more than one object in the array.",
+                HIGH_AVAILABILITY_HOOK_LIBRARY
+            ),
+            links: Some(&[
+                "https://kea.readthedocs.io/en/latest/arm/hooks.html#load-balancing-configuration",
+            ]),
+            places: Some(vec![format!(
+                "hooks-libraries.{}.parameters.high-availability",
+                idx_hook
+            )]),
+        }]);
     }
+
+    None
 }
 
 #[cfg(test)]
 mod tests {
     use serde_json::Value;
 
-    use crate::{common::Rule, configs::v4::KEAv4Config};
+    use crate::configs::v4::KEAv4Config;
 
     use super::{
-        super::_tests::MORE_ONE_OBJECT_CONFIG_HA_RULE_TEST_TEMPLATE, MoreOneObjectConfigHARule,
+        super::_tests::MORE_ONE_OBJECT_CONFIG_HA_RULE_TEST_TEMPLATE, get_more_one_object_config_HA,
     };
 
     #[test]
@@ -61,8 +47,8 @@ mod tests {
         let data: KEAv4Config =
             serde_json::from_str(MORE_ONE_OBJECT_CONFIG_HA_RULE_TEST_TEMPLATE).unwrap();
 
-        let rule = MoreOneObjectConfigHARule;
-        assert!(rule.check(&data).is_some());
+        let rule = get_more_one_object_config_HA(&data.hooks_libraries);
+        assert!(rule.is_some());
     }
 
     #[test]
@@ -108,7 +94,7 @@ mod tests {
         }]);
         let data: KEAv4Config = serde_json::from_value(json_value).unwrap();
 
-        let rule = MoreOneObjectConfigHARule;
-        assert!(rule.check(&data).is_none());
+        let rule = get_more_one_object_config_HA(&data.hooks_libraries);
+        assert!(rule.is_none());
     }
 }
