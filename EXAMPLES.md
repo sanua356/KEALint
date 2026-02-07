@@ -253,7 +253,6 @@ Using config file for storing flags.
 ```
 	- #️⃣ kealint
 	- 📄 config.json
-	- 💾 database.sq3
 ```
 
  **Config file content:**
