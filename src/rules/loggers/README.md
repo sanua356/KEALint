@@ -1,3 +1,4 @@
+
 # Rules "Loggers"
 
 ## Implemented For
@@ -6,11 +7,11 @@
 - ❌ - NOT implemented for specified config.
 - 🚫 - Cannot be implemented for the specified config.
 
-|Rule name|DHCPv4|DDNS|Control Agent|
-|--|--|--|--|
-|[NoDebugLoggersRule](#NoDebugLoggersRule)|✅|✅|✅|
-|[NoLinebreakMessagesLoggersRule](#NoLinebreakMessagesLoggersRule)|✅|✅|✅|
-|[NoPercentMMessagesLoggersCtrlAgentRule](#NoPercentMMessagesLoggersCtrlAgentRule)|✅|✅|✅|
+|Rule name|DHCPv4|DHCPv6|DDNS|Control Agent|
+|--|--|--|--|--|
+|[NoDebugLoggersRule](#NoDebugLoggersRule)|✅|✅|✅|✅|
+|[NoLinebreakMessagesLoggersRule](#NoLinebreakMessagesLoggersRule)|✅|✅|✅|✅|
+|[NoPercentMMessagesLoggersCtrlAgentRule](#NoPercentMMessagesLoggersCtrlAgentRule)|✅|✅|✅|✅|
 
 > The examples in the rules below are for the "Dhcp4" configuration, but they are also relevant for "D2" and "Control Agent".
 
@@ -20,7 +21,7 @@
 
 - **Codename** - LOGGERS::NoDebugLoggersRule.
 - **Importance** - INFO.
-- **Config type** - DHCPv4, D2, Control Agent.
+- **Config type** - DHCPv4, DHCPv6, D2, Control Agent.
 - **Articles** - No article.
 
 #### Problem
@@ -85,7 +86,7 @@ Change the logging level (for example, to "INFO").
 
 - **Codename** - LOGGERS::NoLinebreakMessagesLoggersRule.
 - **Importance** - INFO.
-- **Config type** - DHCPv4, D2, Control Agent.
+- **Config type** - DHCPv4, DHCPv6, D2, Control Agent.
 - **Articles** - https://kea.readthedocs.io/en/latest/arm/logging.html#logging-message-format
 
 #### Problem
@@ -149,7 +150,7 @@ Add '\n' to the end of the string values for the `pattern` key of the loggers co
 
 - **Codename** - LOGGERS::NoPercentMMessagesLoggersCtrlAgentRule.
 - **Importance** - INFO.
-- **Config type** - DHCPv4, D2, Control Agent.
+- **Config type** - DHCPv4, DHCPv6, D2, Control Agent.
 - **Articles** - https://kea.readthedocs.io/en/latest/arm/logging.html#logging-message-format
 
 #### Problem

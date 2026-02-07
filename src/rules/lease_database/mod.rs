@@ -1,5 +1,11 @@
+pub mod shared;
 pub mod v4;
+pub mod v6;
 
-pub use v4::lease_sanity_checks_enabled_for_not_memfile_backend::LeaseSanityChecksEnabledForNotMemfileBackend;
-pub use v4::no_enabled_persist_flag::NoEnabledPersistFlagForMemfileLeasesRule;
-pub use v4::not_change_stop_rety_exit_strategy_on_fail::NotChangeStopRetryExitStrategyOnFailRule;
+pub use v4::lease_sanity_checks_enabled_for_not_memfile_backend_v4::LeaseSanityChecksEnabledForNotMemfileBackendV4Rule;
+pub use v4::no_enabled_persist_flag_v4::NoEnabledPersistFlagForMemfileLeasesV4Rule;
+pub use v4::not_change_stop_retry_exit_strategy_on_fail_v4::NotChangeStopRetryExitStrategyOnFailV4Rule;
+
+pub use v6::lease_sanity_checks_enabled_for_not_memfile_backend_v6::LeaseSanityChecksEnabledForNotMemfileBackendV6Rule;
+pub use v6::no_enabled_persist_flag_v6::NoEnabledPersistFlagForMemfileLeasesV6Rule;
+pub use v6::not_change_stop_retry_exit_strategy_on_fail_v6::NotChangeStopRetryExitStrategyOnFailV6Rule;

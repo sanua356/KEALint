@@ -1,13 +1,13 @@
 use crate::{
     common::{Rule, RuleConfigs, RuleLevels, RuleResult},
-    configs::{KEAv4Config, KEAv4OptionData, KEAv4Subnet},
+    configs::{KEAv4Config, KEAv4Subnet, shared::option_data::KEAOptionData},
     constants::OPTION_DATA_BYTES_REGEXP,
 };
 
 pub struct IncompleteOctetsBytesInOptionValuesRule;
 
 fn get_kea_incomplete_bytes_options(
-    options: &[KEAv4OptionData],
+    options: &[KEAOptionData],
     placement: String,
 ) -> Vec<RuleResult> {
     let mut results: Vec<RuleResult> = Vec::new();

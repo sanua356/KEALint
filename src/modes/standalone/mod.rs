@@ -10,7 +10,7 @@ use std::{
     thread,
 };
 
-use crate::configs::{KEACtrlAgentConfigFile, KEAD2ConfigFile, KEAv4ConfigFile};
+use crate::configs::{KEACtrlAgentConfigFile, KEAD2ConfigFile, KEAv4ConfigFile, KEAv6ConfigFile};
 
 mod loaders;
 mod migrations;
@@ -42,11 +42,12 @@ fn handle_query(stream: UnixStream, database_path: String) {
         .expect("An error occurred when converting the socket buffer to a string.");
 
     let v4_config: Option<KEAv4ConfigFile> = try_configuration(&config, "Dhcp4");
+    let v6_config: Option<KEAv6ConfigFile> = try_configuration(&config, "Dhcp6");
     let d2_config: Option<KEAD2ConfigFile> = try_configuration(&config, "DhcpDdns");
     let ctrl_agent_config: Option<KEACtrlAgentConfigFile> =
         try_configuration(&config, "Control-agent");
 
-    let problems = run_checks(v4_config, d2_config, ctrl_agent_config);
+    let problems = run_checks(v4_config, v6_config, d2_config, ctrl_agent_config);
 
     let connection = Connection::open(database_path)
         .expect("An error occurred when connecting to an SQLite database.");

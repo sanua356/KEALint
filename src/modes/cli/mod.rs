@@ -7,7 +7,7 @@ use std::{
 
 use crate::{
     checkers::{Problem, get_summary_problems, tabled_print_problems},
-    configs::{KEACtrlAgentConfigFile, KEAD2ConfigFile, KEAv4ConfigFile},
+    configs::{KEACtrlAgentConfigFile, KEAD2ConfigFile, KEAv4ConfigFile, KEAv6ConfigFile},
 };
 
 use super::{CLIArgs, KEALintOutputFormatTypes, run_checks, run_checks_parallel};
@@ -38,18 +38,24 @@ where
 
 pub fn run_cli(args: CLIArgs) {
     let mut v4_filepath: PathBuf = PathBuf::new();
+    let mut v6_filepath: PathBuf = PathBuf::new();
     let mut d2_filepath: PathBuf = PathBuf::new();
     let mut ctrl_agent_filepath: PathBuf = PathBuf::new();
 
     if let Some(dir_path) = args.dir_path {
         let dir = Path::new(&dir_path);
         v4_filepath = dir.join("kea-dhcp4.conf");
+        v6_filepath = dir.join("kea-dhcp6.conf");
         d2_filepath = dir.join("kea-dhcp-ddns.conf");
         ctrl_agent_filepath = dir.join("kea-ctrl-agent.conf");
     }
 
     if let Some(v4_path_custom) = args.v4_filepath {
         v4_filepath = Path::new(&v4_path_custom).to_path_buf();
+    }
+
+    if let Some(v6_path_custom) = args.v6_filepath {
+        v6_filepath = Path::new(&v6_path_custom).to_path_buf();
     }
 
     if let Some(d2_path_custom) = args.d2_filepath {
@@ -65,6 +71,9 @@ pub fn run_cli(args: CLIArgs) {
     let content_v4: Option<KEAv4ConfigFile> =
         process_config_file(v4_filepath, skip_not_exists, "DHCPv4");
 
+    let content_v6: Option<KEAv6ConfigFile> =
+        process_config_file(v6_filepath, skip_not_exists, "DHCPv6");
+
     let content_d2: Option<KEAD2ConfigFile> =
         process_config_file(d2_filepath, skip_not_exists, "DHCP DDNS");
 
@@ -72,9 +81,9 @@ pub fn run_cli(args: CLIArgs) {
         process_config_file(ctrl_agent_filepath, skip_not_exists, "Control Agent");
 
     let problems: Vec<Problem> = if args.use_threads {
-        run_checks_parallel(content_v4, content_d2, content_ctrl_agent)
+        run_checks_parallel(content_v4, content_v6, content_d2, content_ctrl_agent)
     } else {
-        run_checks(content_v4, content_d2, content_ctrl_agent)
+        run_checks(content_v4, content_v6, content_d2, content_ctrl_agent)
     };
 
     let summary = if args.with_summary {

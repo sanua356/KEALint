@@ -2,24 +2,16 @@
 
 use serde::Deserialize;
 
-pub use option_data::KEAv4OptionData;
 pub use relay::KEAv4Relay;
-pub use shared::*;
 pub use subnets::{KEAv4PoolVariant, KEAv4Subnet};
 
-use super::shared::{allocator, dhcp_queue_control, hooks, loggers, reservations, sanity_checks};
+use super::shared::{
+    allocator, client_classes, config_control, dhcp_ddns, dhcp_queue_control, hooks,
+    hosts_database, interfaces, lease_database, loggers, multithreading, option_data, option_def,
+    reservations, sanity_checks,
+};
 
-mod client_classes;
-mod config_control;
-mod dhcp_ddns;
-mod hosts_database;
-mod interfaces;
-mod lease_database;
-mod multithreading;
-mod option_data;
-mod option_def;
 mod relay;
-mod shared;
 mod shared_networks;
 mod subnets;
 
@@ -34,14 +26,14 @@ pub struct KEAv4Config {
     pub rebind_timer: u32,
     pub match_client_id: Option<bool>,
 
-    pub interfaces_config: interfaces::KEAv4InterfacesConfig,
-    pub lease_database: lease_database::KEAv4LeaseDatabase,
-    pub multi_threading: Option<multithreading::KEAv4Multithreading>,
+    pub interfaces_config: interfaces::KEAInterfacesConfig,
+    pub lease_database: lease_database::KEALeaseDatabase,
+    pub multi_threading: Option<multithreading::KEAMultithreading>,
 
     pub hooks_libraries: Option<Vec<hooks::KEAHookLibrary>>,
-    pub client_classes: Option<Vec<client_classes::KEAv4ClientClass>>,
-    pub option_def: Option<Vec<option_def::KEAv4OptionDefinition>>,
-    pub option_data: Option<Vec<option_data::KEAv4OptionData>>,
+    pub client_classes: Option<Vec<client_classes::KEAClientClass>>,
+    pub option_def: Option<Vec<option_def::KEAOptionDefinition>>,
+    pub option_data: Option<Vec<option_data::KEAOptionData>>,
 
     pub reservations_global: Option<bool>,
     pub reservations_in_subnet: Option<bool>,
@@ -51,13 +43,13 @@ pub struct KEAv4Config {
     pub subnet4: Option<Vec<subnets::KEAv4Subnet>>,
     pub shared_networks: Option<Vec<shared_networks::KEAv4SharedNetwork>>,
 
-    pub hosts_databases: Option<Vec<hosts_database::KEAv4HostsDatabase>>,
-    pub hosts_database: Option<hosts_database::KEAv4HostsDatabase>,
-    pub config_control: Option<config_control::KEAv4ConfigControl>,
+    pub hosts_databases: Option<Vec<hosts_database::KEAHostsDatabase>>,
+    pub hosts_database: Option<hosts_database::KEAHostsDatabase>,
+    pub config_control: Option<config_control::KEAConfigControl>,
     pub dhcp_queue_control: Option<dhcp_queue_control::KEADhcpQueueControl>,
     pub sanity_checks: Option<sanity_checks::KEASanityChecks>,
 
-    pub dhcp_ddns: Option<dhcp_ddns::KEAv4DHCPDDNS>,
+    pub dhcp_ddns: Option<dhcp_ddns::KEADhcpDdns>,
     pub ddns_send_updates: Option<bool>,
     pub ddns_override_no_update: Option<bool>,
     pub ddns_override_client_update: Option<bool>,

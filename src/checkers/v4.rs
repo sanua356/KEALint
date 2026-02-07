@@ -4,14 +4,14 @@ use crate::{
     configs::v4::KEAv4Config,
     rules::{
         allocator::{
-            NotSelectFLQAllocatorInGlobalLevelConfig,
-            NotSelectIterativeAllocatorForSharedLeaseDatabase,
+            NotSelectFLQAllocatorInGlobalLevelConfigV4Rule,
+            NotSelectIterativeAllocatorForSharedLeaseDatabaseV4Rule,
         },
         client_classes::{
-            EvaluateRequiredAsAdditionalClassesRule, NotLifetimeForAdditionalClassesRule,
-            NotRecommendedPrefixAFTER_ClassesRule,
+            EvaluateRequiredAsAdditionalClassesRule, NotLifetimeForAdditionalClassesV4Rule,
+            NotRecommendedPrefixAFTER_ClassesV4Rule,
         },
-        ddns_server::NotDDNSQualifyingSuffixWithEnabledDDNSUpdatesRule,
+        ddns_server::NotDDNSQualifyingSuffixWithEnabledDDNSUpdatesV4Rule,
         hooks::{
             BadHooksOrderRule, MoreOneObjectConfigHARule,
             MultithreadingModesNotEqualInConfigAndHARule,
@@ -20,16 +20,16 @@ use crate::{
             NoMatchClientIdForFlexIDHookRule, UnnecessaryActivatedDatabaseHooksRule,
             UseUsrCheckHookRule,
         },
-        interfaces::NoInterfacesInInterfacesConfigRule,
+        interfaces::NoInterfacesInInterfacesConfigV4Rule,
         lease_database::{
-            LeaseSanityChecksEnabledForNotMemfileBackend, NoEnabledPersistFlagForMemfileLeasesRule,
-            NotChangeStopRetryExitStrategyOnFailRule,
+            LeaseSanityChecksEnabledForNotMemfileBackendV4Rule,
+            NoEnabledPersistFlagForMemfileLeasesV4Rule, NotChangeStopRetryExitStrategyOnFailV4Rule,
         },
         loggers::{
-            NoDebugLoggersV4Rule, NoLinebreakMessagesLoggersV4, NoPercentMMessagesLoggersV4Rule,
+            NoDebugLoggersV4Rule, NoLinebreakMessagesLoggersV4Rule, NoPercentMMessagesLoggersV4Rule,
         },
         option_data::{IncompleteOctetsBytesInOptionValuesRule, SpecifiedKEAManagedOptionsRule},
-        queue_control::NoEnableQueueAndMultithreadingTogetherRule,
+        queue_control::NoEnableQueueAndMultithreadingTogetherV4Rule,
         reservations::{
             AllReservationsOutOfPoolsRule, DisabledInSubnetReservationsWithEnabledOutOfPool,
             GlobalReservationsOccupyDynamicPoolsRule,
@@ -64,15 +64,15 @@ pub struct RulesV4 {
 impl RuleChecker<KEAv4Config> for RulesV4 {
     fn default() -> Self {
         RulesV4 {
-            interfaces: [Box::new(NoInterfacesInInterfacesConfigRule)],
+            interfaces: [Box::new(NoInterfacesInInterfacesConfigV4Rule)],
             allocators: [
-                Box::new(NotSelectFLQAllocatorInGlobalLevelConfig),
-                Box::new(NotSelectIterativeAllocatorForSharedLeaseDatabase),
+                Box::new(NotSelectFLQAllocatorInGlobalLevelConfigV4Rule),
+                Box::new(NotSelectIterativeAllocatorForSharedLeaseDatabaseV4Rule),
             ],
             lease_database: [
-                Box::new(NoEnabledPersistFlagForMemfileLeasesRule),
-                Box::new(NotChangeStopRetryExitStrategyOnFailRule),
-                Box::new(LeaseSanityChecksEnabledForNotMemfileBackend),
+                Box::new(NoEnabledPersistFlagForMemfileLeasesV4Rule),
+                Box::new(NotChangeStopRetryExitStrategyOnFailV4Rule),
+                Box::new(LeaseSanityChecksEnabledForNotMemfileBackendV4Rule),
             ],
             hooks: [
                 Box::new(MultithreadingModesNotEqualInConfigAndHARule),
@@ -92,8 +92,8 @@ impl RuleChecker<KEAv4Config> for RulesV4 {
             ],
             client_classes: [
                 Box::new(EvaluateRequiredAsAdditionalClassesRule),
-                Box::new(NotLifetimeForAdditionalClassesRule),
-                Box::new(NotRecommendedPrefixAFTER_ClassesRule),
+                Box::new(NotLifetimeForAdditionalClassesV4Rule),
+                Box::new(NotRecommendedPrefixAFTER_ClassesV4Rule),
             ],
             shared_networks: [
                 Box::new(OneSubnetInSharedNetworksRule),
@@ -106,15 +106,17 @@ impl RuleChecker<KEAv4Config> for RulesV4 {
                 Box::new(DisabledInSubnetReservationsWithEnabledOutOfPool),
                 Box::new(GlobalReservationsOccupyDynamicPoolsRule),
             ],
-            queue_control: [Box::new(NoEnableQueueAndMultithreadingTogetherRule)],
+            queue_control: [Box::new(NoEnableQueueAndMultithreadingTogetherV4Rule)],
             option_data: [
                 Box::new(SpecifiedKEAManagedOptionsRule),
                 Box::new(IncompleteOctetsBytesInOptionValuesRule),
             ],
-            dhcp_ddns: [Box::new(NotDDNSQualifyingSuffixWithEnabledDDNSUpdatesRule)],
+            dhcp_ddns: [Box::new(
+                NotDDNSQualifyingSuffixWithEnabledDDNSUpdatesV4Rule,
+            )],
             loggers: [
                 Box::new(NoDebugLoggersV4Rule),
-                Box::new(NoLinebreakMessagesLoggersV4),
+                Box::new(NoLinebreakMessagesLoggersV4Rule),
                 Box::new(NoPercentMMessagesLoggersV4Rule),
             ],
         }

@@ -1,3 +1,4 @@
+
 # Rules "DDNS Server"
 
 ## Implemented For
@@ -6,10 +7,10 @@
 - ❌ - NOT implemented for specified config.
 - 🚫 - Cannot be implemented for the specified config.
 
-|Rule name|DHCPv4|DDNS|Control Agent|
-|--|--|--|--|
-|[NotLocalIPAddressInD2ServerConfigRule](#NotLocalIPAddressInD2ServerConfigRule)|🚫|✅|🚫|
-|[NotDDNSQualifyingSuffixWithEnabledDDNSUpdatesRule](#NotDDNSQualifyingSuffixWithEnabledDDNSUpdatesRule)|✅|🚫|🚫|
+|Rule name|DHCPv4|DHCPv6|DDNS|Control Agent|
+|--|--|--|--|--|
+|[NotLocalIPAddressInD2ServerConfigRule](#NotLocalIPAddressInD2ServerConfigRule)|🚫|🚫|✅|🚫|
+|[NotDDNSQualifyingSuffixWithEnabledDDNSUpdatesRule](#NotDDNSQualifyingSuffixWithEnabledDDNSUpdatesRule)|✅|✅|🚫|🚫|
 
 ## Rules
 
@@ -56,7 +57,7 @@ Set local IP-address in `ip-address` key.
 
 - **Codename** - DDNS_SERVER::NotLocalIPAddressInD2ServerConfigRule.
 - **Importance** - WARNING.
-- **Config type** - DHCPv4.
+- **Config type** - DHCPv4, DHCPv6.
 - **Articles** - https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#kea-dhcp4-name-generation-for-ddns-update-requests
 
 #### Problem

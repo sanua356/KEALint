@@ -6,7 +6,7 @@ KEALint implements a mechanism for communicating with KEA services when the conf
 
 The general scheme is as follows.
 ```
-🖥 KEA DHCPv4/D2/CA ---> CONFIGURATION CHANGED! ---> ⚓ KEALint UNIX Hook ---> SEND TO UNIX SOCKET ---> #️⃣ KEALint ---> RUN CHECKS ---> 💾 SQLite Database ---> ✅ Done
+🖥 KEA DHCPv4/DHCPv6/D2/CA ---> CONFIGURATION CHANGED! ---> ⚓ KEALint UNIX Hook ---> SEND TO UNIX SOCKET ---> #️⃣ KEALint ---> RUN CHECKS ---> 💾 SQLite Database ---> ✅ Done
 ```
 
 ## Database table structure
@@ -29,7 +29,7 @@ A table for storing snapshots of changed server configurations.
 **Fields:**
 `id` - Integer type, primary key. The unique ID of each configuration snapshot.
 
-`config_type` - Text type, not null. The type of configuration that is saved in the snapshot. Possible values: 'Dhcp4, 'D2', 'ControlAgent'.
+`config_type` - Text type, not null. The type of configuration that is saved in the snapshot. Possible values: 'Dhcp4, 'Dhcp6', 'D2', 'ControlAgent'.
 
 `data` - Text type, not null. A snapshot of the configuration in the form of text encoded in JSON.
 

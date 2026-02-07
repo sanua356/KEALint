@@ -6,19 +6,19 @@
 - ❌ - NOT implemented for specified config.
 - 🚫 - Cannot be implemented for the specified config.
 
-|Rule name|DHCPv4|DDNS|Control Agent|
-|--|--|--|--|
-|[BadTKeyGSSTSIGHookTimeoutsRule](#BadTKeyGSSTSIGHookTimeoutsRule)|🚫|✅|🚫|
-|[NoCredentialsCacheAndKeytabTogetherInGSSTSIGRule](#NoCredentialsCacheAndKeytabTogetherInGSSTSIGRule)|🚫|✅|🚫|
-|[BadHooksOrderRule](#BadHooksOrderRule)|✅|🚫|🚫|
-|[MoreOneObjectConfigHARule](#MoreOneObjectConfigHARule)|✅|🚫|🚫|
-|[MultithreadingModesNotEqualInConfigAndHARule](#MultithreadingModesNotEqualInConfigAndHARule)|✅|🚫|🚫|
-|[NoActivatedHostCacheHookForRADIUSHookRule](#NoActivatedHostCacheHookForRADIUSHookRule)|✅|🚫|🚫|
-|[NoActivatedHostCMDsHookForDatabaseBackendRule](#NoActivatedHostCMDsHookForDatabaseBackendRule)|✅|🚫|🚫|
-|[NoBasicHTTPAuthInHAPeersRule](#NoBasicHTTPAuthInHAPeersRule)|✅|🚫|🚫|
-|[NoMatchClientIdForFlexIDHookRule](#NoMatchClientIdForFlexIDHookRule)|✅|🚫|🚫|
-|[UnnecessaryActivatedDatabaseHooksRule](#UnnecessaryActivatedDatabaseHooksRule)|✅|🚫|🚫|
-|[UseUsrCheckHookRule](#UseUsrCheckHookRule)|✅|🚫|🚫|
+|Rule name|DHCPv4|DHCPv6|DDNS|Control Agent|
+|--|--|--|--|--|
+|[BadTKeyGSSTSIGHookTimeoutsRule](#BadTKeyGSSTSIGHookTimeoutsRule)|🚫|🚫|✅|🚫|
+|[NoCredentialsCacheAndKeytabTogetherInGSSTSIGRule](#NoCredentialsCacheAndKeytabTogetherInGSSTSIGRule)|🚫|🚫|✅|🚫|
+|[BadHooksOrderRule](#BadHooksOrderRule)|✅|❌|🚫|🚫|
+|[MoreOneObjectConfigHARule](#MoreOneObjectConfigHARule)|✅|❌|🚫|🚫|
+|[MultithreadingModesNotEqualInConfigAndHARule](#MultithreadingModesNotEqualInConfigAndHARule)|✅|❌|🚫|🚫|
+|[NoActivatedHostCacheHookForRADIUSHookRule](#NoActivatedHostCacheHookForRADIUSHookRule)|✅|❌|🚫|🚫|
+|[NoActivatedHostCMDsHookForDatabaseBackendRule](#NoActivatedHostCMDsHookForDatabaseBackendRule)|✅|❌|🚫|🚫|
+|[NoBasicHTTPAuthInHAPeersRule](#NoBasicHTTPAuthInHAPeersRule)|✅|❌|🚫|🚫|
+|[NoMatchClientIdForFlexIDHookRule](#NoMatchClientIdForFlexIDHookRule)|✅|❌|🚫|🚫|
+|[UnnecessaryActivatedDatabaseHooksRule](#UnnecessaryActivatedDatabaseHooksRule)|✅|❌|🚫|🚫|
+|[UseUsrCheckHookRule](#UseUsrCheckHookRule)|✅|❌|🚫|🚫|
 
 
 ## Rules

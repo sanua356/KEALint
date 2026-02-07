@@ -2,8 +2,10 @@ pub mod common;
 pub mod ctrl_agent;
 pub mod d2;
 pub mod v4;
+pub mod v6;
 
 pub use common::*;
 pub use ctrl_agent::RulesCtrlAgent;
 pub use d2::RulesD2;
 pub use v4::RulesV4;
+pub use v6::RulesV6;

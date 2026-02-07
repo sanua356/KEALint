@@ -1,4 +1,6 @@
+#[cfg(test)]
 pub mod _tests;
+
 pub mod bad_hooks_order;
 pub mod more_one_object_config_ha;
 pub mod multithread_modes_not_equal;

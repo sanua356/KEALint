@@ -1,14 +1,15 @@
+
 # Rules "Interfaces"
 
 ## Implemented For
 
 - ✅ - Implemented for specified config.
-- ❌- NOT implemented for specified config.
+- ❌ - NOT implemented for specified config.
 - 🚫 - Cannot be implemented for the specified config.
 
-|Rule name|DHCPv4|DDNS|Control Agent|
-|--|--|--|--|
-|[NoInterfacesInInterfacesConfigRule](#NoInterfacesInInterfacesConfigRule)|✅|🚫|🚫|
+|Rule name|DHCPv4|DHCPv6|DDNS|Control Agent|
+|--|--|--|--|--|
+|[NoInterfacesInInterfacesConfigRule](#NoInterfacesInInterfacesConfigRule)|✅|✅|🚫|🚫|
 
 
 ## Rules
@@ -17,7 +18,7 @@
 
 - **Codename** - INTERFACES::NoInterfacesInInterfacesConfigRule.
 - **Importance** - WARNING.
-- **Config type** - DHCPv4.
+- **Config type** - DHCPv4, DHCPv6.
 - **Articles** - https://kea.readthedocs.io/en/latest/arm/dhcp6-srv.html#interface-configuration
 
 #### Problem
