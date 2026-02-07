@@ -3,22 +3,25 @@ use crate::{
     configs::KEAv4Config,
 };
 
-use super::super::shared::get_more_one_object_config_HA::get_more_one_object_config_HA_rule;
+use super::super::shared::get_multithread_modes_not_equal::get_multithread_modes_not_equal_rule;
 
-pub struct MoreOneObjectConfigHAV4Rule;
+pub struct MultithreadingModesNotEqualInConfigAndHAV4Rule;
 
-impl Rule<KEAv4Config> for MoreOneObjectConfigHAV4Rule {
+impl Rule<KEAv4Config> for MultithreadingModesNotEqualInConfigAndHAV4Rule {
     fn get_name(&self) -> &'static str {
-        "HOOKS::MoreOneObjectConfigHARule"
+        "HOOKS::MultithreadingModesNotEqualInConfigAndHARule"
     }
+
     fn get_level(&self) -> RuleLevels {
         RuleLevels::Warning
     }
+
     fn get_config_type(&self) -> RuleConfigs {
         RuleConfigs::Dhcp4
     }
+
     fn check(&self, config: &KEAv4Config) -> Option<Vec<RuleResult>> {
-        get_more_one_object_config_HA_rule(&config.hooks_libraries)
+        get_multithread_modes_not_equal_rule(&config.multi_threading, &config.hooks_libraries)
     }
 }
 

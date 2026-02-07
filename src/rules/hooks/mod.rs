@@ -8,7 +8,7 @@ pub use d2::no_credentials_cache_and_client_keytab_together_in_gss_tsig::NoCrede
 
 pub use v4::bad_hooks_order_v4::BadHooksOrderV4Rule;
 pub use v4::more_one_object_config_ha_v4::MoreOneObjectConfigHAV4Rule;
-pub use v4::multithread_modes_not_equal::MultithreadingModesNotEqualInConfigAndHARule;
+pub use v4::multithread_modes_not_equal_v4::MultithreadingModesNotEqualInConfigAndHAV4Rule;
 pub use v4::no_activated_host_cache_hook_for_radius_hook::NoActivatedHostCacheHookForRADIUSHookRule;
 pub use v4::no_activated_host_cmds_for_database_backend::NoActivatedHostCMDsHookForDatabaseBackendRule;
 pub use v4::no_basic_http_auth_in_ha_peers::NoBasicHTTPAuthInHAPeersRule;
@@ -18,3 +18,4 @@ pub use v4::use_user_check_hook::UseUsrCheckHookRule;
 
 pub use v6::bad_hooks_order_v6::BadHooksOrderV6Rule;
 pub use v6::more_one_object_config_ha_v6::MoreOneObjectConfigHAV6Rule;
+pub use v6::multithread_modes_not_equal_v6::MultithreadingModesNotEqualInConfigAndHAV6Rule;

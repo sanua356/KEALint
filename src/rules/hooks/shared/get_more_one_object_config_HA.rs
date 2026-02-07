@@ -2,7 +2,7 @@ use crate::{
     common::RuleResult, configs::hooks::KEAHookLibrary, constants::HIGH_AVAILABILITY_HOOK_LIBRARY,
 };
 
-pub fn get_more_one_object_config_HA(
+pub fn get_more_one_object_config_HA_rule(
     hooks_libraries: &Option<Vec<KEAHookLibrary>>,
 ) -> Option<Vec<RuleResult>> {
     let (idx_hook, hook) = hooks_libraries
@@ -39,7 +39,8 @@ mod tests {
     use crate::configs::v4::KEAv4Config;
 
     use super::{
-        super::_tests::MORE_ONE_OBJECT_CONFIG_HA_RULE_TEST_TEMPLATE, get_more_one_object_config_HA,
+        super::_tests::MORE_ONE_OBJECT_CONFIG_HA_RULE_TEST_TEMPLATE,
+        get_more_one_object_config_HA_rule,
     };
 
     #[test]
@@ -47,7 +48,7 @@ mod tests {
         let data: KEAv4Config =
             serde_json::from_str(MORE_ONE_OBJECT_CONFIG_HA_RULE_TEST_TEMPLATE).unwrap();
 
-        let rule = get_more_one_object_config_HA(&data.hooks_libraries);
+        let rule = get_more_one_object_config_HA_rule(&data.hooks_libraries);
         assert!(rule.is_some());
     }
 
@@ -94,7 +95,7 @@ mod tests {
         }]);
         let data: KEAv4Config = serde_json::from_value(json_value).unwrap();
 
-        let rule = get_more_one_object_config_HA(&data.hooks_libraries);
+        let rule = get_more_one_object_config_HA_rule(&data.hooks_libraries);
         assert!(rule.is_none());
     }
 }
