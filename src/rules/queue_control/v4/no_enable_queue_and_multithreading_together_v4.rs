@@ -25,34 +25,4 @@ impl Rule<KEAv4Config> for NoEnableQueueAndMultithreadingTogetherV4Rule {
     }
 }
 
-#[cfg(test)]
-mod tests {
-    use serde_json::Value;
-
-    use crate::{common::Rule, configs::v4::KEAv4Config};
-
-    use super::{
-        super::_tests::NO_ENABLE_QUEUE_AND_MULTITHREADING_TOGETER_RULE_TEMPLATE,
-        NoEnableQueueAndMultithreadingTogetherV4Rule,
-    };
-
-    #[test]
-    fn check_expected_trigger() {
-        let data: KEAv4Config =
-            serde_json::from_str(NO_ENABLE_QUEUE_AND_MULTITHREADING_TOGETER_RULE_TEMPLATE).unwrap();
-
-        let rule = NoEnableQueueAndMultithreadingTogetherV4Rule;
-        assert!(rule.check(&data).is_some());
-    }
-
-    #[test]
-    fn check_absense_trigger() {
-        let mut json_value: Value =
-            serde_json::from_str(NO_ENABLE_QUEUE_AND_MULTITHREADING_TOGETER_RULE_TEMPLATE).unwrap();
-        json_value["multi-threading"]["enable-multi-threading"] = Value::from(false);
-        let data: KEAv4Config = serde_json::from_value(json_value).unwrap();
-
-        let rule = NoEnableQueueAndMultithreadingTogetherV4Rule;
-        assert!(rule.check(&data).is_none());
-    }
-}
+// The tests are written in a shared directory

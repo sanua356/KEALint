@@ -25,38 +25,4 @@ impl Rule<KEAv6Config> for NotSelectIterativeAllocatorForSharedLeaseDatabaseV6Ru
     }
 }
 
-#[cfg(test)]
-mod tests {
-    use serde_json::Value;
-
-    use crate::{common::Rule, configs::v6::KEAv6Config};
-
-    use super::{
-        super::_tests::NOT_SELECT_ITERATIVE_ALLOCATOR_FOR_SHARED_LEASE_DATABASE_RULE_TEST_TEMPLATE,
-        NotSelectIterativeAllocatorForSharedLeaseDatabaseV6Rule,
-    };
-
-    #[test]
-    fn check_expected_trigger() {
-        let data: KEAv6Config = serde_json::from_str(
-            NOT_SELECT_ITERATIVE_ALLOCATOR_FOR_SHARED_LEASE_DATABASE_RULE_TEST_TEMPLATE,
-        )
-        .unwrap();
-
-        let rule = NotSelectIterativeAllocatorForSharedLeaseDatabaseV6Rule;
-        assert!(rule.check(&data).is_some());
-    }
-
-    #[test]
-    fn check_absense_trigger() {
-        let mut json_value: Value = serde_json::from_str(
-            NOT_SELECT_ITERATIVE_ALLOCATOR_FOR_SHARED_LEASE_DATABASE_RULE_TEST_TEMPLATE,
-        )
-        .unwrap();
-        json_value["allocator"] = Value::from("random");
-        let data: KEAv6Config = serde_json::from_value(json_value).unwrap();
-
-        let rule = NotSelectIterativeAllocatorForSharedLeaseDatabaseV6Rule;
-        assert!(rule.check(&data).is_none());
-    }
-}
+// The tests are written in a shared directory

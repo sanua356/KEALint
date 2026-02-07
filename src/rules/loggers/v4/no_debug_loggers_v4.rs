@@ -18,41 +18,8 @@ impl Rule<KEAv4Config> for NoDebugLoggersV4Rule {
         RuleConfigs::Dhcp4
     }
     fn check(&self, config: &KEAv4Config) -> Option<Vec<RuleResult>> {
-        if let Some(loggers) = &config.loggers {
-            return get_debug_loggers_rule(loggers, &self.get_config_type().to_string());
-        }
-        None
+        get_debug_loggers_rule(&config.loggers, &self.get_config_type().to_string())
     }
 }
 
-#[cfg(test)]
-mod tests {
-    use serde_json::Value;
-
-    use crate::{
-        common::Rule,
-        configs::{loggers::KEALoggerSeverityTypes, v4::KEAv4Config},
-    };
-
-    use super::{super::_tests::DEBUG_LOGGERS_V4_RULE_TEMPLATE, NoDebugLoggersV4Rule};
-
-    #[test]
-    fn check_expected_trigger() {
-        let data: KEAv4Config = serde_json::from_str(DEBUG_LOGGERS_V4_RULE_TEMPLATE).unwrap();
-
-        let rule = NoDebugLoggersV4Rule;
-        assert!(rule.check(&data).is_some());
-    }
-
-    #[test]
-    fn check_absense_trigger() {
-        let mut json_value: Value = serde_json::from_str(DEBUG_LOGGERS_V4_RULE_TEMPLATE).unwrap();
-        json_value["loggers"].as_array_mut().unwrap()[0]["severity"] =
-            Value::from(KEALoggerSeverityTypes::INFO.to_string());
-
-        let data: KEAv4Config = serde_json::from_value(json_value).unwrap();
-
-        let rule = NoDebugLoggersV4Rule;
-        assert!(rule.check(&data).is_none());
-    }
-}
+// The tests are written in a shared directory

@@ -22,38 +22,4 @@ impl Rule<KEAv4Config> for NotSelectFLQAllocatorInGlobalLevelConfigV4Rule {
     }
 }
 
-#[cfg(test)]
-mod tests {
-    use serde_json::Value;
-
-    use crate::{common::Rule, configs::v4::KEAv4Config};
-
-    use super::{
-        super::_tests::NOT_SELECT_FLQ_ALLOCATOR_IN_GLOBAL_LEVEL_CONFIG_RULE_TEST_TEMPLATE,
-        NotSelectFLQAllocatorInGlobalLevelConfigV4Rule,
-    };
-
-    #[test]
-    fn check_expected_trigger() {
-        let data: KEAv4Config = serde_json::from_str(
-            NOT_SELECT_FLQ_ALLOCATOR_IN_GLOBAL_LEVEL_CONFIG_RULE_TEST_TEMPLATE,
-        )
-        .unwrap();
-
-        let rule = NotSelectFLQAllocatorInGlobalLevelConfigV4Rule;
-        assert!(rule.check(&data).is_some());
-    }
-
-    #[test]
-    fn check_absense_trigger() {
-        let mut json_value: Value = serde_json::from_str(
-            NOT_SELECT_FLQ_ALLOCATOR_IN_GLOBAL_LEVEL_CONFIG_RULE_TEST_TEMPLATE,
-        )
-        .unwrap();
-        json_value["allocator"] = Value::from("random");
-        let data: KEAv4Config = serde_json::from_value(json_value).unwrap();
-
-        let rule = NotSelectFLQAllocatorInGlobalLevelConfigV4Rule;
-        assert!(rule.check(&data).is_none());
-    }
-}
+// The tests are written in a shared directory

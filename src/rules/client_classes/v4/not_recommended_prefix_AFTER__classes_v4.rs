@@ -23,34 +23,4 @@ impl Rule<KEAv4Config> for NotRecommendedPrefixAFTER_ClassesV4Rule {
     }
 }
 
-#[cfg(test)]
-mod tests {
-    use serde_json::Value;
-
-    use crate::{common::Rule, configs::v4::KEAv4Config};
-
-    use super::{
-        super::_tests::NOT_RECOMMENDED_PREFIX_AFTER__CLASSES_RULE_TEST_TEMPLATE,
-        NotRecommendedPrefixAFTER_ClassesV4Rule,
-    };
-
-    #[test]
-    fn check_expected_trigger() {
-        let data: KEAv4Config =
-            serde_json::from_str(NOT_RECOMMENDED_PREFIX_AFTER__CLASSES_RULE_TEST_TEMPLATE).unwrap();
-
-        let rule = NotRecommendedPrefixAFTER_ClassesV4Rule;
-        assert!(rule.check(&data).is_some());
-    }
-
-    #[test]
-    fn check_absense_trigger() {
-        let mut json_value: Value =
-            serde_json::from_str(NOT_RECOMMENDED_PREFIX_AFTER__CLASSES_RULE_TEST_TEMPLATE).unwrap();
-        json_value["client-classes"].as_array_mut().unwrap()[0]["name"] = Value::from("test_class");
-        let data: KEAv4Config = serde_json::from_value(json_value).unwrap();
-
-        let rule = NotRecommendedPrefixAFTER_ClassesV4Rule;
-        assert!(rule.check(&data).is_none());
-    }
-}
+// The tests are written in a shared directory

@@ -23,37 +23,4 @@ impl Rule<KEAv6Config> for NoInterfacesInInterfacesConfigV6Rule {
     }
 }
 
-#[cfg(test)]
-mod tests {
-    use serde_json::Value;
-
-    use crate::{common::Rule, configs::v6::KEAv6Config};
-
-    use super::{
-        super::_tests::NO_INTERFACES_IN_INTERFACES_CONFIG_RULE_TEST_TEMPLATE,
-        NoInterfacesInInterfacesConfigV6Rule,
-    };
-
-    #[test]
-    fn check_expected_trigger() {
-        let data: KEAv6Config =
-            serde_json::from_str(NO_INTERFACES_IN_INTERFACES_CONFIG_RULE_TEST_TEMPLATE).unwrap();
-
-        let rule = NoInterfacesInInterfacesConfigV6Rule;
-        assert!(rule.check(&data).is_some());
-    }
-
-    #[test]
-    fn check_absense_trigger() {
-        let mut json_value: Value =
-            serde_json::from_str(NO_INTERFACES_IN_INTERFACES_CONFIG_RULE_TEST_TEMPLATE).unwrap();
-        json_value["interfaces-config"]
-            .as_object_mut()
-            .unwrap()
-            .insert("interfaces".to_string(), Value::from(["eth0"]));
-        let data: KEAv6Config = serde_json::from_value(json_value).unwrap();
-
-        let rule = NoInterfacesInInterfacesConfigV6Rule;
-        assert!(rule.check(&data).is_none());
-    }
-}
+// The tests are written in a shared directory
