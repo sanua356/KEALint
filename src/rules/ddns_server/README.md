@@ -55,7 +55,7 @@ Set local IP-address in `ip-address` key.
 
 ### NotDDNSQualifyingSuffixWithEnabledDDNSUpdatesRule
 
-- **Codename** - DDNS_SERVER::NotLocalIPAddressInD2ServerConfigRule.
+- **Codename** - DDNS_SERVER::NotDDNSQualifyingSuffixWithEnabledDDNSUpdatesRule.
 - **Importance** - WARNING.
 - **Config type** - DHCPv4, DHCPv6.
 - **Articles** - https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#kea-dhcp4-name-generation-for-ddns-update-requests
