@@ -1,43 +1,5 @@
 #![allow(dead_code)]
 
-pub static NO_ACTIVATED_HOST_CMDS_HOOK_FOR_DATABASE_BACKEND_RULE_TEST_TEMPLATE: &str = r#"
-{
-	"valid-lifetime": 4000,
-	"renew-timer": 1000,
-	"rebind-timer": 2000,
-	"interfaces-config": {
-		"interfaces": []
-	},
-	"lease-database": {
-		"type": "memfile",
-		"persist": false,
-		"name": "/var/lib/kea/dhcp4.leases"
-	},
-	"hosts-databases": [
-		{
-			"name": "keatest",
-			"host": "localhost",
-			"password": "1234",
-			"port": 3306,
-			"type": "mysql",
-			"user": "keatest",
-			"readonly": false,
-			"trust-anchor": "my-ca",
-			"cert-file": "my-cert",
-			"key-file": "my-key",
-			"cipher-list": "AES",
-			"reconnect-wait-time": 3000,
-			"max-reconnect-tries": 3,
-			"on-fail": "stop-retry-exit",
-			"retry-on-startup": false,
-			"connect-timeout": 100,
-			"read-timeout": 120,
-			"write-timeout": 180
-		}
-	]
-}
-"#;
-
 pub static NO_BASIC_HTTP_AUTH_IN_HA_PEERS_RULE_TEST_TEMPLATE: &str = r#"
 {
 	"valid-lifetime": 4000,
