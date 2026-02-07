@@ -11,6 +11,7 @@ use crate::{
             NotLifetimeForAdditionalClassesV6Rule, NotRecommendedPrefixAFTER_ClassesV6Rule,
         },
         ddns_server::NotDDNSQualifyingSuffixWithEnabledDDNSUpdatesV6Rule,
+        hooks::BadHooksOrderV6Rule,
         interfaces::NoInterfacesInInterfacesConfigV6Rule,
         lease_database::{
             LeaseSanityChecksEnabledForNotMemfileBackendV6Rule,
@@ -31,6 +32,7 @@ pub struct RulesV6 {
     pub interfaces: [Box<dyn Rule<KEAv6Config>>; 1],
     pub lease_database: [Box<dyn Rule<KEAv6Config>>; 3],
     pub queue_control: [Box<dyn Rule<KEAv6Config>>; 1],
+    pub hooks: [Box<dyn Rule<KEAv6Config>>; 1],
 }
 
 impl RuleChecker<KEAv6Config> for RulesV6 {
@@ -59,6 +61,7 @@ impl RuleChecker<KEAv6Config> for RulesV6 {
             )],
             interfaces: [Box::new(NoInterfacesInInterfacesConfigV6Rule)],
             queue_control: [Box::new(NoEnableQueueAndMultithreadingTogetherV6Rule)],
+            hooks: [Box::new(BadHooksOrderV6Rule)],
         }
     }
 
@@ -71,6 +74,7 @@ impl RuleChecker<KEAv6Config> for RulesV6 {
             &self.interfaces,
             &self.lease_database,
             &self.queue_control,
+            &self.hooks,
         ]
     }
 
