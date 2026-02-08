@@ -18,7 +18,7 @@ use crate::{
             NoActivatedHostCMDsHookForDatabaseBackendV4Rule,
             NoActivatedHostCacheHookForRADIUSHookV4Rule, NoBasicHTTPAuthInHAPeersV4Rule,
             NoMatchClientIdForFlexIDHookRule, UnnecessaryActivatedDatabaseHooksV4Rule,
-            UseUsrCheckHookRule,
+            UseUsrCheckHookV4Rule,
         },
         interfaces::NoInterfacesInInterfacesConfigV4Rule,
         lease_database::{
@@ -81,7 +81,7 @@ impl RuleChecker<KEAv4Config> for RulesV4 {
                 Box::new(BadHooksOrderV4Rule),
                 Box::new(NoBasicHTTPAuthInHAPeersV4Rule),
                 Box::new(NoActivatedHostCacheHookForRADIUSHookV4Rule),
-                Box::new(UseUsrCheckHookRule),
+                Box::new(UseUsrCheckHookV4Rule),
                 Box::new(MoreOneObjectConfigHAV4Rule),
                 Box::new(NoMatchClientIdForFlexIDHookRule),
             ],

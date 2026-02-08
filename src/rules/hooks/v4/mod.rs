@@ -9,4 +9,4 @@ pub mod no_activated_host_cmds_for_database_backend_v4;
 pub mod no_basic_http_auth_in_ha_peers_v4;
 pub mod no_match_client_id_for_flex_id_hook;
 pub mod unnecessary_activated_database_hooks_v4;
-pub mod use_user_check_hook;
+pub mod use_user_check_hook_v4;
