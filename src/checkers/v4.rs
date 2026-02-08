@@ -17,7 +17,7 @@ use crate::{
             MultithreadingModesNotEqualInConfigAndHAV4Rule,
             NoActivatedHostCMDsHookForDatabaseBackendV4Rule,
             NoActivatedHostCacheHookForRADIUSHookV4Rule, NoBasicHTTPAuthInHAPeersV4Rule,
-            NoMatchClientIdForFlexIDHookRule, UnnecessaryActivatedDatabaseHooksRule,
+            NoMatchClientIdForFlexIDHookRule, UnnecessaryActivatedDatabaseHooksV4Rule,
             UseUsrCheckHookRule,
         },
         interfaces::NoInterfacesInInterfacesConfigV4Rule,
@@ -76,7 +76,7 @@ impl RuleChecker<KEAv4Config> for RulesV4 {
             ],
             hooks: [
                 Box::new(MultithreadingModesNotEqualInConfigAndHAV4Rule),
-                Box::new(UnnecessaryActivatedDatabaseHooksRule),
+                Box::new(UnnecessaryActivatedDatabaseHooksV4Rule),
                 Box::new(NoActivatedHostCMDsHookForDatabaseBackendV4Rule),
                 Box::new(BadHooksOrderV4Rule),
                 Box::new(NoBasicHTTPAuthInHAPeersV4Rule),

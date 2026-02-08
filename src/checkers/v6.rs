@@ -16,6 +16,7 @@ use crate::{
             MultithreadingModesNotEqualInConfigAndHAV6Rule,
             NoActivatedHostCMDsHookForDatabaseBackendV6Rule,
             NoActivatedHostCacheHookForRADIUSHookV6Rule, NoBasicHTTPAuthInHAPeersV6Rule,
+            UnnecessaryActivatedDatabaseHooksV6Rule,
         },
         interfaces::NoInterfacesInInterfacesConfigV6Rule,
         lease_database::{
@@ -37,7 +38,7 @@ pub struct RulesV6 {
     pub interfaces: [Box<dyn Rule<KEAv6Config>>; 1],
     pub lease_database: [Box<dyn Rule<KEAv6Config>>; 3],
     pub queue_control: [Box<dyn Rule<KEAv6Config>>; 1],
-    pub hooks: [Box<dyn Rule<KEAv6Config>>; 6],
+    pub hooks: [Box<dyn Rule<KEAv6Config>>; 7],
 }
 
 impl RuleChecker<KEAv6Config> for RulesV6 {
@@ -73,6 +74,7 @@ impl RuleChecker<KEAv6Config> for RulesV6 {
                 Box::new(NoActivatedHostCacheHookForRADIUSHookV6Rule),
                 Box::new(NoActivatedHostCMDsHookForDatabaseBackendV6Rule),
                 Box::new(NoBasicHTTPAuthInHAPeersV6Rule),
+                Box::new(UnnecessaryActivatedDatabaseHooksV6Rule),
             ],
         }
     }

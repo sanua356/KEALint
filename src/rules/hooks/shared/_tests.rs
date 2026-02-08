@@ -353,3 +353,29 @@ pub static NO_BASIC_HTTP_AUTH_IN_HA_PEERS_RULE_TEST_TEMPLATE: &str = r#"
 	]
 }
 "#;
+
+pub static UNNECESSARY_ACTIVATED_DATABASE_HOOKS_RULE_TEST_TEMPLATE: &str = r#"
+{
+	"valid-lifetime": 4000,
+	"renew-timer": 1000,
+	"rebind-timer": 2000,
+	"interfaces-config": {
+		"interfaces": []
+	},
+	"lease-database": {
+		"type": "memfile",
+		"persist": false,
+		"name": "/var/lib/kea/dhcp4.leases"
+	},
+	"hooks-libraries": [
+		{
+			"library": "libdhcp_pgsql.so",
+			"parameters": {}
+		},
+		{
+			"library": "libdhcp_mysql.so",
+			"parameters": {}
+		}
+	]
+}
+"#;
