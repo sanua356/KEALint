@@ -10,15 +10,15 @@
 |--|--|--|--|--|
 |[BadTKeyGSSTSIGHookTimeoutsRule](#BadTKeyGSSTSIGHookTimeoutsRule)|🚫|🚫|✅|🚫|
 |[NoCredentialsCacheAndKeytabTogetherInGSSTSIGRule](#NoCredentialsCacheAndKeytabTogetherInGSSTSIGRule)|🚫|🚫|✅|🚫|
-|[BadHooksOrderRule](#BadHooksOrderRule)|✅|❌|🚫|🚫|
-|[MoreOneObjectConfigHARule](#MoreOneObjectConfigHARule)|✅|❌|🚫|🚫|
-|[MultithreadingModesNotEqualInConfigAndHARule](#MultithreadingModesNotEqualInConfigAndHARule)|✅|❌|🚫|🚫|
-|[NoActivatedHostCacheHookForRADIUSHookRule](#NoActivatedHostCacheHookForRADIUSHookRule)|✅|❌|🚫|🚫|
-|[NoActivatedHostCMDsHookForDatabaseBackendRule](#NoActivatedHostCMDsHookForDatabaseBackendRule)|✅|❌|🚫|🚫|
-|[NoBasicHTTPAuthInHAPeersRule](#NoBasicHTTPAuthInHAPeersRule)|✅|❌|🚫|🚫|
-|[NoMatchClientIdForFlexIDHookRule](#NoMatchClientIdForFlexIDHookRule)|✅|❌|🚫|🚫|
-|[UnnecessaryActivatedDatabaseHooksRule](#UnnecessaryActivatedDatabaseHooksRule)|✅|❌|🚫|🚫|
-|[UseUsrCheckHookRule](#UseUsrCheckHookRule)|✅|❌|🚫|🚫|
+|[BadHooksOrderRule](#BadHooksOrderRule)|✅|✅|🚫|🚫|
+|[MoreOneObjectConfigHARule](#MoreOneObjectConfigHARule)|✅|✅|🚫|🚫|
+|[MultithreadingModesNotEqualInConfigAndHARule](#MultithreadingModesNotEqualInConfigAndHARule)|✅|✅|🚫|🚫|
+|[NoActivatedHostCacheHookForRADIUSHookRule](#NoActivatedHostCacheHookForRADIUSHookRule)|✅|✅|🚫|🚫|
+|[NoActivatedHostCMDsHookForDatabaseBackendRule](#NoActivatedHostCMDsHookForDatabaseBackendRule)|✅|✅|🚫|🚫|
+|[NoBasicHTTPAuthInHAPeersRule](#NoBasicHTTPAuthInHAPeersRule)|✅|✅|🚫|🚫|
+|[NoMatchClientIdForFlexIDHookRule](#NoMatchClientIdForFlexIDHookRule)|✅|🚫|🚫|🚫|
+|[UnnecessaryActivatedDatabaseHooksRule](#UnnecessaryActivatedDatabaseHooksRule)|✅|✅|🚫|🚫|
+|[UseUsrCheckHookRule](#UseUsrCheckHookRule)|✅|✅|🚫|🚫|
 
 
 ## Rules

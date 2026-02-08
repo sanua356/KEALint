@@ -1,0 +1,22 @@
+#![allow(non_snake_case)]
+
+#[cfg(test)]
+pub mod _tests;
+
+pub mod get_bad_hooks_order;
+pub mod get_more_one_object_config_HA;
+pub mod get_multithread_modes_not_equal;
+pub mod get_no_activated_host_cache_hook_for_radius_hook;
+pub mod get_no_activated_host_cmds_for_database_backend;
+pub mod get_no_basic_http_auth_in_ha_peers;
+pub mod get_unnecessary_activated_database_hooks;
+pub mod get_use_user_check_hook;
+
+pub use get_bad_hooks_order::get_bad_hooks_order_rule;
+pub use get_more_one_object_config_HA::get_more_one_object_config_HA_rule;
+pub use get_multithread_modes_not_equal::get_multithread_modes_not_equal_rule;
+pub use get_no_activated_host_cache_hook_for_radius_hook::get_no_activated_host_cache_hook_for_radius_hook;
+pub use get_no_activated_host_cmds_for_database_backend::get_no_activated_host_cmds_for_database_backend_rule;
+pub use get_no_basic_http_auth_in_ha_peers::get_no_basic_http_auth_in_ha_peers_rule;
+pub use get_unnecessary_activated_database_hooks::get_unnecessary_activated_database_hooks_rule;
+pub use get_use_user_check_hook::get_use_user_check_hook_rule;
