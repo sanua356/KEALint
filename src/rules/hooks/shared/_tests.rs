@@ -299,3 +299,57 @@ pub static NO_ACTIVATED_HOST_CMDS_HOOK_FOR_DATABASE_BACKEND_RULE_TEST_TEMPLATE: 
 	]
 }
 "#;
+
+pub static NO_BASIC_HTTP_AUTH_IN_HA_PEERS_RULE_TEST_TEMPLATE: &str = r#"
+{
+	"valid-lifetime": 4000,
+	"renew-timer": 1000,
+	"rebind-timer": 2000,
+	"interfaces-config": {
+		"interfaces": []
+	},
+	"lease-database": {
+		"type": "memfile",
+		"persist": false,
+		"name": "/var/lib/kea/dhcp4.leases"
+	},
+	"hooks-libraries": [
+		{
+			"library": "libdhcp_ha.so",
+			"parameters": {
+				"high-availability": [
+					{
+						"this-server-name": "server1",
+						"mode": "load-balancing",
+						"multi-threading": {
+							"enable-multi-threading": true,
+							"http-dedicated-listener": true,
+							"http-listener-threads": 4,
+							"http-client-threads": 4
+						},
+						"peers": [
+							{
+								"name": "server1",
+								"url": "http://192.168.56.33:8005/",
+								"role": "primary"
+							},
+							{
+								"name": "server2",
+								"url": "http://192.168.56.66:8005/",
+								"role": "secondary"
+							},
+							{
+								"name": "server3",
+								"url": "http://192.168.56.99:8005/",
+								"basic-auth-user": "foo",
+								"basic-auth-password": "1234",
+								"role": "backup"
+							}
+						]
+					}
+				]
+			}
+		}
+	]
+}
+"#;

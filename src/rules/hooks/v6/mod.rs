@@ -3,3 +3,4 @@ pub mod more_one_object_config_ha_v6;
 pub mod multithread_modes_not_equal_v6;
 pub mod no_activated_host_cache_hook_for_radius_hook_v6;
 pub mod no_activated_host_cmds_for_database_backend_v6;
+pub mod no_basic_http_auth_in_ha_peers_v6;
