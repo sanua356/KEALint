@@ -104,6 +104,8 @@ impl DatabaseResultsChecker<Result<()>> for DatabaseResults<Connection> {
 mod test {
     use rusqlite::Connection;
 
+    use crate::checkers::Problem;
+
     use super::{DatabaseResults, DatabaseResultsChecker};
 
     #[test]
@@ -114,5 +116,26 @@ mod test {
         let migrations = database.run_migrations();
 
         assert_eq!(migrations, Ok(()));
+    }
+
+    #[test]
+    fn load_results_test() {
+        let connection = Connection::open_in_memory().unwrap();
+
+        let database: DatabaseResults<Connection> = DatabaseResults { connection };
+        database.run_migrations().unwrap();
+        let results = database.load_results(
+            "Dhcp4".to_string(),
+            vec![Problem {
+                config_type: "Dhcp4".to_string(),
+                description: "Description".to_string(),
+                importance: "WARNING".to_string(),
+                links: None,
+                name: "NAME".to_string(),
+                places: None,
+            }],
+        );
+
+        assert_eq!(results, Ok(()));
     }
 }
