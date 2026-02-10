@@ -12,11 +12,10 @@ use std::{
 
 use crate::configs::{KEACtrlAgentConfigFile, KEAD2ConfigFile, KEAv4ConfigFile, KEAv6ConfigFile};
 
-mod loaders;
-mod migrations;
+mod databases;
+
 use super::{CLIArgs, run_checks};
-use loaders::load_problems;
-use migrations::run_migrations;
+use databases::{DatabaseResults, DatabaseResultsChecker};
 
 fn try_configuration<T>(config: &str, config_key: &'static str) -> Option<T>
 where
@@ -51,8 +50,9 @@ fn handle_query(stream: UnixStream, database_path: String) {
 
     let connection = Connection::open(database_path)
         .expect("An error occurred when connecting to an SQLite database.");
+    let database: DatabaseResults<Connection> = DatabaseResults { connection };
 
-    match load_problems(config, problems, connection) {
+    match database.load_results(config, problems) {
         Ok(_) => {
             println!(
                 "Check results saved to database successfully! {}",
@@ -82,8 +82,9 @@ pub fn run_standalone(args: CLIArgs) {
     let database_path = args.database_filepath.unwrap();
     let connection = Connection::open(database_path.clone())
         .expect("An error occurred when connecting to an SQLite database.");
+    let database: DatabaseResults<Connection> = DatabaseResults { connection };
 
-    match run_migrations(connection) {
+    match database.run_migrations() {
         Ok(_) => {
             println!("Database migrations applied successfully!");
         }
