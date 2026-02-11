@@ -132,4 +132,4 @@ KEALint implements a set of rules for configurations from the following set:
 
 ## License
 
-GPLv3
+[GPLv3](https://www.gnu.org/licenses/gpl-3.0.html)
