@@ -88,9 +88,10 @@ Command line interface 'KEALint' implements the following interaction parameters
 
 `--unix-socket-filepath` - Optional. Defines the path to the UNIX socket that needs to be listened to in order to receive configurations.
 
-`--database-type` - Optional. Defines the path to the database to which the results of the checks will need to be recorded.
+`--database-type` - Optional. Defines the path to the database to which the results of the checks will need to be recorded. Currently, only the value 'sqlite' is supported.
 
-`--database-filepath` - Optional. Defines the type of database to connect to. Currently, only the value 'sqlite' is supported.
+
+`--database-filepath` - Optional. Defines the type of database to connect to. 
 
 ## Rules
 
@@ -132,4 +133,4 @@ KEALint implements a set of rules for configurations from the following set:
 
 ## License
 
-[GPLv3](https://www.gnu.org/licenses/gpl-3.0.html)
+[ISC](https://www.isc.org/licenses/?utm_source=infoseclearner.beehiiv.com&utm_medium=referral&utm_campaign=open-source-software-legal-risks)
