@@ -11,16 +11,18 @@ fn check_rekey_percent(
     rekey_interval: Option<i64>,
     hook_placement: &String,
 ) -> Option<RuleResult> {
-    if let (Some(tkey), Some(rekey)) = (tkey_lifetime, rekey_interval) {
-        let rekey_percent = rekey * 100 / tkey;
-
-        if !(50..=80).contains(&rekey_percent) {
-            return Some(RuleResult {
-                description: "The value of the 'rekey-interval' parameter in the configuration of the 'GSS-TSIG' hook is recommended to be set in the range of 50-80% of the value of the 'tkey-lifetime' parameter".to_string(),
-                places: Some(vec![format!("{}.rekey-interval", hook_placement)]),
-                links: Some(&["https://kea.readthedocs.io/en/latest/arm/integrations.html#using-gss-tsig"]),
-            });
-        }
+    match (tkey_lifetime, rekey_interval) {
+       (Some(tkey), Some(rekey)) => {
+		let rekey_percent = rekey * 100 / tkey;
+		if !(50..=80).contains(&rekey_percent) {
+		    return Some(RuleResult {
+		        description: "The value of the 'rekey-interval' parameter in the configuration of the 'GSS-TSIG' hook is recommended to be set in the range of 50-80% of the value of the 'tkey-lifetime' parameter".to_string(),
+		        places: Some(vec![format!("{}.rekey-interval", hook_placement)]),
+		        links: Some(&["https://kea.readthedocs.io/en/latest/arm/integrations.html#using-gss-tsig"]),
+		    });
+		}
+	},
+	_ => {}
     }
 
     None
@@ -32,15 +34,18 @@ fn check_retry_interval(
     retry_interval: Option<i64>,
     hook_placement: &String,
 ) -> Option<RuleResult> {
-    if let (Some(tkey), Some(rekey), Some(retry)) = (tkey_lifetime, rekey_interval, retry_interval)
-        && retry > ((tkey - rekey) / 3)
-    {
-        return Some(RuleResult {
-		       description: "The value of the 'retry-interval' parameter in the configuration of the 'GSS-TSIG' hook is recommended to be set no more than 1/3 of the difference between the values of the 'tkey-lifetime' and 'rekey-interval' parameters.".to_string(),
-		       places: Some(vec![format!("{}.retry-interval", hook_placement)]),
-		       links: Some(&["https://kea.readthedocs.io/en/latest/arm/integrations.html#using-gss-tsig"]),
-		   });
-    }
+    match (tkey_lifetime, rekey_interval, retry_interval){
+	 (Some(tkey), Some(rekey), Some(retry)) => {
+		if retry > ((tkey - rekey) / 3) {
+			return Some(RuleResult {
+			       description: "The value of the 'retry-interval' parameter in the configuration of the 'GSS-TSIG' hook is recommended to be set no more than 1/3 of the difference between the values of the 'tkey-lifetime' and 'rekey-interval' parameters.".to_string(),
+			       places: Some(vec![format!("{}.retry-interval", hook_placement)]),
+			       links: Some(&["https://kea.readthedocs.io/en/latest/arm/integrations.html#using-gss-tsig"]),
+			});
+		}
+	},
+	_ => {}
+}
 
     None
 }

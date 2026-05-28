@@ -26,23 +26,26 @@ impl Rule<KEAD2Config> for NoCredentialsCacheAndClientKeytabTogetherInGSSTSIGRul
 
         let parameters = gss_tsig.parameters.as_ref().unwrap_or_default();
 
-        if let (Some(credentials_cache), Some(client_keytab)) = (
+        match (
             parameters.get("credentials-cache"),
             parameters.get("client-keytab"),
-        ) && (credentials_cache.as_str().unwrap_or("").chars().count() > 0
-            && client_keytab.as_str().unwrap_or("").chars().count() > 0)
-        {
-            return Some(vec![RuleResult {
-                description: format!(
-                    "It is not recommended to specify both the 'credentials-cache' and 'client-keytab' parameters in the configuration of the '{}' hook. Use one of the two above.",
-                    GSS_TSIG_HOOK_LIBRARY
-                ),
-                places: Some(vec![format!("hooks-libraries.{}", idx_hook)]),
-                links: Some(&[
-                    "https://kea.readthedocs.io/en/latest/arm/integrations.html#using-gss-tsig",
-                ]),
-            }]);
-        }
+        ) {
+	 (Some(credentials_cache), Some(client_keytab)) => {
+		if credentials_cache.as_str().unwrap_or("").chars().count() > 0 && client_keytab.as_str().unwrap_or("").chars().count() > 0 {
+			 return Some(vec![RuleResult {
+				description: format!(
+				    "It is not recommended to specify both the 'credentials-cache' and 'client-keytab' parameters in the configuration of the '{}' hook. Use one of the two above.",
+				    GSS_TSIG_HOOK_LIBRARY
+				),
+				places: Some(vec![format!("hooks-libraries.{}", idx_hook)]),
+				links: Some(&[
+				    "https://kea.readthedocs.io/en/latest/arm/integrations.html#using-gss-tsig",
+				]),
+			    }]);
+		}
+	},
+	_=> {}
+	}
 
         None
     }
