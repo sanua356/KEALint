@@ -25,12 +25,15 @@ fn get_reservations_out_of_pool_in_subnet(
 
         if let (Some(pools), Some(reservations)) = (&subnet.pools, &subnet.reservations) {
             for reservation in reservations {
-                if let Some(address) = reservation.ip_address {
-                    for pool in pools {
-                        if is_address_in_pool(address, &pool.pool) {
-                            is_any_reservation_in_pool = true;
+                match reservation.ip_address {
+                    Some(address) => {
+                        for pool in pools {
+                            if is_address_in_pool(address, &pool.pool) {
+                                is_any_reservation_in_pool = true;
+                            }
                         }
                     }
+                    _ => (),
                 }
             }
         }
@@ -60,22 +63,31 @@ impl Rule<KEAv4Config> for AllReservationsOutOfPoolsRule {
     fn check(&self, config: &KEAv4Config) -> Option<Vec<RuleResult>> {
         let mut results: Vec<RuleResult> = Vec::new();
 
-        if let Some(subnets) = &config.subnet4 {
-            results.extend(get_reservations_out_of_pool_in_subnet(
-                subnets,
-                "subnet4".to_string(),
-            ));
+        match &config.subnet4 {
+            Some(subnets) => {
+                results.extend(get_reservations_out_of_pool_in_subnet(
+                    subnets,
+                    "subnet4".to_string(),
+                ));
+            }
+            _ => (),
         }
 
-        if let Some(shared_networks) = &config.shared_networks {
-            for (idx_shared_network, shared_network) in shared_networks.iter().enumerate() {
-                if let Some(subnets) = &shared_network.subnet4 {
-                    results.extend(get_reservations_out_of_pool_in_subnet(
-                        subnets,
-                        format!("shared-networks.{}.subnet4", idx_shared_network),
-                    ));
+        match &config.shared_networks {
+            Some(shared_networks) => {
+                for (idx_shared_network, shared_network) in shared_networks.iter().enumerate() {
+                    match &shared_network.subnet4 {
+                        Some(subnets) => {
+                            results.extend(get_reservations_out_of_pool_in_subnet(
+                                subnets,
+                                format!("shared-networks.{}.subnet4", idx_shared_network),
+                            ));
+                        }
+                        _ => (),
+                    }
                 }
             }
+            _ => (),
         }
 
         if !results.is_empty() {

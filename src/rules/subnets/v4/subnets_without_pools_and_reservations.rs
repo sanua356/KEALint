@@ -49,19 +49,28 @@ impl Rule<KEAv4Config> for SubnetWithoutPoolsAndReservationsRule {
 
         let mut results: Vec<RuleResult> = Vec::new();
 
-        if let Some(subnets) = &config.subnet4 {
-            results.extend(get_empty_subnets(subnets, "subnet4".to_string()));
+        match &config.subnet4 {
+            Some(subnets) => {
+                results.extend(get_empty_subnets(subnets, "subnet4".to_string()));
+            }
+            _ => (),
         }
 
-        if let Some(shared_networks) = &config.shared_networks {
-            for (idx_shared_network, shared_network) in shared_networks.iter().enumerate() {
-                if let Some(shared_subnets) = &shared_network.subnet4 {
-                    results.extend(get_empty_subnets(
-                        shared_subnets,
-                        format!("shared-networks.{}", idx_shared_network),
-                    ));
+        match &config.shared_networks {
+            Some(shared_networks) => {
+                for (idx_shared_network, shared_network) in shared_networks.iter().enumerate() {
+                    match &shared_network.subnet4 {
+                        Some(shared_subnets) => {
+                            results.extend(get_empty_subnets(
+                                shared_subnets,
+                                format!("shared-networks.{}", idx_shared_network),
+                            ));
+                        }
+                        _ => (),
+                    }
                 }
             }
+            _ => (),
         }
 
         if !results.is_empty() {

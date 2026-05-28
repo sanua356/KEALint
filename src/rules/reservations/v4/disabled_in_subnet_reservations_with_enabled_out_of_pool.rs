@@ -64,30 +64,39 @@ impl Rule<KEAv4Config> for DisabledInSubnetReservationsWithEnabledOutOfPool {
 
         let is_reservations_in_subnet_global = config.reservations_in_subnet.unwrap_or(true);
 
-        if let Some(subnets) = &config.subnet4 {
-            results.extend(get_reservations_out_of_pool_without_in_subnet_flag(
-                subnets,
-                is_reservations_in_subnet_global,
-                None,
-                "subnet4".to_string(),
-            ));
+        match &config.subnet4 {
+            Some(subnets) => {
+                results.extend(get_reservations_out_of_pool_without_in_subnet_flag(
+                    subnets,
+                    is_reservations_in_subnet_global,
+                    None,
+                    "subnet4".to_string(),
+                ));
+            }
+            _ => (),
         }
 
-        if let Some(shared_networks) = &config.shared_networks {
-            for (idx_shared_network, shared_network) in shared_networks.iter().enumerate() {
-                let is_reservations_in_subnet_shared_network =
-                    shared_network.reservations_in_subnet.unwrap_or(true);
+        match &config.shared_networks {
+            Some(shared_networks) => {
+                for (idx_shared_network, shared_network) in shared_networks.iter().enumerate() {
+                    let is_reservations_in_subnet_shared_network =
+                        shared_network.reservations_in_subnet.unwrap_or(true);
 
-                if let Some(subnets) = &shared_network.subnet4 {
-                    results.extend(get_reservations_out_of_pool_without_in_subnet_flag(
-                        subnets,
-                        is_reservations_in_subnet_global
-                            && is_reservations_in_subnet_shared_network,
-                        Some(shared_network.name.clone()),
-                        format!("shared-networks.{}.subnet4", idx_shared_network),
-                    ));
+                    match &shared_network.subnet4 {
+                        Some(subnets) => {
+                            results.extend(get_reservations_out_of_pool_without_in_subnet_flag(
+                                subnets,
+                                is_reservations_in_subnet_global
+                                    && is_reservations_in_subnet_shared_network,
+                                Some(shared_network.name.clone()),
+                                format!("shared-networks.{}.subnet4", idx_shared_network),
+                            ));
+                        }
+                        _ => (),
+                    }
                 }
             }
+            _ => (),
         }
 
         if !results.is_empty() {

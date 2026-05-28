@@ -11,20 +11,29 @@ fn find_additional_classes_from_subnets(subnets: &Vec<KEAv4Subnet>) -> HashSet<S
     let mut classes: HashSet<String> = HashSet::new();
 
     for subnet in subnets {
-        if let Some(evaluated_classes) = &subnet.evaluate_additional_classes {
-            for evaluated in evaluated_classes {
-                classes.insert(evaluated.clone());
+        match &subnet.evaluate_additional_classes {
+            Some(evaluated_classes) => {
+                for evaluated in evaluated_classes {
+                    classes.insert(evaluated.clone());
+                }
             }
+            None => {}
         }
 
-        if let Some(pools) = &subnet.pools {
-            for pool in pools {
-                if let Some(evaluated_classes) = &pool.evaluate_additional_classes {
-                    for evaluated in evaluated_classes {
-                        classes.insert(evaluated.clone());
+        match &subnet.pools {
+            Some(pools) => {
+                for pool in pools {
+                    match &pool.evaluate_additional_classes {
+                        Some(evaluated_classes) => {
+                            for evaluated in evaluated_classes {
+                                classes.insert(evaluated.clone());
+                            }
+                        }
+                        _ => (),
                     }
                 }
             }
+            None => {}
         }
     }
 
@@ -46,23 +55,35 @@ impl Rule<KEAv4Config> for EvaluateRequiredAsAdditionalClassesRule {
 
         let mut evaluate_additional_classes: HashSet<String> = HashSet::new();
 
-        if let Some(subnets) = &config.subnet4 {
-            evaluate_additional_classes.extend(find_additional_classes_from_subnets(subnets));
+        match &config.subnet4 {
+            Some(subnets) => {
+                evaluate_additional_classes.extend(find_additional_classes_from_subnets(subnets));
+            }
+            _ => (),
         }
 
-        if let Some(shared_networks) = &config.shared_networks {
-            for shared_network in shared_networks {
-                if let Some(evaluated_classes) = &shared_network.evaluate_additional_classes {
-                    for evaluated in evaluated_classes {
-                        evaluate_additional_classes.insert(evaluated.clone());
+        match &config.shared_networks {
+            Some(shared_networks) => {
+                for shared_network in shared_networks {
+                    match &shared_network.evaluate_additional_classes {
+                        Some(evaluated_classes) => {
+                            for evaluated in evaluated_classes {
+                                evaluate_additional_classes.insert(evaluated.clone());
+                            }
+                        }
+                        _ => (),
+                    }
+
+                    match &shared_network.subnet4 {
+                        Some(subnets) => {
+                            evaluate_additional_classes
+                                .extend(find_additional_classes_from_subnets(subnets));
+                        }
+                        _ => (),
                     }
                 }
-
-                if let Some(subnets) = &shared_network.subnet4 {
-                    evaluate_additional_classes
-                        .extend(find_additional_classes_from_subnets(subnets));
-                }
             }
+            _ => (),
         }
 
         let mut results: Vec<RuleResult> = Vec::new();
@@ -72,14 +93,15 @@ impl Rule<KEAv4Config> for EvaluateRequiredAsAdditionalClassesRule {
                 .iter()
                 .find(|item| item.name == additional_class);
 
-            if let Some(class_info) = class
-                && !class_info.only_in_additional_list.unwrap_or_default()
-            {
-                results.push(RuleResult {
-                description: format!("The client class named '{}' is specified as the value by the 'evaluate-additional-classes' key in the configuration, but does not have the 'only-if-required' or 'only-in-additional-list' flag set to 'true'.", class_info.name),
-                places: Some(vec![format!("client-classes.{}", idx)]),
-                links: Some(&["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#additional-classification"]),
-            });
+            match class {
+                Some(class_info) if !class_info.only_in_additional_list.unwrap_or_default() => {
+                    results.push(RuleResult {
+                    description: format!("The client class named '{}' is specified as the value by the 'evaluate-additional-classes' key in the configuration, but does not have the 'only-if-required' or 'only-in-additional-list' flag set to 'true'.", class_info.name),
+                    places: Some(vec![format!("client-classes.{}", idx)]),
+                    links: Some(&["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#additional-classification"]),
+                });
+                }
+                _ => (),
             }
         }
 

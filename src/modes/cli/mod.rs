@@ -1,3 +1,5 @@
+#![allow(unused_variables)]
+
 use serde::de::DeserializeOwned;
 use std::{
     fs::{self, OpenOptions},
@@ -42,28 +44,43 @@ pub fn run_cli(args: CLIArgs) {
     let mut d2_filepath: PathBuf = PathBuf::new();
     let mut ctrl_agent_filepath: PathBuf = PathBuf::new();
 
-    if let Some(dir_path) = args.dir_path {
-        let dir = Path::new(&dir_path);
-        v4_filepath = dir.join("kea-dhcp4.conf");
-        v6_filepath = dir.join("kea-dhcp6.conf");
-        d2_filepath = dir.join("kea-dhcp-ddns.conf");
-        ctrl_agent_filepath = dir.join("kea-ctrl-agent.conf");
+    match args.dir_path {
+        Some(dir_path) => {
+            let dir = Path::new(&dir_path);
+            v4_filepath = dir.join("kea-dhcp4.conf");
+            v6_filepath = dir.join("kea-dhcp6.conf");
+            d2_filepath = dir.join("kea-dhcp-ddns.conf");
+            ctrl_agent_filepath = dir.join("kea-ctrl-agent.conf");
+        }
+        _ => (),
     }
 
-    if let Some(v4_path_custom) = args.v4_filepath {
-        v4_filepath = Path::new(&v4_path_custom).to_path_buf();
+    match args.v4_filepath {
+        Some(v4_path_custom) => {
+            v4_filepath = Path::new(&v4_path_custom).to_path_buf();
+        }
+        _ => (),
     }
 
-    if let Some(v6_path_custom) = args.v6_filepath {
-        v6_filepath = Path::new(&v6_path_custom).to_path_buf();
+    match args.v6_filepath {
+        Some(v6_path_custom) => {
+            v6_filepath = Path::new(&v6_path_custom).to_path_buf();
+        }
+        _ => (),
     }
 
-    if let Some(d2_path_custom) = args.d2_filepath {
-        d2_filepath = Path::new(&d2_path_custom).to_path_buf();
+    match args.d2_filepath {
+        Some(d2_path_custom) => {
+            d2_filepath = Path::new(&d2_path_custom).to_path_buf();
+        }
+        _ => (),
     }
 
-    if let Some(ctrl_agent_path_custom) = args.ctrl_agent_filepath {
-        ctrl_agent_filepath = Path::new(&ctrl_agent_path_custom).to_path_buf();
+    match args.ctrl_agent_filepath {
+        Some(ctrl_agent_path_custom) => {
+            ctrl_agent_filepath = Path::new(&ctrl_agent_path_custom).to_path_buf();
+        }
+        _ => (),
     }
 
     let skip_not_exists = args.skip_not_exists;
@@ -97,31 +114,34 @@ pub fn run_cli(args: CLIArgs) {
         KEALintOutputFormatTypes::json => serde_json::to_string_pretty(&problems).unwrap(),
     };
 
-    if let Some(out_filepath) = &args.output_filepath {
-        let path = Path::new(out_filepath).to_path_buf();
+    match &args.output_filepath {
+        Some(out_filepath) => {
+            let path = Path::new(out_filepath).to_path_buf();
 
-        let file = OpenOptions::new()
-            .write(true)
-            .create(true)
-            .truncate(true)
-            .open(path);
+            let file = OpenOptions::new()
+                .write(true)
+                .create(true)
+                .truncate(true)
+                .open(path);
 
-        match file {
-            Ok(mut f) => {
-                f.write_all(printed.as_bytes())
-                    .expect("An error occurred when writing the test results to a file.");
-                println!("Check results successfully written in file!");
+            match file {
+                Ok(mut f) => {
+                    f.write_all(printed.as_bytes())
+                        .expect("An error occurred when writing the test results to a file.");
+                    println!("Check results successfully written in file!");
+                }
+                Err(err) => panic!(
+                    "An error occurred while verifying the access rights of the output file: {}",
+                    err
+                ),
             }
-            Err(err) => panic!(
-                "An error occurred while verifying the access rights of the output file: {}",
-                err
-            ),
         }
-    } else {
-        println!("{}", printed);
+        None => {
+            println!("{}", printed);
 
-        if !summary.is_empty() {
-            println!("{}", summary);
+            if !summary.is_empty() {
+                println!("{}", summary);
+            }
         }
     }
 }

@@ -23,20 +23,27 @@ impl Rule<KEAv4Config> for SameHostReservationsInDifferentSubnetsSharedNetworksR
         for shared_network in config.shared_networks.as_ref()? {
             let mut hw_address_reservations: HashMap<String, Vec<String>> = HashMap::new();
 
-            if let Some(subnets) = &shared_network.subnet4 {
-                for subnet in subnets {
-                    if let Some(reservations) = &subnet.reservations {
-                        for reservation in reservations {
-                            let hw = reservation.hw_address.clone().unwrap_or("".to_string());
-                            if !hw.is_empty() {
-                                hw_address_reservations
-                                    .entry(hw.clone())
-                                    .or_default()
-                                    .push(subnet.subnet.to_string());
+            match &shared_network.subnet4 {
+                Some(subnets) => {
+                    for subnet in subnets {
+                        match &subnet.reservations {
+                            Some(reservations) => {
+                                for reservation in reservations {
+                                    let hw =
+                                        reservation.hw_address.clone().unwrap_or("".to_string());
+                                    if !hw.is_empty() {
+                                        hw_address_reservations
+                                            .entry(hw.clone())
+                                            .or_default()
+                                            .push(subnet.subnet.to_string());
+                                    }
+                                }
                             }
+                            _ => (),
                         }
                     }
                 }
+                _ => (),
             }
 
             for hw_reservation in hw_address_reservations {

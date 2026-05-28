@@ -43,11 +43,14 @@ fn get_kea_incomplete_bytes_options_in_subnets(
     let mut results: Vec<RuleResult> = Vec::new();
 
     for (idx_subnet, subnet) in subnets.iter().enumerate() {
-        if let Some(option_data) = &subnet.option_data {
-            results.extend(get_kea_incomplete_bytes_options(
-                option_data,
-                format!("{}.{}.option-data", placement, idx_subnet),
-            ));
+        match &subnet.option_data {
+            Some(option_data) => {
+                results.extend(get_kea_incomplete_bytes_options(
+                    option_data,
+                    format!("{}.{}.option-data", placement, idx_subnet),
+                ));
+            }
+            _ => (),
         }
 
         for (idx_pool, pool) in subnet.pools.as_ref().unwrap_or(&vec![]).iter().enumerate() {
@@ -79,42 +82,54 @@ impl Rule<KEAv4Config> for IncompleteOctetsBytesInOptionValuesRule {
     fn check(&self, config: &KEAv4Config) -> Option<Vec<RuleResult>> {
         let mut results: Vec<RuleResult> = Vec::new();
 
-        if let Some(options) = &config.option_data {
-            results.extend(get_kea_incomplete_bytes_options(
-                options,
-                "option-data".to_string(),
-            ));
-        }
-        if let Some(classes) = &config.client_classes {
-            for (idx_class, class) in classes.iter().enumerate() {
+        match &config.option_data {
+            Some(options) => {
                 results.extend(get_kea_incomplete_bytes_options(
-                    class.option_data.as_ref().unwrap_or(&vec![]),
-                    format!("client-classes.{}.option-data", idx_class),
+                    options,
+                    "option-data".to_string(),
                 ));
             }
+            _ => (),
         }
-        if let Some(subnets) = &config.subnet4 {
-            results.extend(get_kea_incomplete_bytes_options_in_subnets(
-                subnets,
-                "subnet4".to_string(),
-            ));
-        }
-
-        if let Some(shared_networks) = &config.shared_networks {
-            for (idx_shared_network, shared_network) in shared_networks.iter().enumerate() {
-                if shared_network.option_data.is_some() {
+        match &config.client_classes {
+            Some(classes) => {
+                for (idx_class, class) in classes.iter().enumerate() {
                     results.extend(get_kea_incomplete_bytes_options(
-                        shared_network.option_data.as_ref().unwrap_or(&vec![]),
-                        format!("shared-networks.{}.option-data", idx_shared_network),
-                    ));
-                }
-                if shared_network.subnet4.is_some() {
-                    results.extend(get_kea_incomplete_bytes_options_in_subnets(
-                        shared_network.subnet4.as_ref().unwrap_or(&vec![]),
-                        format!("shared-networks.{}.subnet4", idx_shared_network),
+                        class.option_data.as_ref().unwrap_or(&vec![]),
+                        format!("client-classes.{}.option-data", idx_class),
                     ));
                 }
             }
+            _ => (),
+        }
+        match &config.subnet4 {
+            Some(subnets) => {
+                results.extend(get_kea_incomplete_bytes_options_in_subnets(
+                    subnets,
+                    "subnet4".to_string(),
+                ));
+            }
+            _ => (),
+        }
+
+        match &config.shared_networks {
+            Some(shared_networks) => {
+                for (idx_shared_network, shared_network) in shared_networks.iter().enumerate() {
+                    if shared_network.option_data.is_some() {
+                        results.extend(get_kea_incomplete_bytes_options(
+                            shared_network.option_data.as_ref().unwrap_or(&vec![]),
+                            format!("shared-networks.{}.option-data", idx_shared_network),
+                        ));
+                    }
+                    if shared_network.subnet4.is_some() {
+                        results.extend(get_kea_incomplete_bytes_options_in_subnets(
+                            shared_network.subnet4.as_ref().unwrap_or(&vec![]),
+                            format!("shared-networks.{}.subnet4", idx_shared_network),
+                        ));
+                    }
+                }
+            }
+            _ => (),
         }
 
         if !results.is_empty() {

@@ -13,95 +13,101 @@ pub fn get_bad_hooks_order_rule(
 ) -> Option<Vec<RuleResult>> {
     let mut results: Vec<RuleResult> = Vec::new();
 
-    if let Some(hooks) = &hooks_libraries {
-        let flex_id_hook_index = hooks
-            .iter()
-            .position(|hook| hook.library.contains(FLEX_ID_HOOK_LIBRARY));
+    match &hooks_libraries {
+        Some(hooks) => {
+            let flex_id_hook_index = hooks
+                .iter()
+                .position(|hook| hook.library.contains(FLEX_ID_HOOK_LIBRARY));
 
-        if let Some(index) = flex_id_hook_index {
-            //It is recommended to put the Flex ID hook at the top of the list (clause 16.3.1).
-            if index != 0 {
-                results.push(RuleResult {
-		            description: format!("It is recommended to move the '{}' hook first in the list, otherwise the correct operation of the '{}' hook may be disrupted.", FLEX_ID_HOOK_LIBRARY, HIGH_AVAILABILITY_HOOK_LIBRARY),
-		            places: Some(vec![format!("hooks-libraries.{}", index)]),
-		            links: Some(&["https://kea.readthedocs.io/en/latest/arm/hooks.html#order-of-configuration"]),
-                });
+            match flex_id_hook_index {
+                Some(index) if index != 0 => {
+                    results.push(RuleResult {
+		                                    description: format!("It is recommended to move the '{}' hook first in the list, otherwise the correct operation of the '{}' hook may be disrupted.", FLEX_ID_HOOK_LIBRARY, HIGH_AVAILABILITY_HOOK_LIBRARY),
+		                                    places: Some(vec![format!("hooks-libraries.{}", index)]),
+		                                    links: Some(&["https://kea.readthedocs.io/en/latest/arm/hooks.html#order-of-configuration"]),
+                    });
+                }
+                _ => (),
+            }
+
+            let forensic_logging_hook_index = hooks
+                .iter()
+                .position(|hook| hook.library.contains(FORENSIC_LOGGING_HOOK_LIBRARY));
+
+            match forensic_logging_hook_index {
+                Some(index) => {
+                    // We recommend putting Forensic Logging last in the list (clause 16.3.1).
+                    if index != hooks.len() - 1 {
+                        results.push(RuleResult {
+			                                description: format!("It is recommended to move the '{}' hook last in the list to ensure that all higher-level hooks have already contributed to packet processing.", FORENSIC_LOGGING_HOOK_LIBRARY),
+			                                places: Some(vec![format!("hooks-libraries.{}", index)]),
+			                                links: Some(&["https://kea.readthedocs.io/en/latest/arm/hooks.html#order-of-configuration"]),
+			                            });
+                    }
+                }
+                _ => (),
+            }
+
+            let lease_commands_hook_index = hooks
+                .iter()
+                .position(|hook| hook.library.contains(LEASE_COMMANDS_HOOK_LIBRARY));
+
+            let high_availability_hook_index = hooks
+                .iter()
+                .position(|hook| hook.library.contains(HIGH_AVAILABILITY_HOOK_LIBRARY));
+
+            if let (Some(lease_index), Some(ha_index)) =
+                (lease_commands_hook_index, high_availability_hook_index)
+            {
+                // Lease Commands must be in front of High Availability (clause 16.12.6).
+                if lease_index > ha_index {
+                    results.push(RuleResult {
+			                description: format!("For correct operation, the '{}' hook must be specified before the '{}' hook.", LEASE_COMMANDS_HOOK_LIBRARY, HIGH_AVAILABILITY_HOOK_LIBRARY),
+			                places: Some(vec![format!("hooks-libraries.{}", lease_index), format!("hooks-libraries.{}", ha_index)]),
+			                links: Some(&["https://kea.readthedocs.io/en/latest/arm/hooks.html#load-balancing-configuration"]),
+			            });
+                }
+            }
+
+            let ping_check_hook_index = hooks
+                .iter()
+                .position(|hook| hook.library.contains(PING_CHECK_HOOK_LIBRARY));
+
+            if let (Some(lease_index), Some(ping_check_index)) =
+                (lease_commands_hook_index, ping_check_hook_index)
+            {
+                // Ping Check must be placed before Lease Commands (clause 16.15.12).
+                if ping_check_index > lease_index {
+                    results.push(RuleResult {
+			                description: format!("For correct operation, the '{}' hook must be specified before the '{}' hook.", PING_CHECK_HOOK_LIBRARY, LEASE_COMMANDS_HOOK_LIBRARY),
+			                places: Some(vec![format!("hooks-libraries.{}", lease_index), format!("hooks-libraries.{}", ping_check_index)]),
+			                links: Some(&["https://kea.readthedocs.io/en/latest/arm/hooks.html#binding-variables"]),
+			            });
+                }
+            }
+
+            let host_cache_hook_index = hooks
+                .iter()
+                .position(|hook| hook.library.contains(HOST_CACHE_HOOK_LIBRARY));
+
+            let radius_hook_index = hooks
+                .iter()
+                .position(|hook| hook.library.contains(RADIUS_HOOK_LIBRARY));
+
+            if let (Some(host_cache_index), Some(radius_index)) =
+                (host_cache_hook_index, radius_hook_index)
+            {
+                // Host Cache must be placed before RADIUS (clause 16.15.12).
+                if host_cache_index > radius_index {
+                    results.push(RuleResult {
+			                description: format!("For correct operation, the '{}' hook must be specified before the '{}' hook.", HOST_CACHE_HOOK_LIBRARY, RADIUS_HOOK_LIBRARY),
+			                places: Some(vec![format!("hooks-libraries.{}", host_cache_index), format!("hooks-libraries.{}", radius_index)]),
+			                links: Some(&["https://kea.readthedocs.io/en/latest/arm/integrations.html#radius-hook-library-configuration"]),
+		                });
+                }
             }
         }
-
-        let forensic_logging_hook_index = hooks
-            .iter()
-            .position(|hook| hook.library.contains(FORENSIC_LOGGING_HOOK_LIBRARY));
-
-        if let Some(index) = forensic_logging_hook_index {
-            // We recommend putting Forensic Logging last in the list (clause 16.3.1).
-            if index != hooks.len() - 1 {
-                results.push(RuleResult {
-			        description: format!("It is recommended to move the '{}' hook last in the list to ensure that all higher-level hooks have already contributed to packet processing.", FORENSIC_LOGGING_HOOK_LIBRARY),
-			        places: Some(vec![format!("hooks-libraries.{}", index)]),
-			        links: Some(&["https://kea.readthedocs.io/en/latest/arm/hooks.html#order-of-configuration"]),
-			    });
-            }
-        }
-
-        let lease_commands_hook_index = hooks
-            .iter()
-            .position(|hook| hook.library.contains(LEASE_COMMANDS_HOOK_LIBRARY));
-
-        let high_availability_hook_index = hooks
-            .iter()
-            .position(|hook| hook.library.contains(HIGH_AVAILABILITY_HOOK_LIBRARY));
-
-        if let (Some(lease_index), Some(ha_index)) =
-            (lease_commands_hook_index, high_availability_hook_index)
-        {
-            // Lease Commands must be in front of High Availability (clause 16.12.6).
-            if lease_index > ha_index {
-                results.push(RuleResult {
-			        description: format!("For correct operation, the '{}' hook must be specified before the '{}' hook.", LEASE_COMMANDS_HOOK_LIBRARY, HIGH_AVAILABILITY_HOOK_LIBRARY),
-			        places: Some(vec![format!("hooks-libraries.{}", lease_index), format!("hooks-libraries.{}", ha_index)]),
-			        links: Some(&["https://kea.readthedocs.io/en/latest/arm/hooks.html#load-balancing-configuration"]),
-			    });
-            }
-        }
-
-        let ping_check_hook_index = hooks
-            .iter()
-            .position(|hook| hook.library.contains(PING_CHECK_HOOK_LIBRARY));
-
-        if let (Some(lease_index), Some(ping_check_index)) =
-            (lease_commands_hook_index, ping_check_hook_index)
-        {
-            // Ping Check must be placed before Lease Commands (clause 16.15.12).
-            if ping_check_index > lease_index {
-                results.push(RuleResult {
-			        description: format!("For correct operation, the '{}' hook must be specified before the '{}' hook.", PING_CHECK_HOOK_LIBRARY, LEASE_COMMANDS_HOOK_LIBRARY),
-			        places: Some(vec![format!("hooks-libraries.{}", lease_index), format!("hooks-libraries.{}", ping_check_index)]),
-			        links: Some(&["https://kea.readthedocs.io/en/latest/arm/hooks.html#binding-variables"]),
-			    });
-            }
-        }
-
-        let host_cache_hook_index = hooks
-            .iter()
-            .position(|hook| hook.library.contains(HOST_CACHE_HOOK_LIBRARY));
-
-        let radius_hook_index = hooks
-            .iter()
-            .position(|hook| hook.library.contains(RADIUS_HOOK_LIBRARY));
-
-        if let (Some(host_cache_index), Some(radius_index)) =
-            (host_cache_hook_index, radius_hook_index)
-        {
-            // Host Cache must be placed before RADIUS (clause 16.15.12).
-            if host_cache_index > radius_index {
-                results.push(RuleResult {
-			        description: format!("For correct operation, the '{}' hook must be specified before the '{}' hook.", HOST_CACHE_HOOK_LIBRARY, RADIUS_HOOK_LIBRARY),
-			        places: Some(vec![format!("hooks-libraries.{}", host_cache_index), format!("hooks-libraries.{}", radius_index)]),
-			        links: Some(&["https://kea.readthedocs.io/en/latest/arm/integrations.html#radius-hook-library-configuration"]),
-		        });
-            }
-        }
+        _ => (),
     }
 
     if !results.is_empty() {

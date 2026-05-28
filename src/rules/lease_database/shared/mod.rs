@@ -10,15 +10,18 @@ pub fn get_lease_sanity_checks_enabled_for_not_memfile_backend_rule(
     sanity_checks: &Option<KEASanityChecks>,
     lease_database: &KEALeaseDatabase,
 ) -> Option<Vec<RuleResult>> {
-    if let Some(sanity_checks) = sanity_checks
-        && sanity_checks.lease_checks.is_some()
-        && lease_database.r#type != KEALeaseDatabaseTypes::Memfile
-    {
-        return Some(vec![RuleResult {
-            description: "The Sanity Checks mechanism is not implemented for rent databases other than 'memfile'.".to_string(),
-            places: Some(vec!["lease-database.type".to_string(), "sanity-checks.lease-checks".to_string()]),
-            links: Some(&["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#sanity-checks-in-dhcpv4"]),
-        }]);
+    match sanity_checks {
+        Some(sanity_checks)
+            if sanity_checks.lease_checks.is_some()
+                && lease_database.r#type != KEALeaseDatabaseTypes::Memfile =>
+        {
+            return Some(vec![RuleResult {
+                description: "The Sanity Checks mechanism is not implemented for rent databases other than 'memfile'.".to_string(),
+                places: Some(vec!["lease-database.type".to_string(), "sanity-checks.lease-checks".to_string()]),
+                links: Some(&["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#sanity-checks-in-dhcpv4"]),
+            }]);
+        }
+        _ => (),
     }
 
     None

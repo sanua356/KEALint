@@ -21,37 +21,44 @@ impl Rule<KEAv4Config> for InterfaceOrRelaysInsideSubnetsSharedNetworksRule {
         for (idx_shared_network, shared_network) in
             config.shared_networks.as_ref()?.iter().enumerate()
         {
-            if let Some(subnets) = &shared_network.subnet4 {
-                for (idx_subnet, subnet) in subnets.iter().enumerate() {
-                    if let Some(interface) = &subnet.interface
-                        && !interface.is_empty()
-                    {
-                        results.push(RuleResult {
-                            description: format!(
-	                            "The shared network named '{}' has a subnet named '{}', which has its own network interface named '{}'. It is recommended to create a common network interface for all subnets within the same shared network.",
-	                            shared_network.name,
-	                            subnet.subnet,
-	                            interface
-                            ),
-                            places: Some(vec![format!("shared-networks.{}.subnet4.{}.interface", idx_shared_network, idx_subnet)]),
-                            links: Some(&["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#local-and-relayed-traffic-in-shared-networks"]),
-                        });
-                    }
+            match &shared_network.subnet4 {
+                Some(subnets) => {
+                    for (idx_subnet, subnet) in subnets.iter().enumerate() {
+                        match &subnet.interface {
+                            Some(interface) if !interface.is_empty() => {
+                                results.push(RuleResult {
+                                    description: format!(
+                                        "The shared network named '{}' has a subnet named '{}', which has its own network interface named '{}'. It is recommended to create a common network interface for all subnets within the same shared network.",
+                                        shared_network.name,
+                                        subnet.subnet,
+                                        interface
+                                    ),
+                                    places: Some(vec![format!("shared-networks.{}.subnet4.{}.interface", idx_shared_network, idx_subnet)]),
+                                    links: Some(&["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#local-and-relayed-traffic-in-shared-networks"]),
+                                });
+                            }
+                            _ => (),
+                        }
 
-                    if let Some(relay) = &subnet.relay
-                        && !relay.ip_addresses.as_ref().unwrap_or(&vec![]).is_empty()
-                    {
-                        results.push(RuleResult {
-                            description: format!(
-	                            "The shared network named '{}' has a subnet named '{}', which has its own relay addresses. It is recommended to make common relay addresses for all subnets within the same shared network.",
-	                            shared_network.name,
-	                            subnet.subnet
-                            ),
-                            places: Some(vec![format!("shared-networks.{}.subnet4.{}.relay", idx_shared_network, idx_subnet)]),
-                            links: Some(&["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#local-and-relayed-traffic-in-shared-networks"]),
-                        });
+                        match &subnet.relay {
+                            Some(relay)
+                                if !relay.ip_addresses.as_ref().unwrap_or(&vec![]).is_empty() =>
+                            {
+                                results.push(RuleResult {
+                                    description: format!(
+                                        "The shared network named '{}' has a subnet named '{}', which has its own relay addresses. It is recommended to make common relay addresses for all subnets within the same shared network.",
+                                        shared_network.name,
+                                        subnet.subnet
+                                    ),
+                                    places: Some(vec![format!("shared-networks.{}.subnet4.{}.relay", idx_shared_network, idx_subnet)]),
+                                    links: Some(&["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#local-and-relayed-traffic-in-shared-networks"]),
+                                });
+                            }
+                            _ => (),
+                        }
                     }
                 }
+                _ => (),
             }
         }
 

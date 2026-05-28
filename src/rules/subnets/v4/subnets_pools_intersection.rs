@@ -28,13 +28,16 @@ impl Rule<KEAv4Config> for SubnetsPoolsIntersectionRule {
         let mut all_subnets_pools: Vec<SubnetPool> = Vec::new();
 
         for subnet in config.subnet4.as_ref().unwrap() {
-            if let Some(pools) = &subnet.pools {
-                for pool in pools {
-                    all_subnets_pools.push(SubnetPool {
-                        subnet: subnet.subnet.to_string().clone(),
-                        pool: pool.pool,
-                    });
+            match &subnet.pools {
+                Some(pools) => {
+                    for pool in pools {
+                        all_subnets_pools.push(SubnetPool {
+                            subnet: subnet.subnet.to_string().clone(),
+                            pool: pool.pool,
+                        });
+                    }
                 }
+                _ => (),
             }
         }
 

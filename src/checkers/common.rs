@@ -95,17 +95,20 @@ pub fn find_problems<T>(config: &T, values: Vec<&[Box<dyn Rule<T>>]>) -> Vec<Pro
     for rules_item in values {
         for rule in rules_item {
             let checks = rule.check(config);
-            if let Some(check_items) = checks {
-                for item in check_items {
-                    problems.push(Problem {
-                        name: rule.get_name().to_string(),
-                        importance: rule.get_level().to_string(),
-                        config_type: rule.get_config_type().to_string(),
-                        description: item.description,
-                        places: item.places,
-                        links: item.links,
-                    });
+            match checks {
+                Some(check_items) => {
+                    for item in check_items {
+                        problems.push(Problem {
+                            name: rule.get_name().to_string(),
+                            importance: rule.get_level().to_string(),
+                            config_type: rule.get_config_type().to_string(),
+                            description: item.description,
+                            places: item.places,
+                            links: item.links,
+                        });
+                    }
                 }
+                _ => (),
             }
         }
     }

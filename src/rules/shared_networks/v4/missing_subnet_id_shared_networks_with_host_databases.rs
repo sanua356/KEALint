@@ -31,20 +31,23 @@ impl Rule<KEAv4Config> for MissingSubnetIdSharedNetworksWithHostDatabases {
         for (idx_shared_network, shared_network) in
             config.shared_networks.as_ref()?.iter().enumerate()
         {
-            if let Some(subnets) = &shared_network.subnet4 {
-                for (idx_subnet, subnet) in subnets.iter().enumerate() {
-                    if subnet.id.is_none() {
-                        results.push(RuleResult {
-                            description: format!(
-	                            "The shared network '{}' has a subnet '{}' that does not have an 'id' key with a unique value, which is recommended to be specified if your host reservations are served by a database.",
-	                            shared_network.name,
-	                            subnet.subnet
-                            ),
-                            places: Some(vec![format!("shared-networks.{}.subnet4.{}", idx_shared_network, idx_subnet)]),
-                            links: Some(&["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#host-reservations-in-shared-networks"]),
-                        });
+            match &shared_network.subnet4 {
+                Some(subnets) => {
+                    for (idx_subnet, subnet) in subnets.iter().enumerate() {
+                        if subnet.id.is_none() {
+                            results.push(RuleResult {
+                                description: format!(
+	                                            "The shared network '{}' has a subnet '{}' that does not have an 'id' key with a unique value, which is recommended to be specified if your host reservations are served by a database.",
+	                                            shared_network.name,
+	                                            subnet.subnet
+                                ),
+                                places: Some(vec![format!("shared-networks.{}.subnet4.{}", idx_shared_network, idx_subnet)]),
+                                links: Some(&["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#host-reservations-in-shared-networks"]),
+                            });
+                        }
                     }
                 }
+                _ => (),
             }
         }
 

@@ -38,28 +38,45 @@ pub fn get_unnecessary_activated_database_hooks_rule(
         _ => {}
     }
 
-    if let Some(hosts_database) = hosts_database
-        && let Some(db_type) = &hosts_database.r#type
-    {
-        config_types.insert(*db_type);
-    }
-
-    if let Some(hosts_databases) = hosts_databases {
-        for hosts_db in hosts_databases {
-            if let Some(db_type) = &hosts_db.r#type {
+    match hosts_database {
+        Some(hosts_database) => match &hosts_database.r#type {
+            Some(db_type) => {
                 config_types.insert(*db_type);
             }
-        }
+            _ => {}
+        },
+        _ => {}
     }
 
-    if let Some(config_control) = config_control
-        && let Some(control_databases) = &config_control.config_databases
-    {
-        for control_db in control_databases {
-            if let Some(db_type) = &control_db.r#type {
-                config_types.insert(*db_type);
+    match hosts_databases {
+        Some(hosts_databases) => {
+            for hosts_db in hosts_databases {
+                match &hosts_db.r#type {
+                    Some(db_type) => {
+                        config_types.insert(*db_type);
+                    }
+                    _ => (),
+                }
             }
         }
+        _ => (),
+    }
+
+    match config_control {
+        Some(config_control) => match &config_control.config_databases {
+            Some(control_databases) => {
+                for control_db in control_databases {
+                    match &control_db.r#type {
+                        Some(db_type) => {
+                            config_types.insert(*db_type);
+                        }
+                        _ => (),
+                    }
+                }
+            }
+            _ => {}
+        },
+        _ => {}
     }
 
     let mut results: Vec<RuleResult> = Vec::new();

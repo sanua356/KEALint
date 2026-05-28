@@ -13,27 +13,34 @@ fn get_global_resrvations_occupy_dynamic_pool_in_subnets(
     let mut results: Vec<RuleResult> = Vec::new();
 
     for subnet in subnets {
-        if let Some(pools) = &subnet.pools {
-            for pool in pools {
-                let global_reservation = global_reservations.iter().enumerate().find(|item| {
-                    if let Some(ip_address) = item.1.ip_address {
-                        return is_address_in_pool(ip_address, &pool.pool);
-                    }
-                    false
-                });
-
-                if let Some((reservation_idx, reservation)) = global_reservation {
-                    results.push(RuleResult {
-                        description: format!(
-                        	"The global reservation with the IP address '{}' belongs to the dynamic pool '{}'. It is recommended to change the reservation address or pool size.",
-                        	reservation.ip_address.unwrap(),
-                         	pool.pool,
-                        ),
-                        places: Some(vec![format!("reservation.{}", reservation_idx)]),
-                        links: Some(&["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#conflicts-in-dhcpv4-reservations"]),
+        match &subnet.pools {
+            Some(pools) => {
+                for pool in pools {
+                    let global_reservation = global_reservations.iter().enumerate().find(|item| {
+                        match item.1.ip_address {
+                            Some(ip_address) => return is_address_in_pool(ip_address, &pool.pool),
+                            _ => (),
+                        }
+                        false
                     });
+
+                    match global_reservation {
+                        Some((reservation_idx, reservation)) => {
+                            results.push(RuleResult {
+                                description: format!(
+                	                                    "The global reservation with the IP address '{}' belongs to the dynamic pool '{}'. It is recommended to change the reservation address or pool size.",
+                	                                    reservation.ip_address.unwrap(),
+                 	                                    pool.pool,
+                                ),
+                                places: Some(vec![format!("reservation.{}", reservation_idx)]),
+                                links: Some(&["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#conflicts-in-dhcpv4-reservations"]),
+                            });
+                        }
+                        _ => (),
+                    }
                 }
             }
+            _ => (),
         }
     }
 
@@ -57,22 +64,31 @@ impl Rule<KEAv4Config> for GlobalReservationsOccupyDynamicPoolsRule {
             return None;
         }
 
-        if let Some(subnets) = &config.subnet4 {
-            results.extend(get_global_resrvations_occupy_dynamic_pool_in_subnets(
-                config.reservations.as_ref().unwrap_or(&vec![]),
-                subnets,
-            ));
+        match &config.subnet4 {
+            Some(subnets) => {
+                results.extend(get_global_resrvations_occupy_dynamic_pool_in_subnets(
+                    config.reservations.as_ref().unwrap_or(&vec![]),
+                    subnets,
+                ));
+            }
+            _ => (),
         }
 
-        if let Some(shared_networks) = &config.shared_networks {
-            for shared_network in shared_networks {
-                if let Some(subnets) = &shared_network.subnet4 {
-                    results.extend(get_global_resrvations_occupy_dynamic_pool_in_subnets(
-                        config.reservations.as_ref().unwrap_or(&vec![]),
-                        subnets,
-                    ));
+        match &config.shared_networks {
+            Some(shared_networks) => {
+                for shared_network in shared_networks {
+                    match &shared_network.subnet4 {
+                        Some(subnets) => {
+                            results.extend(get_global_resrvations_occupy_dynamic_pool_in_subnets(
+                                config.reservations.as_ref().unwrap_or(&vec![]),
+                                subnets,
+                            ));
+                        }
+                        _ => (),
+                    }
                 }
             }
+            _ => (),
         }
 
         if !results.is_empty() {

@@ -19,28 +19,31 @@ impl Rule<KEAv4Config> for SubnetsOverlappingRule {
     fn check(&self, config: &KEAv4Config) -> Option<Vec<RuleResult>> {
         let mut results: Vec<RuleResult> = Vec::new();
 
-        if let Some(subnets) = &config.subnet4 {
-            for i in 0..subnets.len() {
-                for j in (i + 1)..subnets.len() {
-                    let a = &subnets[i];
-                    let b = &subnets[j];
+        match &config.subnet4 {
+            Some(subnets) => {
+                for i in 0..subnets.len() {
+                    for j in (i + 1)..subnets.len() {
+                        let a = &subnets[i];
+                        let b = &subnets[j];
 
-                    let (a_start, a_end) = v4_pool_to_start_end_available_ips(a.subnet);
-                    let (b_start, b_end) = v4_pool_to_start_end_available_ips(b.subnet);
+                        let (a_start, a_end) = v4_pool_to_start_end_available_ips(a.subnet);
+                        let (b_start, b_end) = v4_pool_to_start_end_available_ips(b.subnet);
 
-                    if a_start <= b_end && a_end >= b_start {
-                        results.push(RuleResult {
-                        description: format!(
-                            "The subnet '{}' overlaps the subnet '{}'. Change the prefix or subnet address.",
-                            b.subnet,
-                            a.subnet,
-                        ),
-                        places: None,
-                        links: Some(&["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#configuration-of-ipv4-address-pools"]),
-                    });
+                        if a_start <= b_end && a_end >= b_start {
+                            results.push(RuleResult {
+                            description: format!(
+                                "The subnet '{}' overlaps the subnet '{}'. Change the prefix or subnet address.",
+                                b.subnet,
+                                a.subnet,
+                            ),
+                            places: None,
+                            links: Some(&["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#configuration-of-ipv4-address-pools"]),
+                        });
+                        }
                     }
                 }
             }
+            _ => (),
         }
 
         if !results.is_empty() {

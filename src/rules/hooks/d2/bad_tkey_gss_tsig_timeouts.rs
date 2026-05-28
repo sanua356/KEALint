@@ -71,41 +71,54 @@ impl Rule<KEAD2Config> for BadTKeyGSSTSIGHookTimeoutsRule {
         let rekey_interval = parameters["rekey-interval"].as_i64();
         let retry_interval = parameters["retry-interval"].as_i64();
 
-        if let Some(rule) = check_rekey_percent(tkey_lifetime, rekey_interval, &placement) {
-            results.push(rule);
+        match check_rekey_percent(tkey_lifetime, rekey_interval, &placement) {
+            Some(rule) => {
+                results.push(rule);
+            }
+            _ => (),
         }
 
-        if let Some(rule) =
-            check_retry_interval(tkey_lifetime, rekey_interval, retry_interval, &placement)
-        {
-            results.push(rule);
+        match check_retry_interval(tkey_lifetime, rekey_interval, retry_interval, &placement) {
+            Some(rule) => {
+                results.push(rule);
+            }
+            _ => (),
         }
 
-        if let Some(servers) = parameters["servers"].as_array() {
-            for (idx, server) in servers.iter().enumerate() {
-                let server_tkey_lifetime = server["tkey-lifetime"].as_i64();
-                let server_rekey_interval = server["rekey-interval"].as_i64();
-                let server_retry_interval = server["retry-interval"].as_i64();
+        match parameters["servers"].as_array() {
+            Some(servers) => {
+                for (idx, server) in servers.iter().enumerate() {
+                    let server_tkey_lifetime = server["tkey-lifetime"].as_i64();
+                    let server_rekey_interval = server["rekey-interval"].as_i64();
+                    let server_retry_interval = server["retry-interval"].as_i64();
 
-                let server_placement = format!("{}.{}", placement, idx);
+                    let server_placement = format!("{}.{}", placement, idx);
 
-                if let Some(rule) = check_rekey_percent(
-                    server_tkey_lifetime,
-                    server_rekey_interval,
-                    &server_placement,
-                ) {
-                    results.push(rule);
-                }
+                    match check_rekey_percent(
+                        server_tkey_lifetime,
+                        server_rekey_interval,
+                        &server_placement,
+                    ) {
+                        Some(rule) => {
+                            results.push(rule);
+                        }
+                        _ => (),
+                    }
 
-                if let Some(rule) = check_retry_interval(
-                    server_tkey_lifetime,
-                    server_rekey_interval,
-                    server_retry_interval,
-                    &server_placement,
-                ) {
-                    results.push(rule);
+                    match check_retry_interval(
+                        server_tkey_lifetime,
+                        server_rekey_interval,
+                        server_retry_interval,
+                        &server_placement,
+                    ) {
+                        Some(rule) => {
+                            results.push(rule);
+                        }
+                        _ => (),
+                    }
                 }
             }
+            _ => (),
         }
 
         if !results.is_empty() {

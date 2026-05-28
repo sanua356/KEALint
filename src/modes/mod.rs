@@ -25,42 +25,58 @@ pub fn run_checks(
 ) -> Vec<Problem> {
     let mut results: Vec<Problem> = Vec::new();
 
-    if let Some(config) = config_v4 {
-        let checker: RulesV4 = RulesV4::default();
-        results.extend(checker.run(&config.dhcp4));
+    match config_v4 {
+        Some(config) => {
+            let checker: RulesV4 = RulesV4::default();
+            results.extend(checker.run(&config.dhcp4));
+        }
+        _ => (),
     }
 
-    if let Some(config) = config_v6 {
-        let checker: RulesV6 = RulesV6::default();
-        results.extend(checker.run(&config.dhcp6));
+    match config_v6 {
+        Some(config) => {
+            let checker: RulesV6 = RulesV6::default();
+            results.extend(checker.run(&config.dhcp6));
+        }
+        _ => (),
     }
 
-    if let Some(config) = config_d2 {
-        let checker: RulesD2 = RulesD2::default();
-        results.extend(checker.run(&config.dhcp_ddns));
+    match config_d2 {
+        Some(config) => {
+            let checker: RulesD2 = RulesD2::default();
+            results.extend(checker.run(&config.dhcp_ddns));
+        }
+        _ => (),
     }
 
-    if let Some(config) = config_ctrl_agent {
-        let checker: RulesCtrlAgent = RulesCtrlAgent::default();
-        results.extend(checker.run(&config.ctrl_agent));
+    match config_ctrl_agent {
+        Some(config) => {
+            let checker: RulesCtrlAgent = RulesCtrlAgent::default();
+            results.extend(checker.run(&config.ctrl_agent));
+        }
+        _ => (),
     }
 
     results
 }
 
 pub fn get_args(args: CLIArgs) -> CLIArgs {
-    if let Some(config_path) = &args.config_filepath {
-        let file_args: Option<CLIArgs> = match fs::read_to_string(Path::new(config_path)) {
-            Ok(content) => match serde_json::from_str(&content) {
-                Ok(config) => Some(config),
-                Err(err) => panic!("An error occurred while parsing config file: {}", err),
-            },
-            Err(err) => panic!("An error occurred while reading the config file: {}", err),
-        };
+    match &args.config_filepath {
+        Some(config_path) => {
+            let file_args: Option<CLIArgs> = match fs::read_to_string(Path::new(config_path)) {
+                Ok(content) => match serde_json::from_str(&content) {
+                    Ok(config) => Some(config),
+                    Err(err) => panic!("An error occurred while parsing config file: {}", err),
+                },
+                Err(err) => panic!("An error occurred while reading the config file: {}", err),
+            };
 
-        if let Some(f_args) = file_args {
-            return f_args;
+            match file_args {
+                Some(f_args) => return f_args,
+                _ => (),
+            }
         }
+        _ => (),
     }
 
     args
@@ -76,60 +92,72 @@ pub fn run_checks_parallel(
 
     let mut join_handlers: Vec<JoinHandle<()>> = Vec::new();
 
-    if let Some(config) = config_v4 {
-        let cloned_results = results.clone();
+    match config_v4 {
+        Some(config) => {
+            let cloned_results = results.clone();
 
-        let handle = thread::spawn(move || {
-            let checker: RulesV4 = RulesV4::default();
-            let check_results = checker.run(&config.dhcp4);
+            let handle = thread::spawn(move || {
+                let checker: RulesV4 = RulesV4::default();
+                let check_results = checker.run(&config.dhcp4);
 
-            let mut res = cloned_results.lock().expect("It was not possible to block the stream for recording the results of the configuration check.");
-            res.extend(check_results);
-        });
+                let mut res = cloned_results.lock().expect("It was not possible to block the stream for recording the results of the configuration check.");
+                res.extend(check_results);
+            });
 
-        join_handlers.push(handle);
+            join_handlers.push(handle);
+        }
+        _ => (),
     }
 
-    if let Some(config) = config_v6 {
-        let cloned_results = results.clone();
+    match config_v6 {
+        Some(config) => {
+            let cloned_results = results.clone();
 
-        let handle = thread::spawn(move || {
-            let checker: RulesV6 = RulesV6::default();
-            let check_results = checker.run(&config.dhcp6);
+            let handle = thread::spawn(move || {
+                let checker: RulesV6 = RulesV6::default();
+                let check_results = checker.run(&config.dhcp6);
 
-            let mut res = cloned_results.lock().expect("It was not possible to block the stream for recording the results of the configuration check.");
-            res.extend(check_results);
-        });
+                let mut res = cloned_results.lock().expect("It was not possible to block the stream for recording the results of the configuration check.");
+                res.extend(check_results);
+            });
 
-        join_handlers.push(handle);
+            join_handlers.push(handle);
+        }
+        _ => (),
     }
 
-    if let Some(config) = config_d2 {
-        let cloned_results = results.clone();
+    match config_d2 {
+        Some(config) => {
+            let cloned_results = results.clone();
 
-        let handle = thread::spawn(move || {
-            let checker: RulesD2 = RulesD2::default();
-            let check_results = checker.run(&config.dhcp_ddns);
+            let handle = thread::spawn(move || {
+                let checker: RulesD2 = RulesD2::default();
+                let check_results = checker.run(&config.dhcp_ddns);
 
-            let mut res = cloned_results.lock().expect("It was not possible to block the stream for recording the results of the configuration check.");
-            res.extend(check_results);
-        });
+                let mut res = cloned_results.lock().expect("It was not possible to block the stream for recording the results of the configuration check.");
+                res.extend(check_results);
+            });
 
-        join_handlers.push(handle);
+            join_handlers.push(handle);
+        }
+        _ => (),
     }
 
-    if let Some(config) = config_ctrl_agent {
-        let cloned_results = results.clone();
+    match config_ctrl_agent {
+        Some(config) => {
+            let cloned_results = results.clone();
 
-        let handle = thread::spawn(move || {
-            let checker: RulesCtrlAgent = RulesCtrlAgent::default();
-            let check_results = checker.run(&config.ctrl_agent);
+            let handle = thread::spawn(move || {
+                let checker: RulesCtrlAgent = RulesCtrlAgent::default();
+                let check_results = checker.run(&config.ctrl_agent);
 
-            let mut res = cloned_results.lock().expect("It was not possible to block the stream for recording the results of the configuration check.");
-            res.extend(check_results);
-        });
+                let mut res = cloned_results.lock().expect("It was not possible to block the stream for recording the results of the configuration check.");
+                res.extend(check_results);
+            });
 
-        join_handlers.push(handle);
+            join_handlers.push(handle);
+        }
+        _ => (),
     }
 
     for handle in join_handlers {

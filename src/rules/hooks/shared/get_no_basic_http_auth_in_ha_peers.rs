@@ -7,31 +7,41 @@ pub fn get_no_basic_http_auth_in_ha_peers_rule(
 ) -> Option<Vec<RuleResult>> {
     let mut results: Vec<RuleResult> = Vec::new();
 
-    if let Some(hooks) = hooks_libraries {
-        let (idx_hook, ha_hook) = hooks
-            .iter()
-            .enumerate()
-            .find(|(_, hook)| hook.library.contains(HIGH_AVAILABILITY_HOOK_LIBRARY))?;
+    match hooks_libraries {
+        Some(hooks) => {
+            let (idx_hook, ha_hook) = hooks
+                .iter()
+                .enumerate()
+                .find(|(_, hook)| hook.library.contains(HIGH_AVAILABILITY_HOOK_LIBRARY))?;
 
-        if let Some(parameters) = &ha_hook.parameters
-            && let Some(builds) = parameters["high-availability"].as_array()
-        {
-            for (idx_ha, ha) in builds.iter().enumerate() {
-                if let Some(peers) = ha["peers"].as_array() {
-                    for (idx_peer, peer) in peers.iter().enumerate() {
-                        if peer.get("basic-auth-user").is_none()
-                            && peer.get("basic-auth-password").is_none()
-                        {
-                            results.push(RuleResult {
-                                description: format!("The peer named '{}' of the high availability hook lacks basic HTTP authentication.", peer["name"].as_str().unwrap()),
-                                places: Some(vec![format!("hooks-libraries.{}.parameters.high-availability.{}.peers.{}", idx_hook, idx_ha, idx_peer)]),
-                                links: Some(&["https://kea.readthedocs.io/en/latest/arm/hooks.html#hot-standby-configuration"]),
-                            });
+            match &ha_hook.parameters {
+                Some(parameters) => match parameters["high-availability"].as_array() {
+                    Some(builds) => {
+                        for (idx_ha, ha) in builds.iter().enumerate() {
+                            match ha["peers"].as_array() {
+                                Some(peers) => {
+                                    for (idx_peer, peer) in peers.iter().enumerate() {
+                                        if peer.get("basic-auth-user").is_none()
+                                            && peer.get("basic-auth-password").is_none()
+                                        {
+                                            results.push(RuleResult {
+                                    description: format!("The peer named '{}' of the high availability hook lacks basic HTTP authentication.", peer["name"].as_str().unwrap()),
+                                    places: Some(vec![format!("hooks-libraries.{}.parameters.high-availability.{}.peers.{}", idx_hook, idx_ha, idx_peer)]),
+                                    links: Some(&["https://kea.readthedocs.io/en/latest/arm/hooks.html#hot-standby-configuration"]),
+                                });
+                                        }
+                                    }
+                                }
+                                _ => (),
+                            }
                         }
                     }
-                }
+                    _ => {}
+                },
+                _ => {}
             }
         }
+        _ => (),
     }
 
     if !results.is_empty() {

@@ -8,27 +8,33 @@ use crate::{
 };
 
 pub fn get_debug_loggers_rule(loggers: &Option<Vec<KEALogger>>) -> Option<Vec<RuleResult>> {
-    if let Some(loggers) = loggers {
-        let mut results: Vec<RuleResult> = Vec::new();
+    match loggers {
+        Some(loggers) => {
+            let mut results: Vec<RuleResult> = Vec::new();
 
-        for (idx_logger, logger) in loggers.iter().enumerate() {
-            if let Some(severity) = &logger.severity
-                && *severity == KEALoggerSeverityTypes::DEBUG
-            {
-                results.push(RuleResult {
-                description: format!(
-	                "The logger named '{}' has severity 'DEBUG'. Change severity if you are using a production server.",
-	                logger.name
-                ),
-                places: Some(vec![format!("loggers.{}.severity", idx_logger)]),
-                links: None,
-            });
+            for (idx_logger, logger) in loggers.iter().enumerate() {
+                match &logger.severity {
+                    Some(severity) => {
+                        if *severity == KEALoggerSeverityTypes::DEBUG {
+                            results.push(RuleResult {
+				                description: format!(
+			                        "The logger named '{}' has severity 'DEBUG'. Change severity if you are using a production server.",
+			                        logger.name
+				                ),
+				                places: Some(vec![format!("loggers.{}.severity", idx_logger)]),
+				                links: None,
+				            });
+                        }
+                    }
+                    _ => {}
+                }
+            }
+
+            if !results.is_empty() {
+                return Some(results);
             }
         }
-
-        if !results.is_empty() {
-            return Some(results);
-        }
+        _ => (),
     }
 
     None
@@ -37,40 +43,49 @@ pub fn get_debug_loggers_rule(loggers: &Option<Vec<KEALogger>>) -> Option<Vec<Ru
 pub fn get_no_percent_m_in_pattern_rule(
     loggers: &Option<Vec<KEALogger>>,
 ) -> Option<Vec<RuleResult>> {
-    if let Some(loggers) = loggers {
-        let mut results: Vec<RuleResult> = Vec::new();
+    match loggers {
+        Some(loggers) => {
+            let mut results: Vec<RuleResult> = Vec::new();
 
-        let remove_datetime_regex = Regex::new(r#"\{[^}]*[%Dd][^}]*\}"#).unwrap();
+            let remove_datetime_regex = Regex::new(r#"\{[^}]*[%Dd][^}]*\}"#).unwrap();
 
-        for (idx_logger, logger) in loggers.iter().enumerate() {
-            if let Some(output_options) = &logger.output_options {
-                for (idx_options, options) in output_options.iter().enumerate() {
-                    if let Some(pattern) = &options.pattern {
-                        let replaced = String::from_utf8(
-                            remove_datetime_regex
-                                .replace_all(pattern.as_bytes(), b"")
-                                .into_owned(),
-                        )
-                        .unwrap();
+            for (idx_logger, logger) in loggers.iter().enumerate() {
+                match &logger.output_options {
+                    Some(output_options) => {
+                        for (idx_options, options) in output_options.iter().enumerate() {
+                            match &options.pattern {
+                                Some(pattern) => {
+                                    let replaced = String::from_utf8(
+                                        remove_datetime_regex
+                                            .replace_all(pattern.as_bytes(), b"")
+                                            .into_owned(),
+                                    )
+                                    .unwrap();
 
-                        if !replaced.contains("%m") {
-                            results.push(RuleResult {
-			                    description: format!(
-									"The logger named '{}' by the key 'pattern' does not have the literals '%m' outside datetime. The log message will not be available without it.",
-									logger.name
-								),
-			                    places: Some(vec![format!("loggers.{}.output-options.{}.pattern", idx_logger, idx_options)]),
-			                    links: Some(&["https://kea.readthedocs.io/en/latest/arm/logging.html#logging-message-format"]),
-                        });
+                                    if !replaced.contains("%m") {
+                                        results.push(RuleResult {
+	                                            description: format!(
+	                                                "The logger named '{}' by the key 'pattern' does not have the literals '%m' outside datetime. The log message will not be available without it.",
+	                                                logger.name
+	                                            ),
+	                                            places: Some(vec![format!("loggers.{}.output-options.{}.pattern", idx_logger, idx_options)]),
+	                                            links: Some(&["https://kea.readthedocs.io/en/latest/arm/logging.html#logging-message-format"]),
+                                        });
+                                    }
+                                }
+                                _ => (),
+                            }
                         }
                     }
+                    _ => (),
                 }
             }
-        }
 
-        if !results.is_empty() {
-            return Some(results);
+            if !results.is_empty() {
+                return Some(results);
+            }
         }
+        _ => (),
     }
 
     None
@@ -79,31 +94,38 @@ pub fn get_no_percent_m_in_pattern_rule(
 pub fn get_no_linebreak_in_pattern_rule(
     loggers: &Option<Vec<KEALogger>>,
 ) -> Option<Vec<RuleResult>> {
-    if let Some(loggers) = loggers {
-        let mut results: Vec<RuleResult> = Vec::new();
+    match loggers {
+        Some(loggers) => {
+            let mut results: Vec<RuleResult> = Vec::new();
 
-        for (idx_logger, logger) in loggers.iter().enumerate() {
-            if let Some(output_options) = &logger.output_options {
-                for (idx_options, options) in output_options.iter().enumerate() {
-                    if let Some(pattern) = &options.pattern
-                        && !pattern.ends_with('\n')
-                    {
-                        results.push(RuleResult {
-	                        description: format!(
-								r#"The logger named '{}' by the key 'pattern' does not have the literals '\n'. Log messages will not be transferred to a new line."#,
-								logger.name
-							),
-	                     	places: Some(vec![format!("loggers.{}.output-options.{}.pattern", idx_logger, idx_options)]),
-	                      	links: Some(&["https://kea.readthedocs.io/en/latest/arm/logging.html#logging-message-format"]),
-                        });
+            for (idx_logger, logger) in loggers.iter().enumerate() {
+                match &logger.output_options {
+                    Some(output_options) => {
+                        for (idx_options, options) in output_options.iter().enumerate() {
+                            match &options.pattern {
+                                Some(pattern) if !pattern.ends_with('\n') => {
+                                    results.push(RuleResult {
+                                        description: format!(
+                                            r#"The logger named '{}' by the key 'pattern' does not have the literals '\n'. Log messages will not be transferred to a new line."#,
+                                            logger.name
+                                        ),
+                                        places: Some(vec![format!("loggers.{}.output-options.{}.pattern", idx_logger, idx_options)]),
+                                        links: Some(&["https://kea.readthedocs.io/en/latest/arm/logging.html#logging-message-format"]),
+                                    });
+                                }
+                                _ => (),
+                            }
+                        }
                     }
+                    _ => (),
                 }
             }
-        }
 
-        if !results.is_empty() {
-            return Some(results);
+            if !results.is_empty() {
+                return Some(results);
+            }
         }
+        _ => (),
     }
 
     None

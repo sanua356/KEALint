@@ -16,17 +16,20 @@ impl Rule<KEACtrlAgentConfig> for NotLocalIPWithoutHTTPSRule {
         RuleConfigs::ControlAgent
     }
     fn check(&self, config: &KEACtrlAgentConfig) -> Option<Vec<RuleResult>> {
-        if let Some(host_ip) = &config.http_host
-            && !host_ip.is_loopback()
-            && (config.cert_file.is_none()
-                && config.key_file.is_none()
-                && config.trust_anchor.is_none())
-        {
-            return Some(vec![RuleResult {
-            description: "The configuration specifies the 'http-port' key in a value that is not a local IP address, but HTTPS support is not enabled.".to_string(),
-            places: Some(vec!["http-host".to_string()]),
-            links: Some(&["https://kea.readthedocs.io/en/latest/arm/security.html#tls-https-configuration"]),
-        }]);
+        match &config.http_host {
+            Some(host_ip)
+                if !host_ip.is_loopback()
+                    && (config.cert_file.is_none()
+                        && config.key_file.is_none()
+                        && config.trust_anchor.is_none()) =>
+            {
+                return Some(vec![RuleResult {
+                description: "The configuration specifies the 'http-port' key in a value that is not a local IP address, but HTTPS support is not enabled.".to_string(),
+                places: Some(vec!["http-host".to_string()]),
+                links: Some(&["https://kea.readthedocs.io/en/latest/arm/security.html#tls-https-configuration"]),
+            }]);
+            }
+            _ => (),
         }
 
         None

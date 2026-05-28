@@ -29,24 +29,27 @@ impl Rule<KEACtrlAgentConfig> for NoAllControlSocketsSpecifiedRule {
     fn check(&self, config: &KEACtrlAgentConfig) -> Option<Vec<RuleResult>> {
         let mut results: Vec<RuleResult> = Vec::new();
 
-        if let Some(control_sockets) = &config.control_sockets {
-            if control_sockets.dhcp4.is_none() {
-                results.push(get_template_rule("dhcp4"));
-            }
+        match &config.control_sockets {
+            Some(control_sockets) => {
+                if control_sockets.dhcp4.is_none() {
+                    results.push(get_template_rule("dhcp4"));
+                }
 
-            if control_sockets.dhcp6.is_none() {
-                results.push(get_template_rule("dhcp6"));
-            }
+                if control_sockets.dhcp6.is_none() {
+                    results.push(get_template_rule("dhcp6"));
+                }
 
-            if control_sockets.d2.is_none() {
-                results.push(get_template_rule("d2"));
+                if control_sockets.d2.is_none() {
+                    results.push(get_template_rule("d2"));
+                }
             }
-        } else {
-            return Some(vec![RuleResult {
-                description: "The configuration does not specify the 'control-sockets' key with socket handlers. Working with the API may not be available.".to_string(),
-                places: None,
-                links: Some(&["https://kea.readthedocs.io/en/stable/arm/agent.html#configuration"]),
-            }]);
+            None => {
+                return Some(vec![RuleResult {
+                    description: "The configuration does not specify the 'control-sockets' key with socket handlers. Working with the API may not be available.".to_string(),
+                    places: None,
+                    links: Some(&["https://kea.readthedocs.io/en/stable/arm/agent.html#configuration"]),
+                }]);
+            }
         }
 
         if !results.is_empty() {
