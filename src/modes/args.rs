@@ -146,4 +146,12 @@ pub struct CLIArgs {
     #[serde(default)]
     #[serde(rename = "with-summary")]
     pub with_summary: bool,
+
+    #[arg(
+        long,
+        help = "Optional. If specified, support for JSON files with comment support is enabled."
+    )]
+    #[serde(default)]
+    #[serde(rename = "support-json-comments")]
+    pub support_json_comments: bool,
 }

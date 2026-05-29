@@ -80,6 +80,8 @@ Command line interface 'KEALint' implements the following interaction parameters
 
 `--skip-not-exists` - Optional. If specified, the check will run even if not all configuration files exist. By default, the utility waits for all configuration files to run (v4, DDNS, and Control Agent).
 
+`--support-json-comments` - Optional. If specified, adds support JSON configuration files with comments like: //, /* */, #..
+
 `--use-threads` - Optional. If enabled, processing is performed in multithreaded mode.
 
 `--with-summary` - Optional. Adds additional information when displaying the result as a table.
@@ -89,7 +91,6 @@ Command line interface 'KEALint' implements the following interaction parameters
 `--unix-socket-filepath` - Optional. Defines the path to the UNIX socket that needs to be listened to in order to receive configurations.
 
 `--database-type` - Optional. Defines the path to the database to which the results of the checks will need to be recorded. Currently, only the value 'sqlite' is supported.
-
 
 `--database-filepath` - Optional. Defines the type of database to connect to. 
 
