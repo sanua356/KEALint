@@ -369,11 +369,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "json_comments"
+version = "0.2.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9dbbfed4e59ba9750e15ba154fdfd9329cee16ff3df539c2666b70f58cc32105"
+
+[[package]]
 name = "kealint"
-version = "1.4.0"
+version = "1.4.1"
 dependencies = [
  "chrono",
  "clap",
+ "json_comments",
  "lazy_static",
  "regex",
  "rstest",

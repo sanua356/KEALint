@@ -61,8 +61,11 @@ pub static PROCESS_CONFIG_FILE_V4_TEMPLATE: &str = r#"
 		"interfaces-config": {
 			"interfaces": []
 		},
+		// inline comments
 		"lease-database": {
-			"type": "memfile",
+			"type": "memfile", /* multiline
+			comments */
+			# hash comments
 			"persist": false,
 			"name": "/var/lib/kea/dhcp4.leases"
 		},

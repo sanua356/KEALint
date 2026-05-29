@@ -15,20 +15,28 @@ use super::{CLIArgs, KEALintOutputFormatTypes, run_checks, run_checks_parallel};
 fn process_config_file<T>(
     path: PathBuf,
     skip_not_exists: bool,
+    support_json_comments: bool,
     config_type: &'static str,
 ) -> Option<T>
 where
     T: DeserializeOwned,
 {
     match fs::read_to_string(&path) {
-        Ok(content) => match serde_json::from_str(&content) {
-            Ok(config) => Some(config),
-            Err(err) => panic!(
-                "An error occurred while parsing the {} configuration: {}",
-                config_type, err
-            ),
-        },
-        Err(err) if skip_not_exists => None,
+        Ok(content) => {
+            let result = if support_json_comments {
+                serde_json::from_reader(json_comments::StripComments::new(content.as_bytes()))
+            } else {
+                serde_json::from_str(&content)
+            };
+            match result {
+                Ok(config) => Some(config),
+                Err(err) => panic!(
+                    "An error occurred while parsing the {} configuration: {}",
+                    config_type, err
+                ),
+            }
+        }
+        Err(_) if skip_not_exists => None,
         Err(err) => panic!(
             "An error occurred while reading the {} configuration: {}",
             config_type, err
@@ -67,18 +75,35 @@ pub fn run_cli(args: CLIArgs) {
     }
 
     let skip_not_exists = args.skip_not_exists;
+    let support_json_comments = args.support_json_comments;
 
-    let content_v4: Option<KEAv4ConfigFile> =
-        process_config_file(v4_filepath, skip_not_exists, "DHCPv4");
+    let content_v4: Option<KEAv4ConfigFile> = process_config_file(
+        v4_filepath,
+        skip_not_exists,
+        support_json_comments,
+        "DHCPv4",
+    );
 
-    let content_v6: Option<KEAv6ConfigFile> =
-        process_config_file(v6_filepath, skip_not_exists, "DHCPv6");
+    let content_v6: Option<KEAv6ConfigFile> = process_config_file(
+        v6_filepath,
+        skip_not_exists,
+        support_json_comments,
+        "DHCPv6",
+    );
 
-    let content_d2: Option<KEAD2ConfigFile> =
-        process_config_file(d2_filepath, skip_not_exists, "DHCP DDNS");
+    let content_d2: Option<KEAD2ConfigFile> = process_config_file(
+        d2_filepath,
+        skip_not_exists,
+        support_json_comments,
+        "DHCP DDNS",
+    );
 
-    let content_ctrl_agent: Option<KEACtrlAgentConfigFile> =
-        process_config_file(ctrl_agent_filepath, skip_not_exists, "Control Agent");
+    let content_ctrl_agent: Option<KEACtrlAgentConfigFile> = process_config_file(
+        ctrl_agent_filepath,
+        skip_not_exists,
+        support_json_comments,
+        "Control Agent",
+    );
 
     let problems: Vec<Problem> = if args.use_threads {
         run_checks_parallel(content_v4, content_v6, content_d2, content_ctrl_agent)
@@ -143,7 +168,6 @@ mod test {
     use super::process_config_file;
 
     #[test]
-    #[should_panic]
     fn process_config_test() {
         let mut pseudofile = NamedTempFile::new().unwrap();
 
@@ -151,7 +175,7 @@ mod test {
             .write_all(PROCESS_CONFIG_FILE_V4_TEMPLATE.as_bytes())
             .unwrap();
         let v4: Option<KEAv4ConfigFile> =
-            process_config_file(pseudofile.path().to_path_buf(), false, "DHCPv4");
+            process_config_file(pseudofile.path().to_path_buf(), false, true, "DHCPv4");
         assert!(v4.is_some());
 
         pseudofile = NamedTempFile::new().unwrap();
@@ -159,15 +183,19 @@ mod test {
             .write_all(PROCESS_CONFIG_FILE_D2_TEMPLATE.as_bytes())
             .unwrap();
         let d2: Option<KEAD2ConfigFile> =
-            process_config_file(pseudofile.path().to_path_buf(), false, "DHCP DDNS");
+            process_config_file(pseudofile.path().to_path_buf(), false, false, "DHCP DDNS");
         assert!(d2.is_some());
 
         pseudofile = NamedTempFile::new().unwrap();
         pseudofile
             .write_all(PROCESS_CONFIG_FILE_CA_TEMPLATE.as_bytes())
             .unwrap();
-        let ca: Option<KEACtrlAgentConfigFile> =
-            process_config_file(pseudofile.path().to_path_buf(), false, "Control Agent");
+        let ca: Option<KEACtrlAgentConfigFile> = process_config_file(
+            pseudofile.path().to_path_buf(),
+            false,
+            false,
+            "Control Agent",
+        );
         assert!(ca.is_some());
 
         pseudofile = NamedTempFile::new().unwrap();
@@ -178,16 +206,28 @@ mod test {
             process_config_file::<KEAv4ConfigFile>(
                 Path::new("BAD PATH").to_path_buf(),
                 true,
+                true,
                 "DHCPv4",
             )
             .is_none()
         );
+    }
+
+    #[test]
+    #[should_panic]
+    fn process_config_panic_test() {
+        let mut pseudofile = NamedTempFile::new().unwrap();
+
+        pseudofile
+            .write_all(PROCESS_CONFIG_FILE_V4_TEMPLATE.as_bytes())
+            .unwrap();
 
         // panic
         process_config_file::<KEAv4ConfigFile>(
             pseudofile.path().to_path_buf(),
             false,
-            "Control Agent",
+            false,
+            "DHCPv4",
         );
     }
 }

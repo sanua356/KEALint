@@ -268,6 +268,7 @@ mod test {
             unix_socket_filepath: None,
             v4_filepath: Some("./test-path".to_string()),
             v6_filepath: None,
+            support_json_comments: true,
         };
 
         let args = get_args(mock_args);
@@ -279,6 +280,7 @@ mod test {
         // Not exists params
         assert_eq!(args.ctrl_agent_filepath, None);
         assert_eq!(args.output_filepath, None);
+        assert_eq!(args.support_json_comments, true);
     }
 
     #[test]
@@ -304,6 +306,7 @@ mod test {
             unix_socket_filepath: None,
             v4_filepath: Some("BAD PATH".to_string()),
             v6_filepath: Some("BAD PATH V6".to_string()),
+            support_json_comments: false,
         };
 
         let args = get_args(mock_args);
@@ -314,5 +317,6 @@ mod test {
         // Not exists params
         assert_eq!(args.v4_filepath, None);
         assert_eq!(args.skip_not_exists, false);
+        assert_eq!(args.support_json_comments, false);
     }
 }
