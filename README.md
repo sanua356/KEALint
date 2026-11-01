@@ -13,7 +13,7 @@ Implements a flexible **CLI interface** for interaction and output of verificati
 
 Support for working in **'standalone' mode to automatically run checks** when configuration is changed using its own [kealint-unix-hook](https://github.com/sanua356/kealint-unix-hook). More information about the 'standalone' mode can be found [here](https://github.com/sanua356/KEALint/tree/master/src/modes/standalone).
 
-Currently supported CPU architectures: x86_64, E2K.
+Currently supported CPU architectures: x86_64, aarch64, E2K.
  
 ## Example of work
 
