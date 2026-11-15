@@ -26,6 +26,24 @@ pub enum KEALintOutputFormatTypes {
     table,
 }
 
+#[derive(Debug, Default, Clone, Copy, ValueEnum, Deserialize)]
+pub enum KEALintLanguages {
+    #[allow(non_camel_case_types)]
+    ru,
+    #[allow(non_camel_case_types)]
+    #[default]
+    en,
+}
+
+impl ToString for KEALintLanguages {
+    fn to_string(&self) -> String {
+        match self {
+            Self::en => String::from("en"),
+            Self::ru => String::from("ru"),
+        }
+    }
+}
+
 #[derive(Debug, Parser, Deserialize)]
 #[command(
     version,
@@ -49,6 +67,15 @@ pub struct CLIArgs {
     )]
     #[serde(default)]
     pub format: KEALintOutputFormatTypes,
+
+    #[arg(
+        long,
+        help = "Optional. Defines the locale in which the result will be displayed.",
+        value_enum,
+        default_value_t = KEALintLanguages::en
+    )]
+    #[serde(default)]
+    pub lang: KEALintLanguages,
 
     #[arg(
         long,

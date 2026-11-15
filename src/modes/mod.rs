@@ -269,6 +269,7 @@ mod test {
             v4_filepath: Some("./test-path".to_string()),
             v6_filepath: None,
             support_json_comments: true,
+            lang: super::KEALintLanguages::en,
         };
 
         let args = get_args(mock_args);
@@ -307,6 +308,7 @@ mod test {
             v4_filepath: Some("BAD PATH".to_string()),
             v6_filepath: Some("BAD PATH V6".to_string()),
             support_json_comments: false,
+            lang: super::KEALintLanguages::en,
         };
 
         let args = get_args(mock_args);

@@ -66,6 +66,8 @@ Command line interface 'KEALint' implements the following interaction parameters
 
 ### CLI mode parameters
 
+`--lang` - Optional. Defines the locale in which the result will be displayed.
+
 `--dir-path` - Optional. Specifies the path to the directory where the KEA configuration files are stored. If this parameter is specified, files named 'kea-dhcp4.conf', 'kea-dhcp-ddns.conf' and 'kea-ctrl-agent.conf' are searched inside the specified directory.
 
 `--format` - Optional. Defines the format for the output of the verification result. You can specify the value 'table' or 'json'.
