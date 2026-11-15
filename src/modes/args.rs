@@ -34,12 +34,11 @@ pub enum KEALintLanguages {
     #[default]
     en,
 }
-
-impl ToString for KEALintLanguages {
-    fn to_string(&self) -> String {
+impl std::fmt::Display for KEALintLanguages {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Self::en => String::from("en"),
-            Self::ru => String::from("ru"),
+            Self::en => write!(f, "en"),
+            Self::ru => write!(f, "ru"),
         }
     }
 }

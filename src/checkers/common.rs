@@ -47,7 +47,7 @@ fn translate_importance(importance: String) -> String {
         "Critical" => tr!("Critical"),
         "Warning" => tr!("Warning"),
         "Info" => tr!("Info"),
-        _ => format!(""),
+        _ => String::new(),
     }
 }
 
