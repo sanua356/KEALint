@@ -27,3 +27,7 @@ standalone-mode-running-successfully = Сервер запущен в автон
 
 get_not_select_flq_allocator_in_global_level_config_rule = Распределение адресов 'FLQ' не рекомендуется использовать на глобальном уровне конфигурации.
 get_not_select_iterative_allocator_for_shared_lease_database = 'Итеративный' распределитель адресов не рекомендуется использовать с общей базой данных аренды на нескольких серверах.
+
+get_not_lifetime_for_additional_classes_rule = Для клиентского класса '{ $className }' флаг 'only-in-additional-list' установлен в значение 'true'. Класс содержит один из следующих параметров: 'min-valid-lifetime', 'valid-lifetime', 'max-valid-lifetime' или 'offer-lifetime', но они не будут иметь никакого эффекта.
+get_not_recommended_prefix_AFTER__classes = Клиентский класс с именем '{ $className }' использует префикс 'AFTER_'. Этот префикс зарезервирован системой для механизма обработки запросов, который еще не написан. Рекомендуется заменить префикс на произвольный.
+evaluate_required_as_additional_classes_rule = Клиентский класс с именем '{ $className }' указан в качестве значения ключа 'evaluate-additional-classes' в конфигурации, но для него не установлен флаг 'only-if-required' или 'only-in-additional-list' со значением 'true'.

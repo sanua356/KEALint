@@ -1,6 +1,6 @@
 #![allow(non_snake_case)]
 
-use crate::{common::RuleResult, configs::client_classes::KEAClientClass};
+use crate::{common::RuleResult, configs::client_classes::KEAClientClass, tr};
 
 pub fn get_not_lifetime_for_additional_classes_rule(
     client_classes: &Option<Vec<KEAClientClass>>,
@@ -15,12 +15,14 @@ pub fn get_not_lifetime_for_additional_classes_rule(
                 || class.offer_lifetime.is_some())
         {
             results.push(RuleResult {
-                description: format!(
-                   	"For the client class '{}', the 'only-in-additional-list' flag is set to 'true'. The class contains any of the following parameters: 'min-valid-lifetime', 'valid-lifetime', 'max-valid-lifetime' or 'offer-lifetime', but they will have no effect.",
-                   	class.name
+                description: tr!(
+                    "get_not_lifetime_for_additional_classes_rule",
+                    className = class.name.clone()
                 ),
                 places: Some(vec![format!("client-classes.{}", idx)]),
-                links: Some(&["https://kea.readthedocs.io/en/stable/arm/classify.html#class-priority"]),
+                links: Some(&[
+                    "https://kea.readthedocs.io/en/stable/arm/classify.html#class-priority",
+                ]),
             });
         }
     }
@@ -40,9 +42,9 @@ pub fn get_not_recommended_prefix_AFTER__classes(
     for (idx, class) in client_classes.as_ref()?.iter().enumerate() {
         if class.name.starts_with("AFTER_") {
             results.push(RuleResult {
-                description: format!(
-                   	"The client class named '{}' uses the prefix 'AFTER_'. This prefix is reserved by the system for a query processing mechanism that has not yet been written. It is recommended to replace the prefix with an arbitrary one.",
-                   	class.name
+                description: tr!(
+                    "get_not_recommended_prefix_AFTER__classes",
+                    className = class.name.clone()
                 ),
                 places: Some(vec![format!("client-classes.{}", idx)]),
                 links: Some(&["https://kea.readthedocs.io/en/latest/arm/classify.html#built-in-client-classes"]),
