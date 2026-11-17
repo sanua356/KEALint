@@ -1,6 +1,7 @@
 use crate::{
     common::{Rule, RuleConfigs, RuleLevels, RuleResult},
     configs::KEAD2Config,
+    tr,
 };
 
 pub struct NotLocalIPAddressInD2ServerConfigRule;
@@ -21,9 +22,11 @@ impl Rule<KEAD2Config> for NotLocalIPAddressInD2ServerConfigRule {
     fn check(&self, config: &KEAD2Config) -> Option<Vec<RuleResult>> {
         if !config.ip_address.as_ref()?.is_loopback() {
             return Some(vec![RuleResult {
-                description: "Loopback addresses must be used as the server address to avoid attacks with fake requests.".to_string(),
+                description: tr!("not_local_ip_address_in_d2_server_config_rule"),
                 places: Some(vec!["ip-address".to_string()]),
-                links: Some(&["https://kea.readthedocs.io/en/latest/arm/ddns.html#global-server-parameters"]),
+                links: Some(&[
+                    "https://kea.readthedocs.io/en/latest/arm/ddns.html#global-server-parameters",
+                ]),
             }]);
         }
 

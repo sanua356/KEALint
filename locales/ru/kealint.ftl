@@ -35,3 +35,6 @@ evaluate_required_as_additional_classes_rule = Клиентский класс �
 get_template_rule = Обработчик сокетов '{ $socketType }' не указан в конфигурации для ключа 'control-sockets'. Работа с API этого сервиса может быть недоступна.
 no_all_control_sockets_specified_rule = В конфигурации не указан ключ 'control-sockets' с обработчиками сокетов. Работа с API может быть недоступна.
 not_local_ip_without_https_rule = В конфигурации указан ключ http-port со значением, которое не является локальным IP-адресом, но поддержка HTTPS не включена.
+
+get_not_ddns_qualifying_suffix_with_enabled_ddns_updates_rule = При включении обновлений DDNS рекомендуется указать значение для поля 'ddns-qualifying-suffix'.
+not_local_ip_address_in_d2_server_config_rule = Для предотвращения атак с использованием поддельных запросов в качестве адреса сервера необходимо использовать адреса обратной связи.

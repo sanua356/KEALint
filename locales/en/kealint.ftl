@@ -36,3 +36,6 @@ evaluate_required_as_additional_classes_rule = The client class named '{ $classN
 get_template_rule = The socket handler '{ $socketType }' is not specified in the configuration for the 'control-sockets' key. Working with the API of this service may not be available.
 no_all_control_sockets_specified_rule = The configuration does not specify the 'control-sockets' key with socket handlers. Working with the API may not be available.
 not_local_ip_without_https_rule = The configuration specifies the 'http-port' key in a value that is not a local IP address, but HTTPS support is not enabled.
+
+get_not_ddns_qualifying_suffix_with_enabled_ddns_updates_rule = It is recommended to specify the value for the 'ddns-qualifying-suffix' field when enabling DDNS updates.
+not_local_ip_address_in_d2_server_config_rule = Loopback addresses must be used as the server address to avoid attacks with fake requests.
