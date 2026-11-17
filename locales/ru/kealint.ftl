@@ -31,3 +31,7 @@ get_not_select_iterative_allocator_for_shared_lease_database = 'Итератив
 get_not_lifetime_for_additional_classes_rule = Для клиентского класса '{ $className }' флаг 'only-in-additional-list' установлен в значение 'true'. Класс содержит один из следующих параметров: 'min-valid-lifetime', 'valid-lifetime', 'max-valid-lifetime' или 'offer-lifetime', но они не будут иметь никакого эффекта.
 get_not_recommended_prefix_AFTER__classes = Клиентский класс с именем '{ $className }' использует префикс 'AFTER_'. Этот префикс зарезервирован системой для механизма обработки запросов, который еще не написан. Рекомендуется заменить префикс на произвольный.
 evaluate_required_as_additional_classes_rule = Клиентский класс с именем '{ $className }' указан в качестве значения ключа 'evaluate-additional-classes' в конфигурации, но для него не установлен флаг 'only-if-required' или 'only-in-additional-list' со значением 'true'.
+
+get_template_rule = Обработчик сокетов '{ $socketType }' не указан в конфигурации для ключа 'control-sockets'. Работа с API этого сервиса может быть недоступна.
+no_all_control_sockets_specified_rule = В конфигурации не указан ключ 'control-sockets' с обработчиками сокетов. Работа с API может быть недоступна.
+not_local_ip_without_https_rule = В конфигурации указан ключ http-port со значением, которое не является локальным IP-адресом, но поддержка HTTPS не включена.

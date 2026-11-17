@@ -32,3 +32,7 @@ get_not_select_iterative_allocator_for_shared_lease_database = The 'iterative' a
 get_not_lifetime_for_additional_classes_rule = For the client class '{ $className }', the 'only-in-additional-list' flag is set to 'true'. The class contains any of the following parameters: 'min-valid-lifetime', 'valid-lifetime', 'max-valid-lifetime' or 'offer-lifetime', but they will have no effect.
 get_not_recommended_prefix_AFTER__classes = The client class named '{ $className }' uses the prefix 'AFTER_'. This prefix is reserved by the system for a query processing mechanism that has not yet been written. It is recommended to replace the prefix with an arbitrary one.
 evaluate_required_as_additional_classes_rule = The client class named '{ $className }' is specified as the value by the 'evaluate-additional-classes' key in the configuration, but does not have the 'only-if-required' or 'only-in-additional-list' flag set to 'true'.
+
+get_template_rule = The socket handler '{ $socketType }' is not specified in the configuration for the 'control-sockets' key. Working with the API of this service may not be available.
+no_all_control_sockets_specified_rule = The configuration does not specify the 'control-sockets' key with socket handlers. Working with the API may not be available.
+not_local_ip_without_https_rule = The configuration specifies the 'http-port' key in a value that is not a local IP address, but HTTPS support is not enabled.

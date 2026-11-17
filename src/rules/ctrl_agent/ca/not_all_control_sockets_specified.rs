@@ -1,16 +1,14 @@
 use crate::{
     common::{Rule, RuleConfigs, RuleLevels, RuleResult},
     configs::KEACtrlAgentConfig,
+    tr,
 };
 
 pub struct NoAllControlSocketsSpecifiedRule;
 
 fn get_template_rule(socket_type: &str) -> RuleResult {
     RuleResult {
-        description: format!(
-            "The socket handler '{}' is not specified in the configuration for the 'control-sockets' key. Working with the API of this service may not be available.",
-            socket_type
-        ),
+        description: tr!("get_template_rule", socketType = socket_type),
         places: None,
         links: Some(&["https://kea.readthedocs.io/en/stable/arm/agent.html#configuration"]),
     }
@@ -43,7 +41,7 @@ impl Rule<KEACtrlAgentConfig> for NoAllControlSocketsSpecifiedRule {
             }
         } else {
             return Some(vec![RuleResult {
-                description: "The configuration does not specify the 'control-sockets' key with socket handlers. Working with the API may not be available.".to_string(),
+                description: tr!("no_all_control_sockets_specified_rule"),
                 places: None,
                 links: Some(&["https://kea.readthedocs.io/en/stable/arm/agent.html#configuration"]),
             }]);
