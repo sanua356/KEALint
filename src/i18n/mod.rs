@@ -1,3 +1,5 @@
+#[cfg(test)]
+use std::sync::Once;
 use std::{path::Path, sync::OnceLock};
 
 use i18n_embed::{FileSystemAssets, LanguageLoader, fluent::FluentLanguageLoader, unic_langid};
@@ -29,7 +31,21 @@ impl I18N {
     }
 }
 
+#[cfg(test)]
+static TEST_INIT_LOADER: Once = Once::new();
+
 pub fn loader() -> &'static FluentLanguageLoader {
+    #[cfg(test)]
+    {
+        if LOADER.get().is_none() {
+            TEST_INIT_LOADER.call_once(|| {
+                if LOADER.get().is_none() {
+                    I18N::new(KEALintLanguages::en).unwrap();
+                }
+            });
+        }
+    }
+
     LOADER.get().expect("i18n is not initialized")
 }
 

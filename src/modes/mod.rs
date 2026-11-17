@@ -151,8 +151,7 @@ mod test {
     use crate::configs::{
         KEACtrlAgentConfigFile, KEAD2ConfigFile, KEAv4ConfigFile, KEAv6ConfigFile,
     };
-    use crate::i18n::I18N;
-    use crate::modes::{CLIArgs, KEALintLanguages};
+    use crate::modes::CLIArgs;
 
     use super::_tests::{
         GET_FILE_ARGS_TEMPLATE, RUN_CHECKS_CA_TEMPLATE, RUN_CHECKS_D2_TEMPLATE,
@@ -203,7 +202,6 @@ mod test {
     fn test_checks() {
         // No problems
         let mut mock_configs = prepare_configs();
-        I18N::new(KEALintLanguages::en).unwrap();
         assert_eq!(
             run_checks(
                 Some(mock_configs.0),

@@ -42,7 +42,6 @@ fn display_slice(slice: &Option<&'static [&'static str]>) -> String {
 }
 
 fn translate_importance(importance: String) -> String {
-    println!("{}", importance);
     match importance.as_str() {
         "Critical" => tr!("Critical"),
         "Warning" => tr!("Warning"),

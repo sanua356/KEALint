@@ -25,3 +25,6 @@ write-results-to-file-successfully = Check results successfully written in file!
 save-results-to-database = Check results saved to database successfully! { $datetime }
 database-migrations-applied-successfully = Database migrations applied successfully!
 standalone-mode-running-successfully = Server runned in standalone mode!
+
+get_not_select_flq_allocator_in_global_level_config_rule = The 'FLQ' address allocator is not recommended for use at the global configuration level.
+get_not_select_iterative_allocator_for_shared_lease_database = The 'iterative' address allocator is not recommended for use with a shared database of rents on several servers.

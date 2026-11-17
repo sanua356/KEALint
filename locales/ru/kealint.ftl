@@ -24,3 +24,6 @@ write-results-to-file-successfully = Результаты проверки ус�
 save-results-to-database = Результаты проверки успешно сохранены в базу данных!
 database-migrations-applied-successfully = Миграции базы данных успешно применены!
 standalone-mode-running-successfully = Сервер запущен в автономном режиме!
+
+get_not_select_flq_allocator_in_global_level_config_rule = Распределение адресов 'FLQ' не рекомендуется использовать на глобальном уровне конфигурации.
+get_not_select_iterative_allocator_for_shared_lease_database = 'Итеративный' распределитель адресов не рекомендуется использовать с общей базой данных аренды на нескольких серверах.
