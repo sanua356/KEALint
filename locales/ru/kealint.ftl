@@ -63,3 +63,7 @@ get_no_active_interfaces = В конфигурации сервера не ук�
 get_lease_sanity_checks_enabled_for_not_memfile_backend_rule = Механизм Sanity Checks не реализован для баз данных аренды, отличных от 'memfile'.
 get_no_enabled_persist_flag_rule = Флаг 'persist' не установлен в значение 'true' для поддержки базы данных аренды в 'memfile'.
 get_not_change_stop_retry_exit_strategy_on_fail_rule = Для корректной обработки аренды в рабочей среде рекомендуется установить для параметра 'on-fail' в конфигурации 'lease-database' значение 'stop-retry-exit'.
+
+get_debug_loggers_rule = Логгер с именем '{ $loggerName }' имеет уровень серьезности 'DEBUG'. Измените уровень серьезности, если вы используете рабочий сервер.
+get_no_percent_m_in_pattern_rule = В логгере с именем '{ $loggerName }' по ключу 'pattern' нет литералов '%m' вне datetime. Без них сообщение журнала будет недоступно.
+get_no_linebreak_in_pattern_rule = В логгере с именем '{ $loggerName }' по ключу 'pattern' нет литералов '\n'. Сообщения журнала не будут переноситься на новую строку.

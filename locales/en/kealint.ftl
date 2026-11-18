@@ -63,3 +63,7 @@ get_no_active_interfaces = No network interfaces are specified in the server con
 get_lease_sanity_checks_enabled_for_not_memfile_backend_rule = The Sanity Checks mechanism is not implemented for rent databases other than 'memfile'.
 get_no_enabled_persist_flag_rule = The 'persist' flag is not set to 'true' for the maintenance of the lease database in the 'memfile'.
 get_not_change_stop_retry_exit_strategy_on_fail_rule = It is recommended to set the 'on-fail' parameter in the 'lease-database' configuration to 'stop-retry-exit' for the correct processing of leases in the production environment.
+
+get_debug_loggers_rule = The logger named '{ $loggerName }' has severity 'DEBUG'. Change severity if you are using a production server.
+get_no_percent_m_in_pattern_rule = The logger named '{ $loggerName }' by the key 'pattern' does not have the literals '%m' outside datetime. The log message will not be available without it.
+get_no_linebreak_in_pattern_rule = The logger named '{ $loggerName }' by the key 'pattern' does not have the literals '\n'. Log messages will not be transferred to a new line.
