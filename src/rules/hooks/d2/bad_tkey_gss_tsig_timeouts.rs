@@ -2,6 +2,7 @@ use crate::{
     common::{Rule, RuleConfigs, RuleLevels, RuleResult},
     configs::KEAD2Config,
     constants::GSS_TSIG_HOOK_LIBRARY,
+    tr,
 };
 
 pub struct BadTKeyGSSTSIGHookTimeoutsRule;
@@ -16,9 +17,11 @@ fn check_rekey_percent(
 
         if !(50..=80).contains(&rekey_percent) {
             return Some(RuleResult {
-                description: "The value of the 'rekey-interval' parameter in the configuration of the 'GSS-TSIG' hook is recommended to be set in the range of 50-80% of the value of the 'tkey-lifetime' parameter".to_string(),
+                description: tr!("check_rekey_percent"),
                 places: Some(vec![format!("{}.rekey-interval", hook_placement)]),
-                links: Some(&["https://kea.readthedocs.io/en/latest/arm/integrations.html#using-gss-tsig"]),
+                links: Some(&[
+                    "https://kea.readthedocs.io/en/latest/arm/integrations.html#using-gss-tsig",
+                ]),
             });
         }
     }
@@ -36,10 +39,12 @@ fn check_retry_interval(
         && retry > ((tkey - rekey) / 3)
     {
         return Some(RuleResult {
-		       description: "The value of the 'retry-interval' parameter in the configuration of the 'GSS-TSIG' hook is recommended to be set no more than 1/3 of the difference between the values of the 'tkey-lifetime' and 'rekey-interval' parameters.".to_string(),
-		       places: Some(vec![format!("{}.retry-interval", hook_placement)]),
-		       links: Some(&["https://kea.readthedocs.io/en/latest/arm/integrations.html#using-gss-tsig"]),
-		   });
+            description: tr!("check_retry_interval"),
+            places: Some(vec![format!("{}.retry-interval", hook_placement)]),
+            links: Some(&[
+                "https://kea.readthedocs.io/en/latest/arm/integrations.html#using-gss-tsig",
+            ]),
+        });
     }
 
     None

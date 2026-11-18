@@ -26,6 +26,23 @@ pub enum KEALintOutputFormatTypes {
     table,
 }
 
+#[derive(Debug, Default, Clone, Copy, ValueEnum, Deserialize)]
+pub enum KEALintLanguages {
+    #[allow(non_camel_case_types)]
+    ru,
+    #[allow(non_camel_case_types)]
+    #[default]
+    en,
+}
+impl std::fmt::Display for KEALintLanguages {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Self::en => write!(f, "en"),
+            Self::ru => write!(f, "ru"),
+        }
+    }
+}
+
 #[derive(Debug, Parser, Deserialize)]
 #[command(
     version,
@@ -49,6 +66,15 @@ pub struct CLIArgs {
     )]
     #[serde(default)]
     pub format: KEALintOutputFormatTypes,
+
+    #[arg(
+        long,
+        help = "Optional. Defines the locale in which the result will be displayed.",
+        value_enum,
+        default_value_t = KEALintLanguages::en
+    )]
+    #[serde(default)]
+    pub lang: KEALintLanguages,
 
     #[arg(
         long,

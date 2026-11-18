@@ -2,6 +2,7 @@ use crate::{
     common::{Rule, RuleConfigs, RuleLevels, RuleResult},
     configs::{KEAv4Config, KEAv4Subnet},
     constants::HOST_CMDS_HOOK_LIBRARY,
+    tr,
 };
 
 pub struct SubnetWithoutPoolsAndReservationsRule;
@@ -14,7 +15,7 @@ fn get_empty_subnets(subnets: &[KEAv4Subnet], placement: String) -> Vec<RuleResu
             && subnet.pools.as_ref().unwrap_or(&vec![]).is_empty()
         {
             results.push(RuleResult {
-                description: format!("There are no pools or address reservations in the subnet '{}'. It can be deleted.", subnet.subnet),
+                description: tr!("get_empty_subnets", subnet = subnet.subnet.to_string()),
                 places: Some(vec![format!("{}.{}", placement, idx_subnet)]),
                 links: None,
             });

@@ -2,6 +2,7 @@ use crate::{
     common::{Rule, RuleConfigs, RuleLevels, RuleResult},
     configs::{KEAv4Config, KEAv4Subnet, shared::option_data::KEAOptionData},
     constants::OPTION_DATA_BYTES_REGEXP,
+    tr,
 };
 
 pub struct IncompleteOctetsBytesInOptionValuesRule;
@@ -22,10 +23,10 @@ fn get_kea_incomplete_bytes_options(
                 format!("code '{}'", option.code.unwrap())
             };
             results.push(RuleResult {
-                description: format!(
-                "The option with {} has the parameter 'csv-format' set to 'false', but the key 'data' has incomplete octets in value '{}'. It is recommended to always specify octets in pairs (for example: FF, A1, 22).",
-				option_id,
-				option_value
+                description: tr!(
+                "get_kea_incomplete_bytes_options",
+				optionId = option_id,
+				optionValue = option_value
                 ),
                 places: Some(vec![format!("{}.{}", placement, idx_option)]),
                 links: Some(&["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#standard-dhcpv4-options"]),

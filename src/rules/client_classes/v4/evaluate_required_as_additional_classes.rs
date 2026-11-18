@@ -3,6 +3,7 @@ use std::collections::HashSet;
 use crate::{
     common::{Rule, RuleConfigs, RuleLevels, RuleResult},
     configs::{KEAv4Config, KEAv4Subnet},
+    tr,
 };
 
 pub struct EvaluateRequiredAsAdditionalClassesRule;
@@ -76,7 +77,7 @@ impl Rule<KEAv4Config> for EvaluateRequiredAsAdditionalClassesRule {
                 && !class_info.only_in_additional_list.unwrap_or_default()
             {
                 results.push(RuleResult {
-                description: format!("The client class named '{}' is specified as the value by the 'evaluate-additional-classes' key in the configuration, but does not have the 'only-if-required' or 'only-in-additional-list' flag set to 'true'.", class_info.name),
+                description: tr!("evaluate_required_as_additional_classes_rule", className = class_info.name.clone()),
                 places: Some(vec![format!("client-classes.{}", idx)]),
                 links: Some(&["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#additional-classification"]),
             });

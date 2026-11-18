@@ -1,6 +1,7 @@
 use crate::{
     common::{Rule, RuleConfigs, RuleLevels, RuleResult},
     configs::KEAv4Config,
+    tr,
     utils::v4_pool_to_start_end_available_ips,
 };
 
@@ -30,10 +31,10 @@ impl Rule<KEAv4Config> for SubnetsOverlappingRule {
 
                     if a_start <= b_end && a_end >= b_start {
                         results.push(RuleResult {
-                        description: format!(
-                            "The subnet '{}' overlaps the subnet '{}'. Change the prefix or subnet address.",
-                            b.subnet,
-                            a.subnet,
+                        description: tr!(
+                            "subnets_overlapping_rule",
+                            subnet1 = b.subnet.to_string(),
+                            subnet2 = a.subnet.to_string(),
                         ),
                         places: None,
                         links: Some(&["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#configuration-of-ipv4-address-pools"]),

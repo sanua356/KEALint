@@ -1,6 +1,7 @@
 use crate::{
     common::{Rule, RuleConfigs, RuleLevels, RuleResult},
     configs::{KEAv4Config, KEAv4PoolVariant},
+    tr,
     utils::v4_pool_to_start_end_available_ips,
 };
 
@@ -50,12 +51,12 @@ impl Rule<KEAv4Config> for SubnetsPoolsIntersectionRule {
 
                 if a_start <= b_end && a_end >= b_start {
                     results.push(RuleResult {
-                        description: format!(
-                            "Pool '{}' in subnet '{}' intersection with pool '{}' in subnet '{}'.",
-                            a.pool,
-                            a.subnet,
-                            b.pool,
-                            b.subnet
+                        description: tr!(
+                            "subnets_pools_intersection_rule",
+                            pool1 = a.pool.to_string(),
+                            subnet1 = a.subnet.to_string(),
+                            pool2 = b.pool.to_string(),
+                            subnet2 = b.subnet.to_string()
                         ),
                         places: None,
                         links: Some(&["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#configuration-of-ipv4-address-pools"]),

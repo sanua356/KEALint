@@ -5,6 +5,7 @@ use regex::bytes::Regex;
 use crate::{
     common::RuleResult,
     configs::loggers::{KEALogger, KEALoggerSeverityTypes},
+    tr,
 };
 
 pub fn get_debug_loggers_rule(loggers: &Option<Vec<KEALogger>>) -> Option<Vec<RuleResult>> {
@@ -16,13 +17,10 @@ pub fn get_debug_loggers_rule(loggers: &Option<Vec<KEALogger>>) -> Option<Vec<Ru
                 && *severity == KEALoggerSeverityTypes::DEBUG
             {
                 results.push(RuleResult {
-                description: format!(
-	                "The logger named '{}' has severity 'DEBUG'. Change severity if you are using a production server.",
-	                logger.name
-                ),
-                places: Some(vec![format!("loggers.{}.severity", idx_logger)]),
-                links: None,
-            });
+                    description: tr!("get_debug_loggers_rule", loggerName = logger.name.clone()),
+                    places: Some(vec![format!("loggers.{}.severity", idx_logger)]),
+                    links: None,
+                });
             }
         }
 
@@ -55,9 +53,9 @@ pub fn get_no_percent_m_in_pattern_rule(
 
                         if !replaced.contains("%m") {
                             results.push(RuleResult {
-			                    description: format!(
-									"The logger named '{}' by the key 'pattern' does not have the literals '%m' outside datetime. The log message will not be available without it.",
-									logger.name
+			                    description: tr!(
+									"get_no_percent_m_in_pattern_rule",
+									loggerName = logger.name.clone()
 								),
 			                    places: Some(vec![format!("loggers.{}.output-options.{}.pattern", idx_logger, idx_options)]),
 			                    links: Some(&["https://kea.readthedocs.io/en/latest/arm/logging.html#logging-message-format"]),
@@ -89,9 +87,9 @@ pub fn get_no_linebreak_in_pattern_rule(
                         && !pattern.ends_with('\n')
                     {
                         results.push(RuleResult {
-	                        description: format!(
-								r#"The logger named '{}' by the key 'pattern' does not have the literals '\n'. Log messages will not be transferred to a new line."#,
-								logger.name
+	                        description: tr!(
+								"get_no_linebreak_in_pattern_rule",
+								loggerName = logger.name.clone()
 							),
 	                     	places: Some(vec![format!("loggers.{}.output-options.{}.pattern", idx_logger, idx_options)]),
 	                      	links: Some(&["https://kea.readthedocs.io/en/latest/arm/logging.html#logging-message-format"]),

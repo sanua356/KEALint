@@ -1,5 +1,6 @@
 use crate::{
     common::RuleResult, configs::hooks::KEAHookLibrary, constants::HIGH_AVAILABILITY_HOOK_LIBRARY,
+    tr,
 };
 
 pub fn get_more_one_object_config_HA_rule(
@@ -15,9 +16,9 @@ pub fn get_more_one_object_config_HA_rule(
 
     if parameters["high-availability"].as_array()?.len() > 1 {
         return Some(vec![RuleResult {
-            description: format!(
-                "For the hook '{}', the 'high-availability' key cannot contain more than one object in the array.",
-                HIGH_AVAILABILITY_HOOK_LIBRARY
+            description: tr!(
+                "get_more_one_object_config_HA_rule",
+                hookName = HIGH_AVAILABILITY_HOOK_LIBRARY
             ),
             links: Some(&[
                 "https://kea.readthedocs.io/en/latest/arm/hooks.html#load-balancing-configuration",

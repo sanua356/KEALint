@@ -8,6 +8,7 @@ use std::{
 use crate::{
     checkers::{Problem, get_summary_problems, tabled_print_problems},
     configs::{KEACtrlAgentConfigFile, KEAD2ConfigFile, KEAv4ConfigFile, KEAv6ConfigFile},
+    tr,
 };
 
 use super::{CLIArgs, KEALintOutputFormatTypes, run_checks, run_checks_parallel};
@@ -31,15 +32,23 @@ where
             match result {
                 Ok(config) => Some(config),
                 Err(err) => panic!(
-                    "An error occurred while parsing the {} configuration: {}",
-                    config_type, err
+                    "{}",
+                    tr!(
+                        "parsing-config-file-error",
+                        config_type = config_type,
+                        err = err.to_string()
+                    )
                 ),
             }
         }
         Err(_) if skip_not_exists => None,
         Err(err) => panic!(
-            "An error occurred while reading the {} configuration: {}",
-            config_type, err
+            "{}",
+            tr!(
+                "reading-config-file-error",
+                config_type = config_type,
+                err = err.to_string()
+            )
         ),
     }
 }
@@ -134,12 +143,12 @@ pub fn run_cli(args: CLIArgs) {
         match file {
             Ok(mut f) => {
                 f.write_all(printed.as_bytes())
-                    .expect("An error occurred when writing the test results to a file.");
-                println!("Check results successfully written in file!");
+                    .expect(tr!("write-results-to-file-error").as_str());
+                println!("{}", tr!("write-results-to-file-successfully"));
             }
             Err(err) => panic!(
-                "An error occurred while verifying the access rights of the output file: {}",
-                err
+                "{}",
+                tr!("write-results-to-file-access-error", err = err.to_string())
             ),
         }
     } else {

@@ -7,6 +7,7 @@ use crate::{
         hooks::KEAHookLibrary, hosts_database::KEAHostsDatabase, lease_database::KEALeaseDatabase,
     },
     constants::{MYSQL_HOOK_LIBRARY, PGSQL_HOOK_LIBRARY},
+    tr,
 };
 
 pub fn get_unnecessary_activated_database_hooks_rule(
@@ -67,7 +68,7 @@ pub fn get_unnecessary_activated_database_hooks_rule(
     if mysql_hook.is_some() && !config_types.contains(&KEAHostsDatabasesTypes::MySQL) {
         results.push(
         	RuleResult {
-	        	description: "The MySQL support hook is specified in the configuration of the hooks, but it does not serve any functionality.".to_string(),
+	        	description: tr!("get_unnecessary_activated_database_hooks_rule_1"),
 		        places: None,
 		        links: Some(&["https://kea.readthedocs.io/en/latest/arm/hooks.html#libdhcp-mysql-so-database-backend-for-mysql"])
         });
@@ -76,7 +77,7 @@ pub fn get_unnecessary_activated_database_hooks_rule(
     if pgsql_hook.is_some() && !config_types.contains(&KEAHostsDatabasesTypes::PostgreSQL) {
         results.push(
             RuleResult {
-               	description: "The PostgreSQL support hook is specified in the configuration of the hooks, but it does not serve any functionality.".to_string(),
+               	description: tr!("get_unnecessary_activated_database_hooks_rule_2"),
 		    	places: None,
 			    links: Some(&["https://kea.readthedocs.io/en/latest/arm/hooks.html#libdhcp-pgsql-so-database-backend-for-postgresql"])
 		});

@@ -2,6 +2,7 @@ use crate::{
     common::{Rule, RuleConfigs, RuleLevels, RuleResult},
     configs::KEAD2Config,
     constants::GSS_TSIG_HOOK_LIBRARY,
+    tr,
 };
 
 pub struct NoCredentialsCacheAndClientKeytabTogetherInGSSTSIGRule;
@@ -33,9 +34,9 @@ impl Rule<KEAD2Config> for NoCredentialsCacheAndClientKeytabTogetherInGSSTSIGRul
             && client_keytab.as_str().unwrap_or("").chars().count() > 0)
         {
             return Some(vec![RuleResult {
-                description: format!(
-                    "It is not recommended to specify both the 'credentials-cache' and 'client-keytab' parameters in the configuration of the '{}' hook. Use one of the two above.",
-                    GSS_TSIG_HOOK_LIBRARY
+                description: tr!(
+                    "no_credentials_cache_and_client_keytab_together_in_GSSTSIG_rule",
+                    hookName = GSS_TSIG_HOOK_LIBRARY
                 ),
                 places: Some(vec![format!("hooks-libraries.{}", idx_hook)]),
                 links: Some(&[

@@ -6,7 +6,7 @@ use tabled::{
     settings::{Modify, Style, Width, object::Columns},
 };
 
-use crate::common::Rule;
+use crate::{common::Rule, tr};
 
 #[derive(Debug, Serialize, Tabled)]
 #[tabled(display(Option, "tabled::derive::display::option", ""))]
@@ -41,8 +41,52 @@ fn display_slice(slice: &Option<&'static [&'static str]>) -> String {
     }
 }
 
+fn translate_importance(importance: String) -> String {
+    match importance.as_str() {
+        "Critical" => tr!("Critical"),
+        "Warning" => tr!("Warning"),
+        "Info" => tr!("Info"),
+        _ => String::new(),
+    }
+}
+
+struct TranslatedProblem(Problem);
+
+impl Tabled for TranslatedProblem {
+    const LENGTH: usize = Problem::LENGTH;
+
+    fn fields(&self) -> Vec<std::borrow::Cow<'_, str>> {
+        self.0.fields()
+    }
+
+    fn headers() -> Vec<std::borrow::Cow<'static, str>> {
+        translate_table_headings()
+            .into_iter()
+            .map(std::borrow::Cow::Owned)
+            .collect()
+    }
+}
+
+fn translate_table_headings() -> Vec<String> {
+    [
+        tr!("name"),
+        tr!("config_type"),
+        tr!("importance"),
+        tr!("description"),
+        tr!("places"),
+        tr!("links"),
+    ]
+    .to_vec()
+}
+
 pub fn tabled_print_problems(problems: Vec<Problem>) -> String {
+    let problems = problems
+        .into_iter()
+        .map(TranslatedProblem)
+        .collect::<Vec<_>>();
+
     let mut table = Table::new(problems);
+
     table.with(Style::modern());
     table.with(Modify::new(Columns::one(0)).with(Width::wrap(20)));
     table.with(Modify::new(Columns::one(3)).with(Width::wrap(20)));
@@ -53,7 +97,7 @@ pub fn tabled_print_problems(problems: Vec<Problem>) -> String {
 }
 
 pub fn get_summary_problems(problems: &Vec<Problem>) -> String {
-    let mut summary = format!("Found {} problem(s).\n\n", problems.len());
+    let mut summary = tr!("problems-total", count = problems.len());
 
     let mut problem_config_types: BTreeMap<String, u32> = BTreeMap::new();
     let mut problem_importances: BTreeMap<String, u32> = BTreeMap::new();
@@ -68,21 +112,27 @@ pub fn get_summary_problems(problems: &Vec<Problem>) -> String {
             .or_insert(0) += 1;
     }
 
-    summary = format!("{}\nBy type config:\n", summary);
+    summary = format!("{}\n\n{}\n", summary, tr!("by-type-config"));
 
     for problem_config_type in problem_config_types.iter() {
         summary = format!(
-            "{}{} = {} problem(s).\n",
-            summary, problem_config_type.0, problem_config_type.1
+            "{}{} = {} {}\n",
+            summary,
+            problem_config_type.0,
+            problem_config_type.1,
+            tr!("problems")
         );
     }
 
-    summary = format!("{}\nBy importance:\n", summary);
+    summary = format!("{}\n{}\n", summary, tr!("by-importance"));
 
     for problem_importance in problem_importances {
         summary = format!(
-            "{}{} = {} problem(s).\n",
-            summary, problem_importance.0, problem_importance.1
+            "{}{} = {} {}\n",
+            summary,
+            problem_importance.0,
+            problem_importance.1,
+            tr!("problems")
         );
     }
 
@@ -99,7 +149,7 @@ pub fn find_problems<T>(config: &T, values: Vec<&[Box<dyn Rule<T>>]>) -> Vec<Pro
                 for item in check_items {
                     problems.push(Problem {
                         name: rule.get_name().to_string(),
-                        importance: rule.get_level().to_string(),
+                        importance: translate_importance(rule.get_level().to_string()),
                         config_type: rule.get_config_type().to_string(),
                         description: item.description,
                         places: item.places,

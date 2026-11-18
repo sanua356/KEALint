@@ -10,7 +10,10 @@ use std::{
     thread,
 };
 
-use crate::configs::{KEACtrlAgentConfigFile, KEAD2ConfigFile, KEAv4ConfigFile, KEAv6ConfigFile};
+use crate::{
+    configs::{KEACtrlAgentConfigFile, KEAD2ConfigFile, KEAv4ConfigFile, KEAv6ConfigFile},
+    tr,
+};
 
 mod databases;
 
@@ -21,8 +24,8 @@ fn try_configuration<T>(config: &str, config_key: &'static str) -> Option<T>
 where
     T: DeserializeOwned,
 {
-    let value: Value = serde_json::from_str(config)
-        .expect("An error occurred when converting the configuration to a structure");
+    let value: Value =
+        serde_json::from_str(config).expect(tr!("convert-configuration-to-struct-error").as_str());
     let obj = value.as_object().unwrap();
 
     if obj.contains_key(config_key) {
@@ -38,7 +41,7 @@ fn handle_query(stream: UnixStream, database_path: String) {
 
     buffer
         .read_to_string(&mut config)
-        .expect("An error occurred when converting the socket buffer to a string.");
+        .expect(tr!("convert-unix-socket-buffer-error").as_str());
 
     let v4_config: Option<KEAv4ConfigFile> = try_configuration(&config, "Dhcp4");
     let v6_config: Option<KEAv6ConfigFile> = try_configuration(&config, "Dhcp6");
@@ -48,21 +51,24 @@ fn handle_query(stream: UnixStream, database_path: String) {
 
     let problems = run_checks(v4_config, v6_config, d2_config, ctrl_agent_config);
 
-    let connection = Connection::open(database_path)
-        .expect("An error occurred when connecting to an SQLite database.");
+    let connection =
+        Connection::open(database_path).expect(tr!("sqlite-connection-error").as_str());
     let database: DatabaseResults<Connection> = DatabaseResults { connection };
 
     match database.load_results(config, problems) {
         Ok(_) => {
             println!(
-                "Check results saved to database successfully! {}",
-                chrono::offset::Local::now()
+                "{}",
+                tr!(
+                    "save-results-to-database",
+                    datetime = chrono::offset::Local::now().to_string()
+                )
             );
         }
         Err(err) => {
             panic!(
-                "An error occurred when saving check results in the database. {}",
-                err
+                "{}",
+                tr!("save-results-to-database-error", err = err.to_string())
             )
         }
     }
@@ -70,41 +76,44 @@ fn handle_query(stream: UnixStream, database_path: String) {
 
 pub fn run_standalone(args: CLIArgs) {
     if args.unix_socket_filepath.is_none() {
-        panic!("The path for the UNIX listening socket is not specified!");
+        panic!("{}", tr!("unix-socket-path-not-exists-error").as_str());
     }
 
     let unix_socket_path = args.unix_socket_filepath.unwrap();
 
     if args.database_filepath.is_none() {
-        panic!("The path for the database is not specified!");
+        panic!("{}", tr!("path-to-database-not-exists-error").as_str());
     }
 
     let database_path = args.database_filepath.unwrap();
-    let connection = Connection::open(database_path.clone())
-        .expect("An error occurred when connecting to an SQLite database.");
+    let connection =
+        Connection::open(database_path.clone()).expect(tr!("sqlite-connection-error").as_str());
     let database: DatabaseResults<Connection> = DatabaseResults { connection };
 
     match database.run_migrations() {
         Ok(_) => {
-            println!("Database migrations applied successfully!");
+            println!(
+                "{}",
+                tr!("database-migrations-applied-successfully").as_str()
+            );
         }
         Err(err) => {
             panic!(
-                "An error occurred when applying migrations in the database. {}",
-                err
+                "{}",
+                tr!("database-migrations-applying-error", err = err.to_string())
             )
         }
     }
 
     if fs::exists(&unix_socket_path).unwrap() {
         fs::remove_file(&unix_socket_path)
-            .expect("The previous UNIX socket file could not be deleted.");
+            .expect(tr!("remove-previous-unix-socket-file-error").as_str());
     }
 
-    let listener = UnixListener::bind(unix_socket_path)
-        .expect("An error occurred when connecting to a UNIX socket.");
+    let listener =
+        UnixListener::bind(unix_socket_path).expect(tr!("unix-socket-connection-error").as_str());
 
-    println!("Server runned in standalone mode!");
+    println!("{}", tr!("standalone-mode-running-successfully").as_str());
 
     let database_path_arc = Arc::new(database_path);
 
@@ -115,8 +124,10 @@ pub fn run_standalone(args: CLIArgs) {
                 thread::spawn(move || handle_query(stream, (*db_path).clone()));
             }
             Err(err) => {
-                println!("Error in time listening UNIX socket: {}", err);
-                break;
+                panic!(
+                    "{}",
+                    tr!("unix-socket-listening-error", err = err.to_string())
+                );
             }
         }
     }

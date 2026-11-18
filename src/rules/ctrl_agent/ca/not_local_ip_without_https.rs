@@ -1,6 +1,7 @@
 use crate::{
     common::{Rule, RuleConfigs, RuleLevels, RuleResult},
     configs::KEACtrlAgentConfig,
+    tr,
 };
 
 pub struct NotLocalIPWithoutHTTPSRule;
@@ -23,10 +24,12 @@ impl Rule<KEACtrlAgentConfig> for NotLocalIPWithoutHTTPSRule {
                 && config.trust_anchor.is_none())
         {
             return Some(vec![RuleResult {
-            description: "The configuration specifies the 'http-port' key in a value that is not a local IP address, but HTTPS support is not enabled.".to_string(),
-            places: Some(vec!["http-host".to_string()]),
-            links: Some(&["https://kea.readthedocs.io/en/latest/arm/security.html#tls-https-configuration"]),
-        }]);
+                description: tr!("not_local_ip_without_https_rule"),
+                places: Some(vec!["http-host".to_string()]),
+                links: Some(&[
+                    "https://kea.readthedocs.io/en/latest/arm/security.html#tls-https-configuration",
+                ]),
+            }]);
         }
 
         None

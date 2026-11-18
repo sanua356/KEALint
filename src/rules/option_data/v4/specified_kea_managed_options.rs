@@ -2,6 +2,7 @@ use crate::{
     common::{Rule, RuleConfigs, RuleLevels, RuleResult},
     configs::{KEAv4Config, KEAv4Subnet, shared::option_data::KEAOptionData},
     constants::KEA_NO_CONFIGURABLE_OPTIONS,
+    tr,
 };
 
 pub struct SpecifiedKEAManagedOptionsRule;
@@ -21,10 +22,10 @@ fn get_kea_managed_options(options: &[KEAOptionData], placement: String) -> Vec<
 
         if let Some(managed_option) = finded_kea_managed_option {
             results.push(RuleResult {
-                description: format!(
-                "The option with name '{}' and code '{}' is controlled by the KEA engine and is not recommended for manual setting.",
-				managed_option.name,
-				managed_option.code
+                description: tr!(
+                    "get_kea_managed_options",
+                    optionName = managed_option.name,
+                    optionCode = managed_option.code
                 ),
                 places: Some(vec![format!("{}.{}", placement, idx_option)]),
                 links: Some(&["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#id6"]),

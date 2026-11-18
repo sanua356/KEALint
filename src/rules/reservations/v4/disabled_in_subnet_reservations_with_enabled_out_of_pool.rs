@@ -1,6 +1,7 @@
 use crate::{
     common::{Rule, RuleConfigs, RuleLevels, RuleResult},
     configs::{KEAv4Config, KEAv4Subnet},
+    tr,
 };
 
 pub struct DisabledInSubnetReservationsWithEnabledOutOfPool;
@@ -24,10 +25,10 @@ fn get_reservations_out_of_pool_without_in_subnet_flag(
         if subnet.reservations_in_subnet.is_some() {
             if !subnet.reservations_in_subnet.unwrap_or(true) && is_reservations_out_of_pool {
                 results.push(RuleResult {
-                    description: format!(
-                       	"In the subnet '{}'{}, the 'reservations-in-subnet' parameter is set to 'false'. As long as the flag is set to 'false', the 'reservations-out-of-pool' parameter will have no effect.",
-                       	subnet.subnet,
-                        msg_subtext
+                    description: tr!(
+                       	"get_reservations_out_of_pool_without_in_subnet_flag_1",
+                       	subnet = subnet.subnet.to_string(),
+                        subtext = msg_subtext
                     ),
                     places: Some(vec![format!("{}.{}.reservations-out-of-pool", placement, subnet_idx)]),
                     links: Some(&["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#fine-tuning-dhcpv4-host-reservation"]),
@@ -35,10 +36,10 @@ fn get_reservations_out_of_pool_without_in_subnet_flag(
             }
         } else if !is_reservations_in_subnet_global && is_reservations_out_of_pool {
             results.push(RuleResult {
-	            description: format!(
-	               	"At the upper configuration levels, the 'reservations-in-subnet' parameter is set to 'false'. As long as the flag is set to 'false', the 'reservations-out-of-pool' parameter inside the subnet '{}'{} will have no effect.",
-	               	subnet.subnet,
-	                msg_subtext
+	            description: tr!(
+	               	"get_reservations_out_of_pool_without_in_subnet_flag_2",
+	               	subnet = subnet.subnet.to_string(),
+	                subtext = msg_subtext
 	            ),
 	            places: Some(vec![format!("{}.{}.reservations-out-of-pool", placement, subnet_idx)]),
 	            links: Some(&["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#fine-tuning-dhcpv4-host-reservation"]),

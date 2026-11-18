@@ -1,11 +1,13 @@
 [package]
 name = "kealint"
-version = "1.4.1"
+version = "1.5.0"
 edition = "2024"
 
 [dependencies]
 chrono = "0.4.43"
 clap = { version = "4.5.56", features = ["derive"] }
+i18n-embed = { version = "0.16.0", features = ["fluent-system", "filesystem-assets"] }
+i18n-embed-fl = "0.10.1"
 json_comments = "0.2.2"
 lazy_static = "1.5.0"
 regex = "1.12.2"
