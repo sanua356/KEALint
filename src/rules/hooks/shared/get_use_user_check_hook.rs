@@ -1,4 +1,6 @@
-use crate::{common::RuleResult, configs::hooks::KEAHookLibrary, constants::USER_CHK_HOOK_LIBRARY};
+use crate::{
+    common::RuleResult, configs::hooks::KEAHookLibrary, constants::USER_CHK_HOOK_LIBRARY, tr,
+};
 
 pub fn get_use_user_check_hook_rule(
     hooks_libraries: &Option<Vec<KEAHookLibrary>>,
@@ -10,9 +12,9 @@ pub fn get_use_user_check_hook_rule(
         .find(|(_, hook)| hook.library.contains(USER_CHK_HOOK_LIBRARY))?;
 
     Some(vec![RuleResult {
-        description: format!(
-            "The '{}' hook is outdated. It is recommended to use it only for educational purposes. Use the hosts reservations mechanisms of the global configuration instead of the hook.",
-            USER_CHK_HOOK_LIBRARY
+        description: tr!(
+            "get_use_user_check_hook_rule",
+            hookName = USER_CHK_HOOK_LIBRARY
         ),
         places: Some(vec![format!("hooks-libraries.{}", idx_hook)]),
         links: Some(&[

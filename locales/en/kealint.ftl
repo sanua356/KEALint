@@ -39,3 +39,21 @@ not_local_ip_without_https_rule = The configuration specifies the 'http-port' ke
 
 get_not_ddns_qualifying_suffix_with_enabled_ddns_updates_rule = It is recommended to specify the value for the 'ddns-qualifying-suffix' field when enabling DDNS updates.
 not_local_ip_address_in_d2_server_config_rule = Loopback addresses must be used as the server address to avoid attacks with fake requests.
+
+check_retry_interval = The value of the 'retry-interval' parameter in the configuration of the 'GSS-TSIG' hook is recommended to be set no more than 1/3 of the difference between the values of the 'tkey-lifetime' and 'rekey-interval' parameters.
+check_rekey_percent = The value of the 'rekey-interval' parameter in the configuration of the 'GSS-TSIG' hook is recommended to be set in the range of 50-80% of the value of the 'tkey-lifetime' parameter.
+no_credentials_cache_and_client_keytab_together_in_GSSTSIG_rule = It is not recommended to specify both the 'credentials-cache' and 'client-keytab' parameters in the configuration of the '{ $hookName }' hook. Use one of the two above.
+get_bad_hooks_order_rule_1 = It is recommended to move the '{ $hook1 }' hook first in the list, otherwise the correct operation of the '{ $hook2 }' hook may be disrupted.
+get_bad_hooks_order_rule_2 = It is recommended to move the '{ $hook1 }' hook last in the list to ensure that all higher-level hooks have already contributed to packet processing.
+get_bad_hooks_order_rule_3 = For correct operation, the '{ $hook1 }' hook must be specified before the '{ $hook2 }' hook.
+get_bad_hooks_order_rule_4 = For correct operation, the '{ $hook1 }' hook must be specified before the '{ $hook2 }' hook.
+get_bad_hooks_order_rule_5 = For correct operation, the '{ $hook1 }' hook must be specified before the '{ $hook2 }' hook.
+get_more_one_object_config_HA_rule = For the hook '{ $hookName }', the 'high-availability' key cannot contain more than one object in the array.
+get_multithread_modes_not_equal_rule = The multithreading control flags in the global server configuration and the high availability hook configuration are not equal.
+get_no_activated_host_cache_hook_for_radius_hook = The '{ $hook1 }' hook requires activation of the '{ $hook2 }' hook to work correctly.
+get_no_activated_host_cmds_for_database_backend_rule = When using databases to store host reservations using the 'hosts-database' or 'hosts-databases' key, it is recommended to use the '{ $hookName }' hook to interact with them in a predictable way.
+get_no_basic_http_auth_in_ha_peers_rule = The peer named '{ $peerName }' of the high availability hook lacks basic HTTP authentication.
+get_unnecessary_activated_database_hooks_rule_1 = The MySQL support hook is specified in the configuration of the hooks, but it does not serve any functionality.
+get_unnecessary_activated_database_hooks_rule_2 = The PostgreSQL support hook is specified in the configuration of the hooks, but it does not serve any functionality.
+get_use_user_check_hook_rule = The '{ $hookName }' hook is outdated. It is recommended to use it only for educational purposes. Use the hosts reservations mechanisms of the global configuration instead of the hook.
+no_match_client_id_for_flex_id_hook_rule = The 'replace-client-id' parameter is set to 'true' inside the '{ $hookName }' hook. For it to work, the 'match-client-id' parameter must be set to 'true' in the global configuration.

@@ -1,5 +1,6 @@
 use crate::{
     common::RuleResult, configs::hooks::KEAHookLibrary, constants::HIGH_AVAILABILITY_HOOK_LIBRARY,
+    tr,
 };
 
 pub fn get_no_basic_http_auth_in_ha_peers_rule(
@@ -23,7 +24,7 @@ pub fn get_no_basic_http_auth_in_ha_peers_rule(
                             && peer.get("basic-auth-password").is_none()
                         {
                             results.push(RuleResult {
-                                description: format!("The peer named '{}' of the high availability hook lacks basic HTTP authentication.", peer["name"].as_str().unwrap()),
+                                description: tr!("get_no_basic_http_auth_in_ha_peers_rule", peerName = peer["name"].as_str().unwrap()),
                                 places: Some(vec![format!("hooks-libraries.{}.parameters.high-availability.{}.peers.{}", idx_hook, idx_ha, idx_peer)]),
                                 links: Some(&["https://kea.readthedocs.io/en/latest/arm/hooks.html#hot-standby-configuration"]),
                             });

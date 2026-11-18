@@ -2,6 +2,7 @@ use crate::{
     common::RuleResult,
     configs::hooks::KEAHookLibrary,
     constants::{HOST_CACHE_HOOK_LIBRARY, RADIUS_HOOK_LIBRARY},
+    tr,
 };
 
 pub fn get_no_activated_host_cache_hook_for_radius_hook(
@@ -19,9 +20,10 @@ pub fn get_no_activated_host_cache_hook_for_radius_hook(
 
     if radius_hook.is_some() && host_cache_hook.is_none() {
         return Some(vec![RuleResult {
-            description: format!(
-                "The '{}' hook requires activation of the '{}' hook to work correctly.",
-                RADIUS_HOOK_LIBRARY, HOST_CACHE_HOOK_LIBRARY
+            description: tr!(
+                "get_no_activated_host_cache_hook_for_radius_hook",
+                hook1 = RADIUS_HOOK_LIBRARY,
+                hook2 = HOST_CACHE_HOOK_LIBRARY
             ),
             places: None,
             links: Some(&[

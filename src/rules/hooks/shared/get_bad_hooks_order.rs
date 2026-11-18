@@ -6,6 +6,7 @@ use crate::{
         HOST_CACHE_HOOK_LIBRARY, LEASE_COMMANDS_HOOK_LIBRARY, PING_CHECK_HOOK_LIBRARY,
         RADIUS_HOOK_LIBRARY,
     },
+    tr,
 };
 
 pub fn get_bad_hooks_order_rule(
@@ -22,7 +23,7 @@ pub fn get_bad_hooks_order_rule(
             //It is recommended to put the Flex ID hook at the top of the list (clause 16.3.1).
             if index != 0 {
                 results.push(RuleResult {
-		            description: format!("It is recommended to move the '{}' hook first in the list, otherwise the correct operation of the '{}' hook may be disrupted.", FLEX_ID_HOOK_LIBRARY, HIGH_AVAILABILITY_HOOK_LIBRARY),
+		            description: tr!("get_bad_hooks_order_rule_1", hook1 = FLEX_ID_HOOK_LIBRARY, hook2 = HIGH_AVAILABILITY_HOOK_LIBRARY),
 		            places: Some(vec![format!("hooks-libraries.{}", index)]),
 		            links: Some(&["https://kea.readthedocs.io/en/latest/arm/hooks.html#order-of-configuration"]),
                 });
@@ -37,7 +38,7 @@ pub fn get_bad_hooks_order_rule(
             // We recommend putting Forensic Logging last in the list (clause 16.3.1).
             if index != hooks.len() - 1 {
                 results.push(RuleResult {
-			        description: format!("It is recommended to move the '{}' hook last in the list to ensure that all higher-level hooks have already contributed to packet processing.", FORENSIC_LOGGING_HOOK_LIBRARY),
+			        description: tr!("get_bad_hooks_order_rule_2", hook1 = FORENSIC_LOGGING_HOOK_LIBRARY),
 			        places: Some(vec![format!("hooks-libraries.{}", index)]),
 			        links: Some(&["https://kea.readthedocs.io/en/latest/arm/hooks.html#order-of-configuration"]),
 			    });
@@ -58,7 +59,7 @@ pub fn get_bad_hooks_order_rule(
             // Lease Commands must be in front of High Availability (clause 16.12.6).
             if lease_index > ha_index {
                 results.push(RuleResult {
-			        description: format!("For correct operation, the '{}' hook must be specified before the '{}' hook.", LEASE_COMMANDS_HOOK_LIBRARY, HIGH_AVAILABILITY_HOOK_LIBRARY),
+			        description: tr!("get_bad_hooks_order_rule_3", hook1 = LEASE_COMMANDS_HOOK_LIBRARY, hook2 = HIGH_AVAILABILITY_HOOK_LIBRARY),
 			        places: Some(vec![format!("hooks-libraries.{}", lease_index), format!("hooks-libraries.{}", ha_index)]),
 			        links: Some(&["https://kea.readthedocs.io/en/latest/arm/hooks.html#load-balancing-configuration"]),
 			    });
@@ -75,10 +76,19 @@ pub fn get_bad_hooks_order_rule(
             // Ping Check must be placed before Lease Commands (clause 16.15.12).
             if ping_check_index > lease_index {
                 results.push(RuleResult {
-			        description: format!("For correct operation, the '{}' hook must be specified before the '{}' hook.", PING_CHECK_HOOK_LIBRARY, LEASE_COMMANDS_HOOK_LIBRARY),
-			        places: Some(vec![format!("hooks-libraries.{}", lease_index), format!("hooks-libraries.{}", ping_check_index)]),
-			        links: Some(&["https://kea.readthedocs.io/en/latest/arm/hooks.html#binding-variables"]),
-			    });
+                    description: tr!(
+                        "get_bad_hooks_order_rule_4",
+                        hook1 = PING_CHECK_HOOK_LIBRARY,
+                        hook2 = LEASE_COMMANDS_HOOK_LIBRARY
+                    ),
+                    places: Some(vec![
+                        format!("hooks-libraries.{}", lease_index),
+                        format!("hooks-libraries.{}", ping_check_index),
+                    ]),
+                    links: Some(&[
+                        "https://kea.readthedocs.io/en/latest/arm/hooks.html#binding-variables",
+                    ]),
+                });
             }
         }
 
@@ -96,7 +106,7 @@ pub fn get_bad_hooks_order_rule(
             // Host Cache must be placed before RADIUS (clause 16.15.12).
             if host_cache_index > radius_index {
                 results.push(RuleResult {
-			        description: format!("For correct operation, the '{}' hook must be specified before the '{}' hook.", HOST_CACHE_HOOK_LIBRARY, RADIUS_HOOK_LIBRARY),
+			        description: tr!("get_bad_hooks_order_rule_5", hook1 = HOST_CACHE_HOOK_LIBRARY, hook2 = RADIUS_HOOK_LIBRARY),
 			        places: Some(vec![format!("hooks-libraries.{}", host_cache_index), format!("hooks-libraries.{}", radius_index)]),
 			        links: Some(&["https://kea.readthedocs.io/en/latest/arm/integrations.html#radius-hook-library-configuration"]),
 		        });

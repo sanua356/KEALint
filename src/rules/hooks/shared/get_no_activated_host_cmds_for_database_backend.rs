@@ -2,6 +2,7 @@ use crate::{
     common::RuleResult,
     configs::{hooks::KEAHookLibrary, hosts_database::KEAHostsDatabase},
     constants::HOST_CMDS_HOOK_LIBRARY,
+    tr,
 };
 
 pub fn get_no_activated_host_cmds_for_database_backend_rule(
@@ -23,9 +24,9 @@ pub fn get_no_activated_host_cmds_for_database_backend_rule(
 
     if !is_found_host_cmds_hook && (is_found_hosts_database || is_found_hosts_databases) {
         return Some(vec![RuleResult {
-            description: format!(
-                "When using databases to store host reservations using the 'hosts-database' or 'hosts-databases' key, it is recommended to use the '{}' hook to interact with them in a predictable way.",
-                HOST_CMDS_HOOK_LIBRARY
+            description: tr!(
+                "get_no_activated_host_cmds_for_database_backend_rule",
+                hookName = HOST_CMDS_HOOK_LIBRARY
             ),
             places: None,
             links: Some(&[

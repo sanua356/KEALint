@@ -1,6 +1,7 @@
 use crate::{
     common::{Rule, RuleConfigs, RuleLevels, RuleResult},
     configs::KEACtrlAgentConfig,
+    tr,
 };
 
 pub struct NotLocalIPWithoutHTTPSRule;

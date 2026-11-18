@@ -2,6 +2,7 @@ use crate::{
     common::{Rule, RuleConfigs, RuleLevels, RuleResult},
     configs::KEAv4Config,
     constants::FLEX_ID_HOOK_LIBRARY,
+    tr,
 };
 
 pub struct NoMatchClientIdForFlexIDHookRule;
@@ -33,9 +34,9 @@ impl Rule<KEAv4Config> for NoMatchClientIdForFlexIDHookRule {
 
         if replace_client_id && !match_client_id {
             return Some(vec![RuleResult {
-                description: format!(
-                    "The 'replace-client-id' parameter is set to 'true' inside the '{}' hook. For it to work, the 'match-client-id' parameter must be set to 'true' in the global configuration.",
-                    FLEX_ID_HOOK_LIBRARY
+                description: tr!(
+                    "no_match_client_id_for_flex_id_hook_rule",
+                    hookName = FLEX_ID_HOOK_LIBRARY
                 ),
                 places: Some(vec![
                     "match-client-id".to_string(),
