@@ -67,3 +67,6 @@ get_not_change_stop_retry_exit_strategy_on_fail_rule = Для корректно
 get_debug_loggers_rule = Логгер с именем '{ $loggerName }' имеет уровень серьезности 'DEBUG'. Измените уровень серьезности, если вы используете рабочий сервер.
 get_no_percent_m_in_pattern_rule = В логгере с именем '{ $loggerName }' по ключу 'pattern' нет литералов '%m' вне datetime. Без них сообщение журнала будет недоступно.
 get_no_linebreak_in_pattern_rule = В логгере с именем '{ $loggerName }' по ключу 'pattern' нет литералов '\n'. Сообщения журнала не будут переноситься на новую строку.
+
+get_kea_incomplete_bytes_options = Для параметра { $optionId } с ключом 'csv-format' установлено значение 'false', но ключ 'data' содержит неполные октеты в значении '{ $optionValue }'. Рекомендуется всегда указывать октеты парами (например: FF, A1, 22).
+get_kea_managed_options = Параметр с именем '{ $optionName }' и кодом '{ $optionCode }' управляется системой KEA и не рекомендуется для ручной настройки.

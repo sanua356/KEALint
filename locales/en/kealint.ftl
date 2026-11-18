@@ -67,3 +67,6 @@ get_not_change_stop_retry_exit_strategy_on_fail_rule = It is recommended to set 
 get_debug_loggers_rule = The logger named '{ $loggerName }' has severity 'DEBUG'. Change severity if you are using a production server.
 get_no_percent_m_in_pattern_rule = The logger named '{ $loggerName }' by the key 'pattern' does not have the literals '%m' outside datetime. The log message will not be available without it.
 get_no_linebreak_in_pattern_rule = The logger named '{ $loggerName }' by the key 'pattern' does not have the literals '\n'. Log messages will not be transferred to a new line.
+
+get_kea_incomplete_bytes_options = The option with { $optionId } has the parameter 'csv-format' set to 'false', but the key 'data' has incomplete octets in value '{ $optionValue }'. It is recommended to always specify octets in pairs (for example: FF, A1, 22).
+get_kea_managed_options = The option with name '{ $optionName }' and code '{ $optionCode }' is controlled by the KEA engine and is not recommended for manual setting.
