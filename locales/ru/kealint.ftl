@@ -70,3 +70,5 @@ get_no_linebreak_in_pattern_rule = В логгере с именем '{ $loggerN
 
 get_kea_incomplete_bytes_options = Для параметра { $optionId } с ключом 'csv-format' установлено значение 'false', но ключ 'data' содержит неполные октеты в значении '{ $optionValue }'. Рекомендуется всегда указывать октеты парами (например: FF, A1, 22).
 get_kea_managed_options = Параметр с именем '{ $optionName }' и кодом '{ $optionCode }' управляется системой KEA и не рекомендуется для ручной настройки.
+
+get_no_enable_queue_and_multithreading_together_rule = Параметры 'dhcp-queue-control' не будут работать, если для KEA активирован многопоточный режим в глобальной конфигурации с помощью ключа 'multi-threading'.

@@ -70,3 +70,5 @@ get_no_linebreak_in_pattern_rule = The logger named '{ $loggerName }' by the key
 
 get_kea_incomplete_bytes_options = The option with { $optionId } has the parameter 'csv-format' set to 'false', but the key 'data' has incomplete octets in value '{ $optionValue }'. It is recommended to always specify octets in pairs (for example: FF, A1, 22).
 get_kea_managed_options = The option with name '{ $optionName }' and code '{ $optionCode }' is controlled by the KEA engine and is not recommended for manual setting.
+
+get_no_enable_queue_and_multithreading_together_rule = The 'dhcp-queue-control' parameters will not work while multithreading mode is activated for KEA in the global configuration using the 'multi-threading' key.
