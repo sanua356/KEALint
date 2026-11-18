@@ -59,3 +59,7 @@ get_use_user_check_hook_rule = Хук '{ $hookName }' устарел.  Реко�
 no_match_client_id_for_flex_id_hook_rule = Параметр 'replace-client-id' имеет значение 'true' внутри хука '{ $hookName }'. Чтобы это работало, параметр 'match-client-id' должен иметь значение 'true' в глобальной конфигурации.
 
 get_no_active_interfaces = В конфигурации сервера не указаны сетевые интерфейсы. Адреса не будут обслуживаться.
+
+get_lease_sanity_checks_enabled_for_not_memfile_backend_rule = Механизм Sanity Checks не реализован для баз данных аренды, отличных от 'memfile'.
+get_no_enabled_persist_flag_rule = Флаг 'persist' не установлен в значение 'true' для поддержки базы данных аренды в 'memfile'.
+get_not_change_stop_retry_exit_strategy_on_fail_rule = Для корректной обработки аренды в рабочей среде рекомендуется установить для параметра 'on-fail' в конфигурации 'lease-database' значение 'stop-retry-exit'.

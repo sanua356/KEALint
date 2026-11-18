@@ -59,3 +59,7 @@ get_use_user_check_hook_rule = The '{ $hookName }' hook is outdated. It is recom
 no_match_client_id_for_flex_id_hook_rule = The 'replace-client-id' parameter is set to 'true' inside the '{ $hookName }' hook. For it to work, the 'match-client-id' parameter must be set to 'true' in the global configuration.
 
 get_no_active_interfaces = No network interfaces are specified in the server configuration. Addresses will not be serviced.
+
+get_lease_sanity_checks_enabled_for_not_memfile_backend_rule = The Sanity Checks mechanism is not implemented for rent databases other than 'memfile'.
+get_no_enabled_persist_flag_rule = The 'persist' flag is not set to 'true' for the maintenance of the lease database in the 'memfile'.
+get_not_change_stop_retry_exit_strategy_on_fail_rule = It is recommended to set the 'on-fail' parameter in the 'lease-database' configuration to 'stop-retry-exit' for the correct processing of leases in the production environment.
