@@ -50,8 +50,43 @@ fn translate_importance(importance: String) -> String {
     }
 }
 
+struct TranslatedProblem(Problem);
+
+impl Tabled for TranslatedProblem {
+    const LENGTH: usize = Problem::LENGTH;
+
+    fn fields(&self) -> Vec<std::borrow::Cow<'_, str>> {
+        self.0.fields()
+    }
+
+    fn headers() -> Vec<std::borrow::Cow<'static, str>> {
+        translate_table_headings()
+            .into_iter()
+            .map(std::borrow::Cow::Owned)
+            .collect()
+    }
+}
+
+fn translate_table_headings() -> Vec<String> {
+    [
+        tr!("name"),
+        tr!("config_type"),
+        tr!("importance"),
+        tr!("description"),
+        tr!("places"),
+        tr!("links"),
+    ]
+    .to_vec()
+}
+
 pub fn tabled_print_problems(problems: Vec<Problem>) -> String {
+    let problems = problems
+        .into_iter()
+        .map(TranslatedProblem)
+        .collect::<Vec<_>>();
+
     let mut table = Table::new(problems);
+
     table.with(Style::modern());
     table.with(Modify::new(Columns::one(0)).with(Width::wrap(20)));
     table.with(Modify::new(Columns::one(3)).with(Width::wrap(20)));

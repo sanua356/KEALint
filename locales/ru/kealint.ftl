@@ -6,6 +6,13 @@ Critical = Критика
 Warning = Предупреждение
 Info = Информация
 
+name = Название
+config_type = Тип конфигурации
+importance = Важность
+description = Описание
+places = Места
+links = Ссылки
+
 parsing-config-file-error = Произошла ошибка при разборе файла конфигурации { $config_type }: { $err }
 reading-config-file-error = Произошла ошибка при чтении файла конфигурации { $config_type }: { $err }
 write-results-to-file-error = Произошла ошибка при записи результатов теста в файл.

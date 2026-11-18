@@ -6,6 +6,13 @@ Critical = Critical
 Warning = Warning
 Info = Info
 
+name = Name
+config_type = Config Type
+importance = Importance
+description = Description
+places = Places
+links = Links
+
 parsing-config-file-error = An error occurred while parsing the { $config_type } configuration: { $err }
 reading-config-file-error = An error occurred while reading the { $config_type } configuration: { $err }
 write-results-to-file-error = An error occurred when writing the test results to a file.
