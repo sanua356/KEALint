@@ -72,3 +72,8 @@ get_kea_incomplete_bytes_options = Для параметра { $optionId } с к
 get_kea_managed_options = Параметр с именем '{ $optionName }' и кодом '{ $optionCode }' управляется системой KEA и не рекомендуется для ручной настройки.
 
 get_no_enable_queue_and_multithreading_together_rule = Параметры 'dhcp-queue-control' не будут работать, если для KEA активирован многопоточный режим в глобальной конфигурации с помощью ключа 'multi-threading'.
+
+get_reservations_out_of_pool_in_subnet = В подсети '{ $subnet }' все резервирования регистрируются вне динамических пулов. Для повышения производительности можно установить флаг 'reservations-out-of-pool' в значение 'true'.
+get_reservations_out_of_pool_without_in_subnet_flag_1 = В подсети '{ $subnet }'{ $subtext } параметру 'reservations-in-subnet' присвоено значение 'false'. Пока этот флаг установлен в значение 'false', параметр 'reservations-out-of-pool' не будет иметь никакого эффекта.
+get_reservations_out_of_pool_without_in_subnet_flag_2 = На верхних уровнях конфигурации параметру 'reservations-in-subnet' присвоено значение 'false'. Пока этот флаг установлен в значение 'false', параметр 'reservations-out-of-pool' внутри подсети '{ $subnet }'{ $subtext } не будет иметь никакого эффекта.
+get_global_resrvations_occupy_dynamic_pool_in_subnets = Глобальное резервирование с IP-адресом '{ $ip }' принадлежит динамическому пулу '{ $pool }'. Рекомендуется изменить адрес резервирования или размер пула.

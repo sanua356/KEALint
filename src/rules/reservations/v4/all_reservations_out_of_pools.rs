@@ -1,6 +1,7 @@
 use crate::{
     common::{Rule, RuleConfigs, RuleLevels, RuleResult},
     configs::{KEAv4Config, KEAv4Subnet},
+    tr,
     utils::is_address_in_pool,
 };
 
@@ -37,7 +38,7 @@ fn get_reservations_out_of_pool_in_subnet(
 
         if !is_any_reservation_in_pool {
             out_of_pool.push(RuleResult {
-                description: format!("In the subnet '{}', all reservations are registered outside of dynamic pools. It is possible to set the 'reservations-out-of-pool' flag to 'true' to improve performance.", subnet.subnet),
+                description: tr!("get_reservations_out_of_pool_in_subnet", subnet = subnet.subnet.to_string()),
                 places: Some(vec![format!("{}.{}", placement, idx_subnet)]),
                 links: Some(&["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#fine-tuning-dhcpv4-host-reservation"]),
             });

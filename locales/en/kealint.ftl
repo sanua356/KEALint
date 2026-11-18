@@ -72,3 +72,8 @@ get_kea_incomplete_bytes_options = The option with { $optionId } has the paramet
 get_kea_managed_options = The option with name '{ $optionName }' and code '{ $optionCode }' is controlled by the KEA engine and is not recommended for manual setting.
 
 get_no_enable_queue_and_multithreading_together_rule = The 'dhcp-queue-control' parameters will not work while multithreading mode is activated for KEA in the global configuration using the 'multi-threading' key.
+
+get_reservations_out_of_pool_in_subnet = In the subnet '{ $subnet }', all reservations are registered outside of dynamic pools. It is possible to set the 'reservations-out-of-pool' flag to 'true' to improve performance.
+get_reservations_out_of_pool_without_in_subnet_flag_1 = In the subnet '{ $subnet }'{ $subtext }, the 'reservations-in-subnet' parameter is set to 'false'. As long as the flag is set to 'false', the 'reservations-out-of-pool' parameter will have no effect.
+get_reservations_out_of_pool_without_in_subnet_flag_2 = At the upper configuration levels, the 'reservations-in-subnet' parameter is set to 'false'. As long as the flag is set to 'false', the 'reservations-out-of-pool' parameter inside the subnet '{ $subnet }'{ $subtext } will have no effect.
+get_global_resrvations_occupy_dynamic_pool_in_subnets = The global reservation with the IP address '{ $ip }' belongs to the dynamic pool '{ $pool }'. It is recommended to change the reservation address or pool size.

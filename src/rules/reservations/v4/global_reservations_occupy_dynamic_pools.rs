@@ -1,6 +1,7 @@
 use crate::{
     common::{Rule, RuleConfigs, RuleLevels, RuleResult},
     configs::{KEAv4Config, KEAv4Subnet, reservations::KEAReservation},
+    tr,
     utils::is_address_in_pool,
 };
 
@@ -24,10 +25,10 @@ fn get_global_resrvations_occupy_dynamic_pool_in_subnets(
 
                 if let Some((reservation_idx, reservation)) = global_reservation {
                     results.push(RuleResult {
-                        description: format!(
-                        	"The global reservation with the IP address '{}' belongs to the dynamic pool '{}'. It is recommended to change the reservation address or pool size.",
-                        	reservation.ip_address.unwrap(),
-                         	pool.pool,
+                        description: tr!(
+                        	"get_global_resrvations_occupy_dynamic_pool_in_subnets",
+                        	ip = reservation.ip_address.unwrap().to_string(),
+                         	pool = pool.pool.to_string(),
                         ),
                         places: Some(vec![format!("reservation.{}", reservation_idx)]),
                         links: Some(&["https://kea.readthedocs.io/en/latest/arm/dhcp4-srv.html#conflicts-in-dhcpv4-reservations"]),
