@@ -77,3 +77,7 @@ get_reservations_out_of_pool_in_subnet = В подсети '{ $subnet }' все 
 get_reservations_out_of_pool_without_in_subnet_flag_1 = В подсети '{ $subnet }'{ $subtext } параметру 'reservations-in-subnet' присвоено значение 'false'. Пока этот флаг установлен в значение 'false', параметр 'reservations-out-of-pool' не будет иметь никакого эффекта.
 get_reservations_out_of_pool_without_in_subnet_flag_2 = На верхних уровнях конфигурации параметру 'reservations-in-subnet' присвоено значение 'false'. Пока этот флаг установлен в значение 'false', параметр 'reservations-out-of-pool' внутри подсети '{ $subnet }'{ $subtext } не будет иметь никакого эффекта.
 get_global_resrvations_occupy_dynamic_pool_in_subnets = Глобальное резервирование с IP-адресом '{ $ip }' принадлежит динамическому пулу '{ $pool }'. Рекомендуется изменить адрес резервирования или размер пула.
+
+subnets_overlapping_rule = Подсеть '{ $subnet1 }' пересекается с подсетью '{ $subnet2 }'. Измените префикс или адрес подсети.
+subnets_pools_intersection_rule = Пул '{ $pool1 }' в подсети '{ $subnet1 }' пересекается с пулом '{ $pool2 }' в подсети '{ $subnet2 }'.
+get_empty_subnets = В подсети '{ $subnet }' нет пулов или резервирований адресов.  Ее можно удалить.

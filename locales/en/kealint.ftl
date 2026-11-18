@@ -77,3 +77,7 @@ get_reservations_out_of_pool_in_subnet = In the subnet '{ $subnet }', all reserv
 get_reservations_out_of_pool_without_in_subnet_flag_1 = In the subnet '{ $subnet }'{ $subtext }, the 'reservations-in-subnet' parameter is set to 'false'. As long as the flag is set to 'false', the 'reservations-out-of-pool' parameter will have no effect.
 get_reservations_out_of_pool_without_in_subnet_flag_2 = At the upper configuration levels, the 'reservations-in-subnet' parameter is set to 'false'. As long as the flag is set to 'false', the 'reservations-out-of-pool' parameter inside the subnet '{ $subnet }'{ $subtext } will have no effect.
 get_global_resrvations_occupy_dynamic_pool_in_subnets = The global reservation with the IP address '{ $ip }' belongs to the dynamic pool '{ $pool }'. It is recommended to change the reservation address or pool size.
+
+subnets_overlapping_rule = The subnet '{ $subnet1 }' overlaps the subnet '{ $subnet2 }'. Change the prefix or subnet address.
+subnets_pools_intersection_rule = Pool '{ $pool1 }' in subnet '{ $subnet1 }' intersection with pool '{ $pool2 }' in subnet '{ $subnet2 }'.
+get_empty_subnets = There are no pools or address reservations in the subnet '{ $subnet }'. It can be deleted.
