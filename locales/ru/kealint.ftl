@@ -57,3 +57,5 @@ get_unnecessary_activated_database_hooks_rule_1 = В конфигурации х
 get_unnecessary_activated_database_hooks_rule_2 = В конфигурации хуков указан хук поддержки PostgreSQL, но он не выполняет никаких функций.
 get_use_user_check_hook_rule = Хук '{ $hookName }' устарел.  Рекомендуется использовать его только в образовательных целях.  Вместо хука используйте механизмы резервирования хостов в глобальной конфигурации.
 no_match_client_id_for_flex_id_hook_rule = Параметр 'replace-client-id' имеет значение 'true' внутри хука '{ $hookName }'. Чтобы это работало, параметр 'match-client-id' должен иметь значение 'true' в глобальной конфигурации.
+
+get_no_active_interfaces = В конфигурации сервера не указаны сетевые интерфейсы. Адреса не будут обслуживаться.

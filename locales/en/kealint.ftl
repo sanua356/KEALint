@@ -57,3 +57,5 @@ get_unnecessary_activated_database_hooks_rule_1 = The MySQL support hook is spec
 get_unnecessary_activated_database_hooks_rule_2 = The PostgreSQL support hook is specified in the configuration of the hooks, but it does not serve any functionality.
 get_use_user_check_hook_rule = The '{ $hookName }' hook is outdated. It is recommended to use it only for educational purposes. Use the hosts reservations mechanisms of the global configuration instead of the hook.
 no_match_client_id_for_flex_id_hook_rule = The 'replace-client-id' parameter is set to 'true' inside the '{ $hookName }' hook. For it to work, the 'match-client-id' parameter must be set to 'true' in the global configuration.
+
+get_no_active_interfaces = No network interfaces are specified in the server configuration. Addresses will not be serviced.
